@@ -20,6 +20,8 @@ namespace Galaga.Model
         private int lifeCount;
         private UITextManager uiTextManager;
         private BulletManager bulletManger;
+        private DateTime lastFireTime;
+        private readonly TimeSpan fireCooldown = TimeSpan.FromMilliseconds(200);
 
         /// <summary>
         /// calls objects moveLeft
@@ -43,6 +45,7 @@ namespace Galaga.Model
             this.uiTextManager = uiTextManager;
             this.createAndPlacePlayer();
             this.bulletManger = bulletManger;
+            lastFireTime = DateTime.Now - fireCooldown;
         }
 
         #endregion
@@ -80,16 +83,21 @@ namespace Galaga.Model
 
 
         /// <summary>
-        /// this is how the player fires their fireball, the space bar calls here
+        /// This is how the player fires their bullet; the space bar calls here.
         /// </summary>
         public void FireBullet()
         {
             if (!this.uiTextManager.gameOver)
             {
-                double renderX = this.player.X + this.player.Width / 2;
-                double renderY = this.canvasHeight - PlayerOffsetFromBottom;
+                DateTime currentTime = DateTime.Now;
+                if (currentTime - lastFireTime >= fireCooldown)
+                {
+                    double renderX = this.player.X + this.player.Width / 2;
+                    double renderY = this.canvasHeight - PlayerOffsetFromBottom;
 
-                this.bulletManger.playerFiresBullet(renderX, renderY);
+                    this.bulletManger.playerFiresBullet(renderX, renderY);
+                    lastFireTime = currentTime; // Update the last fire time
+                }
             }
         }
 
