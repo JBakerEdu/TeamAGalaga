@@ -136,6 +136,9 @@
     <Compile Include="View\Sprites\BulletSprite.xaml.cs">
       <DependentUpon>BulletSprite.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Sprites\EnemyShipLevel4Sprite.xaml.cs">
+      <DependentUpon>EnemyShipLevel4Sprite.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Sprites\EnemyShipLevel3Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel3Sprite.xaml</DependentUpon>
     </Compile>
@@ -178,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Sprites\BulletSprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\EnemyShipLevel4Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -50,6 +50,5 @@
 
         <Line X1="47" Y1="50" X2="47" Y2="15" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="5"/>
         <Line X1="47" Y1="11" X2="47" Y2="20" Stroke="{StaticResource WingTipColor}" StrokeThickness="5"/>
-
     </Canvas>
 </local:BaseSprite>

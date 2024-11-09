@@ -11,6 +11,7 @@ namespace Galaga.Model
         private readonly Random random = new Random();
 
         public int Score { get; private set; }
+        public bool isShooter { get; private set; }
 
 
         /// <summary>
@@ -18,10 +19,11 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="sprite">The sprite instance to be used for the enemy ship.</param>
         /// <param name="speed">The speed of the enemy ship.</param>
-        public EnemyShip(BaseSprite sprite, int xSpeed, int ySpeed, int pointValue)
+        public EnemyShip(BaseSprite sprite, int xSpeed, int ySpeed, int pointValue, bool isShooter)
         {
             this.Sprite = sprite;
             this.Score = pointValue;
+            this.isShooter = isShooter;
             SetSpeed(xSpeed, ySpeed);  // Assuming horizontal movement speed only
         }
 

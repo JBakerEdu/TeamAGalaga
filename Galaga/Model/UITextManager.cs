@@ -13,7 +13,7 @@ namespace Galaga.Model
         public bool gameOver { get; private set; }
         private TextBlock gameOverTextBlock;
 
-    public UITextManager(Canvas canvas, int playerLives)
+        public UITextManager(Canvas canvas, int playerLives)
         {
             this.canvas = canvas;
             this.gameOver = false;
@@ -28,7 +28,7 @@ namespace Galaga.Model
             {
                 Text = "Score: 0",
                 FontSize = 24,
-                Margin = new Thickness(10, 40, 0, 0)
+                Margin = new Thickness(this.canvas.Width - this.canvas.Width / 4 , 10, 0, 0)
             };
             this.canvas.Children.Add(this.scoreTextBlock);
         }
