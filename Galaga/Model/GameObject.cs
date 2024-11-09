@@ -100,14 +100,12 @@ namespace Galaga.Model
         /// </summary>
         public void MoveRight(double canvasWidth)
         {
-            // Check if the player is within the right boundary before moving
             if (this.X + this.Width + this.SpeedX <= canvasWidth)
             {
                 this.X += this.SpeedX;
             }
             else
             {
-                // If moving right would go out of bounds, set X to be just at the boundary
                 this.X = canvasWidth - this.Width;
             }
         }
@@ -119,14 +117,12 @@ namespace Galaga.Model
         /// </summary>
         public void MoveLeft()
         {
-            // Check if the player is within the left boundary before moving
             if (this.X - this.SpeedX >= 0)
             {
                 this.X -= this.SpeedX;
             }
             else
             {
-                // If moving left would go out of bounds, set X to 0 (left boundary)
                 this.X = 0;
             }
         }

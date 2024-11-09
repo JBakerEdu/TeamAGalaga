@@ -3,76 +3,37 @@ using Galaga.View.Sprites;
 
 namespace Galaga.Model
 {
-    public class Bullet : BaseSprite
+    public class Bullet : GameObject
     {
         /// <summary>
-        /// gets and sets the sprites X on canvas
+        /// Initializes a new instance of the <see cref="Bullet"/> class with the specified sprite.
         /// </summary>
-        public double X
-        {
-            get => Canvas.GetLeft(this);
-            set => Canvas.SetLeft(this, value);
-        }
-
-        /// <summary>
-        /// gets and sets the sprites Y on canvas
-        /// </summary>
-        public double Y
-        {
-            get => Canvas.GetTop(this);
-            set => Canvas.SetTop(this, value);
-        }
-        /// <summary>
-        /// Gets and sets the sprite in use
-        /// </summary>
-        public BaseSprite Sprite { get; private set; }
-        /// <summary>
-        /// Inits the sprite 
-        /// </summary>
-        /// <param name="bulletSprite">in the new sprite using bullet</param>
-        public Bullet(BaseSprite bulletSprite)
+        /// <param name="bulletSprite">The sprite to use for the bullet.</param>
+        public Bullet(BaseSprite bulletSprite, int xSpeed, int ySpeed)
         {
             this.Sprite = bulletSprite;
-            Width = 20;
-            Height = 20;
-            Content = this.Sprite;
+            SetSpeed(xSpeed, ySpeed);
         }
 
         /// <summary>
-        /// Renders the sprite to an X and Y value
+        /// Renders the sprite to an X and Y value on the canvas.
         /// </summary>
-        /// <param name="x">the x on canvas</param>
-        /// <param name="y">the y on canvas</param>
-        public new void RenderAt(double x, double y)
+        /// <param name="x">The x-coordinate on the canvas.</param>
+        /// <param name="y">The y-coordinate on the canvas.</param>
+        public void RenderAt(double x, double y)
         {
             this.X = x;
             this.Y = y;
         }
 
         /// <summary>
-        /// moves bullet up
+        /// Checks if the bullet is off the screen.
         /// </summary>
-        public void MoveUp()
-        {
-            this.Y -= 5;
-        }
-
-        /// <summary>
-        /// Moves bullet down
-        /// </summary>
-        public void MoveDown()
-        {
-            this.Y += 5;
-        }
-
-        /// <summary>
-        /// Checks if bullet goes out of canvas
-        /// </summary>
-        /// <param name="screenHeight">the height of the canvas to know if out of range</param>
-        /// <returns>bool of if on canvas or not</returns>
+        /// <param name="screenHeight">The height of the canvas to determine if out of range.</param>
+        /// <returns>True if the bullet is off-screen, otherwise false.</returns>
         public bool IsOffScreen(double screenHeight)
         {
-            return (this.Y + this.Sprite.Height < 0) || (this.Y + this.Sprite.Height > this.Y + screenHeight);
+            return this.Y + this.Sprite.Height < 0 || this.Y > screenHeight;
         }
     }
 }
