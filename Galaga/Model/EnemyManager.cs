@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Galaga.View.Sprites;
@@ -32,7 +33,55 @@ namespace Galaga.Model
         private const int ShipSpeedX = 1;
         private const int ShipSpeedY = 0;
         private const int ShootingMin = 3;
-        private const int PointMultiplier = 100;
+
+
+        private const int VisibleTicks = 60; // Number of ticks to be visible
+        private const int InvisibleTicks = 60; // Number of ticks to be invisible
+        private int visibilityTickCounter = 0; // Counter to track visibility ticks
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private bool test = false;
 
         #endregion
 
@@ -69,6 +118,28 @@ namespace Galaga.Model
         private void OnEnemyTimerTick(object sender, object e)
         {
             this.UpdateEnemies();
+            this.visibilityTickCounter++;
+            foreach (var enemy in this.enemyShips)
+            {
+                if (enemy != null && enemy.Level >= 3)
+                {
+                    if (visibilityTickCounter < VisibleTicks)
+                    {
+                        enemy.Sprite.Visibility = Visibility.Visible;
+                        enemy.Sprite2.Visibility = Visibility.Collapsed;
+                    }
+                    else if (visibilityTickCounter < VisibleTicks + InvisibleTicks)
+                    {
+                        enemy.Sprite2.Visibility = Visibility.Visible;
+                        enemy.Sprite.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        visibilityTickCounter = 0;
+                    }
+                }
+            }
+
             this.tickCounter++;
 
             if (this.enemyShips.Count > 0 && this.tickCounter >= FireIntervalMin)
@@ -102,24 +173,28 @@ namespace Galaga.Model
                     switch (enemyLevel)
                     {
                         case 1:
-                            enemyShip = new EnemyShip(new EnemyShipLevel1Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel * PointMultiplier, meetsShootingMin);
+                            enemyShip = new EnemyShip(new EnemyShipLevel1Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
                             break;
                         case 2:
-                            enemyShip = new EnemyShip(new EnemyShipLevel2Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel * PointMultiplier, meetsShootingMin);
+                            enemyShip = new EnemyShip(new EnemyShipLevel2Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
                             break;
                         case 3:
-                            enemyShip = new EnemyShip(new EnemyShipLevel3Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel * PointMultiplier, meetsShootingMin);
+                            enemyShip = new EnemyShip(new EnemyShipLevel3Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
                             break;
                         case 4:
-                            enemyShip = new EnemyShip(new EnemyShipLevel4Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel * PointMultiplier, meetsShootingMin);
+                            enemyShip = new EnemyShip(new EnemyShipLevel4Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
                             break;
                         default:
-                            enemyShip = new EnemyShip(new EnemyShipLevel1Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel * PointMultiplier, meetsShootingMin);
+                            enemyShip = new EnemyShip(new EnemyShipLevel1Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
                             break;
                     }
                     var shipX = shipSpacing + i * (shipSpacing);
                     enemyShip.RenderAt(shipX, rowY);
                     this.canvas.Children.Add(enemyShip.Sprite);
+                    if (enemyShip.hasSecondSprite)
+                    {
+                        this.canvas.Children.Add(enemyShip.Sprite2);
+                    }
                     this.enemyShips.Add(enemyShip);
                     this.originalEnemyPositions.Add(shipX);
                 }
@@ -167,6 +242,11 @@ namespace Galaga.Model
         {
             Canvas.SetLeft(enemy.Sprite, enemy.X);
             Canvas.SetTop(enemy.Sprite, enemy.Y);
+            if (enemy.hasSecondSprite)
+            {
+                Canvas.SetLeft(enemy.Sprite2, enemy.X);
+                Canvas.SetTop(enemy.Sprite2, enemy.Y);
+            }
         }
 
         /// <summary>
@@ -189,6 +269,10 @@ namespace Galaga.Model
             if (index >= 0)
             {
                 this.canvas.Children.Remove(enemy.Sprite);
+                if (enemy.hasSecondSprite)
+                {
+                    this.canvas.Children.Remove(enemy.Sprite2);
+                }
                 this.enemyShips.RemoveAt(index);
                 this.originalEnemyPositions.RemoveAt(index);
             }
