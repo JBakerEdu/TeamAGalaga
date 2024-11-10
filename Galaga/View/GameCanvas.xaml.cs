@@ -36,21 +36,18 @@ namespace Galaga.View
 
             this.gameManager = new GameManager(this.canvas);
 
-            // Set up a timer to handle continuous movement
-            movementTimer = new DispatcherTimer();
-            movementTimer.Interval = TimeSpan.FromMilliseconds(16); // Roughly 60 updates per second
-            movementTimer.Tick += OnMovementTimerTick;
-            movementTimer.Start();
+            this.movementTimer = new DispatcherTimer();
+            this.movementTimer.Interval = TimeSpan.FromMilliseconds(16);
+            this.movementTimer.Tick += this.OnMovementTimerTick;
+            this.movementTimer.Start();
         }
 
         private void coreWindowOnKeyDown(CoreWindow sender, KeyEventArgs args)
         {
-            if (!pressedKeys.Contains(args.VirtualKey))
+            if (!this.pressedKeys.Contains(args.VirtualKey))
             {
-                pressedKeys.Add(args.VirtualKey);
+                this.pressedKeys.Add(args.VirtualKey);
             }
-
-            // Only fire a bullet on the key down event
             if (args.VirtualKey == VirtualKey.Space)
             {
                 this.gameManager.FireBullet();
@@ -59,18 +56,16 @@ namespace Galaga.View
 
         private void coreWindowOnKeyUp(CoreWindow sender, KeyEventArgs args)
         {
-            // Remove the key from the pressed keys set
-            pressedKeys.Remove(args.VirtualKey);
+            this.pressedKeys.Remove(args.VirtualKey);
         }
 
         private void OnMovementTimerTick(object sender, object e)
         {
-            // Check which keys are pressed and move the player accordingly
-            if (pressedKeys.Contains(VirtualKey.Left))
+            if (this.pressedKeys.Contains(VirtualKey.Left))
             {
                 this.gameManager.MovePlayerLeft();
             }
-            if (pressedKeys.Contains(VirtualKey.Right))
+            if (this.pressedKeys.Contains(VirtualKey.Right))
             {
                 this.gameManager.MovePlayerRight();
             }

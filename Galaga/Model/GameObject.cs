@@ -89,7 +89,7 @@ namespace Galaga.Model
         /// </value>
         public BaseSprite Sprite { get; protected set; }
         /// <summary>
-        ///     Gets or sets the sprite associated with the game object.
+        ///     Gets or sets the second sprite associated with the game object.
         /// </summary>
         /// <value>
         ///     The sprite.

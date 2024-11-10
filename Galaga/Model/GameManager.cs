@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
-using Galaga.View.Sprites;
-using System.Linq;
 
 namespace Galaga.Model
 {
+    /// <summary>
+    /// This is the game manger which initializes the game and creates all the managers.
+    /// </summary>
     public class GameManager
     {
         #region Data members
-
-        private int playerLives = 3;
-        private readonly Canvas canvas;
-        private BulletManager bulletManager;
-        private EnemyManager enemyManager;
-        private PlayerManager playerManager;
-        private UITextManager uiTextManager;
-
+        private readonly PlayerManager playerManager;
+        private readonly int playerLives = 3;
         #endregion
 
         #region Constructors
@@ -29,24 +22,21 @@ namespace Galaga.Model
         /// <exception cref="ArgumentNullException"></exception>
         public GameManager(Canvas canvas)
         {
-            this.canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
-            this.bulletManager = new BulletManager(this.canvas);
-            this.uiTextManager = new UITextManager(this.canvas, this.playerLives);
-            this.playerManager = new PlayerManager(this.canvas, this.playerLives, this.bulletManager, this.uiTextManager);
-            this.enemyManager = new EnemyManager(this.canvas, this.bulletManager, this.uiTextManager);
-            this.bulletManager.EnemyManager = this.enemyManager;
-            this.bulletManager.PlayerManager = this.playerManager;
+            canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
+            BulletManager bulletManager = new BulletManager(canvas);
+            UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives);
+            this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, uiTextManager);
+            EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager);
+            bulletManager.EnemyManager = enemyManager;
+            bulletManager.PlayerManager = this.playerManager;
         }
-
         #endregion
 
         #region Methods
-
         /// <summary>
         /// calls objects moveLeft
         /// </summary>
         public void MovePlayerLeft() => this.playerManager.MoveLeft();
-
         /// <summary>
         /// calls objects moveRight
         /// </summary>
@@ -55,7 +45,6 @@ namespace Galaga.Model
         /// calls objects fire
         /// </summary>
         public void FireBullet() => this.playerManager.FireBullet();
-
         #endregion
     }
 }

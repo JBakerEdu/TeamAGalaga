@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using Windows.Devices.Printers;
 using Galaga.View.Sprites;
 
 namespace Galaga.Model
@@ -12,11 +10,22 @@ namespace Galaga.Model
     {
         private const int PointMultiplier = 100;
         private readonly Random random = new Random();
+        /// <summary>
+        ///This is the level of the enemy ship
+        /// </summary>
         public int Level;
-        public bool hasSecondSprite = false;
-
+        /// <summary>
+        /// this is a boolean if a sprite has two sprites
+        /// </summary>
+        public bool HasSecondSprite;
+        /// <summary>
+        /// this is the point value of the ship if destroyed
+        /// </summary>
         public int Score { get; private set; }
-        public bool isShooter { get; private set; }
+        /// <summary>
+        /// this is a boolean if a sprite can shoot/fire
+        /// </summary>
+        public bool IsShooter { get; private set; }
 
 
         /// <summary>
@@ -29,21 +38,21 @@ namespace Galaga.Model
         /// <param name="isShooter">The value used to see if enemy can shoot or not.</param>
         public EnemyShip(BaseSprite sprite, int xSpeed, int ySpeed, int level, bool isShooter)
         {
-            this.Sprite = sprite;
+            Sprite = sprite;
             this.Level = level;
             this.Score = level * PointMultiplier;
-            this.isShooter = isShooter;
+            this.IsShooter = isShooter;
             SetSpeed(xSpeed, ySpeed);
-            if (this.Level == 3)
+            switch (this.Level)
             {
-                this.Sprite2 = new EnemyShipLevel3SecondSprite();
-                this.hasSecondSprite = true;
-            }
-
-            if (this.Level == 4)
-            {
-                this.Sprite2 = new EnemyShipLevel4SecondSprite();
-                this.hasSecondSprite = true;
+                case 3:
+                    Sprite2 = new EnemyShipLevel3SecondSprite();
+                    this.HasSecondSprite = true;
+                    break;
+                case 4:
+                    Sprite2 = new EnemyShipLevel4SecondSprite();
+                    this.HasSecondSprite = true;
+                    break;
             }
         }
 
@@ -55,8 +64,8 @@ namespace Galaga.Model
         public void RenderAt(double x, double y)
 
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
@@ -65,7 +74,7 @@ namespace Galaga.Model
         /// <param name="deltaX">The change in X position, multiplied by speed.</param>
         public void Move(double deltaX)
         {
-            this.X += deltaX * this.SpeedX;
+            X += deltaX * SpeedX;
         }
     }
 }

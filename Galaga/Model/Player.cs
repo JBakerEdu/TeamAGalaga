@@ -17,7 +17,7 @@ namespace Galaga.Model
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Player"/> class.
+        /// Initializes a new instance of the  <see cref="Player"/> class.
         /// </summary>
         public Player()
         {

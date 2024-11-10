@@ -1,17 +1,21 @@
-﻿using Windows.UI.Xaml.Controls;
-using Galaga.View.Sprites;
+﻿using Galaga.View.Sprites;
 
 namespace Galaga.Model
 {
+    /// <summary>
+    /// This is a bullet object which will be fired from ships at others
+    /// </summary>
     public class Bullet : GameObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Bullet"/> class with the specified sprite.
         /// </summary>
         /// <param name="bulletSprite">The sprite to use for the bullet.</param>
+        /// <param name="xSpeed">seed of x axis</param>
+        /// <param name="ySpeed">speed of y axis</param>
         public Bullet(BaseSprite bulletSprite, int xSpeed, int ySpeed)
         {
-            this.Sprite = bulletSprite;
+            Sprite = bulletSprite;
             SetSpeed(xSpeed, ySpeed);
         }
 
@@ -22,8 +26,8 @@ namespace Galaga.Model
         /// <param name="y">The y-coordinate on the canvas.</param>
         public void RenderAt(double x, double y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace Galaga.Model
         /// <returns>True if the bullet is off-screen, otherwise false.</returns>
         public bool IsOffScreen(double screenHeight)
         {
-            return this.Y + this.Sprite.Height < 0 || this.Y > screenHeight;
+            return Y + Sprite.Height < 0 || Y > screenHeight;
         }
     }
 }

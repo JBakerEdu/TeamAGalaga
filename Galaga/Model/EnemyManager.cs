@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System;
-using System.Diagnostics;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Galaga.View.Sprites;
 using System.Linq;
-using System.Reflection;
 
 namespace Galaga.Model
 {
+    /// <summary>
+    /// This is the manager of all enemy ships
+    /// </summary>
     public class EnemyManager
     {
         #region Data members
@@ -16,7 +17,6 @@ namespace Galaga.Model
         private const double EnemyMovementSpeed = 0.2;
         private const double EnemyMaxMoveDistance = 10;
         private readonly Canvas canvas;
-        private readonly double canvasHeight;
         private readonly double canvasWidth;
         private int tickCounter;
         private const int FireIntervalMin = 30;
@@ -28,60 +28,14 @@ namespace Galaga.Model
         private List<double> originalEnemyPositions;
         private bool movingRight = true;
         private DispatcherTimer enemyMovementTimer;
-        private BulletManager bulletManager;
-        private UITextManager uiTextManager;
+        private readonly BulletManager bulletManager;
+        private readonly UiTextManager uiTextManager;
         private const int ShipSpeedX = 1;
         private const int ShipSpeedY = 0;
         private const int ShootingMin = 3;
-
-
-        private const int VisibleTicks = 60; // Number of ticks to be visible
-        private const int InvisibleTicks = 60; // Number of ticks to be invisible
-        private int visibilityTickCounter = 0; // Counter to track visibility ticks
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private bool test = false;
+        private const int VisibleTicks = 60;
+        private const int InvisibleTicks = 60;
+        private int visibilityTickCounter;
 
         #endregion
 
@@ -90,14 +44,14 @@ namespace Galaga.Model
         /// <summary>
         /// Creates the game manager class and init the game
         /// </summary>
-        /// <param name="canvas">the canvas passes in</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public EnemyManager(Canvas canvas, BulletManager bulletManager, UITextManager uiTextManager)
+        /// <param name="canvas">the canvas to work on</param>
+        /// <param name="bulletManager">the bullet manager so it can talk about if a bullet hits an enemy </param>
+        /// <param name="uiTextManager"> the UiTextManger so it can call when games ends and to add a score of the enemies when hit</param>
+        public EnemyManager(Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager)
         {
             this.canvas = canvas;
-            this.canvasHeight = canvas.Height;
             this.canvasWidth = canvas.Width;
-            this.createAndPlaceEnemies();
+            this.initializeEnemies();
             this.uiTextManager = uiTextManager;
             this.bulletManager = bulletManager;
             this.initializeTimer();
@@ -117,31 +71,14 @@ namespace Galaga.Model
 
         private void OnEnemyTimerTick(object sender, object e)
         {
-            this.UpdateEnemies();
-            this.visibilityTickCounter++;
-            foreach (var enemy in this.enemyShips)
-            {
-                if (enemy != null && enemy.Level >= 3)
-                {
-                    if (visibilityTickCounter < VisibleTicks)
-                    {
-                        enemy.Sprite.Visibility = Visibility.Visible;
-                        enemy.Sprite2.Visibility = Visibility.Collapsed;
-                    }
-                    else if (visibilityTickCounter < VisibleTicks + InvisibleTicks)
-                    {
-                        enemy.Sprite2.Visibility = Visibility.Visible;
-                        enemy.Sprite.Visibility = Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        visibilityTickCounter = 0;
-                    }
-                }
-            }
+            this.updateEnemiesMovement();
+            this.updateSwitching();
+            this.updateFiring();
+        }
 
+        private void updateFiring()
+        {
             this.tickCounter++;
-
             if (this.enemyShips.Count > 0 && this.tickCounter >= FireIntervalMin)
             {
                 var randomFireTick = this.random.Next(FireIntervalMin, FireIntervalMax + 1);
@@ -150,12 +87,37 @@ namespace Galaga.Model
                 {
                     int randomIndex = this.random.Next(this.enemyShips.Count);
                     var enemy = this.enemyShips[randomIndex];
-                    this.FireEnemyBullet(enemy);
+                    this.fireEnemyBullet(enemy);
                 }
             }
         }
 
-        private void createAndPlaceEnemies()
+        private void updateSwitching()
+        {
+            this.visibilityTickCounter++;
+            foreach (var enemy in this.enemyShips)
+            {
+                if (enemy != null && enemy.HasSecondSprite)
+                {
+                    if (this.visibilityTickCounter < VisibleTicks)
+                    {
+                        enemy.Sprite.Visibility = Visibility.Visible;
+                        enemy.Sprite2.Visibility = Visibility.Collapsed;
+                    }
+                    else if (this.visibilityTickCounter < VisibleTicks + InvisibleTicks)
+                    {
+                        enemy.Sprite2.Visibility = Visibility.Visible;
+                        enemy.Sprite.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        this.visibilityTickCounter = 0;
+                    }
+                }
+            }
+        }
+
+        private void initializeEnemies()
         {
             this.enemyShips = new List<EnemyShip>();
             this.originalEnemyPositions = new List<double>();
@@ -164,62 +126,70 @@ namespace Galaga.Model
                 var shipCount = this.shipsPerRow[row];
                 var rowY = this.rowHeights[row];
                 var shipSpacing = (this.canvasWidth - shipCount) / (shipCount + 1);
-
                 for (var i = 0; i < shipCount; i++)
                 {
-                    EnemyShip enemyShip;
-                    var enemyLevel = row + 1;
-                    bool  meetsShootingMin = enemyLevel >= ShootingMin;
-                    switch (enemyLevel)
-                    {
-                        case 1:
-                            enemyShip = new EnemyShip(new EnemyShipLevel1Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
-                            break;
-                        case 2:
-                            enemyShip = new EnemyShip(new EnemyShipLevel2Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
-                            break;
-                        case 3:
-                            enemyShip = new EnemyShip(new EnemyShipLevel3Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
-                            break;
-                        case 4:
-                            enemyShip = new EnemyShip(new EnemyShipLevel4Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
-                            break;
-                        default:
-                            enemyShip = new EnemyShip(new EnemyShipLevel1Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
-                            break;
-                    }
-                    var shipX = shipSpacing + i * (shipSpacing);
-                    enemyShip.RenderAt(shipX, rowY);
-                    this.canvas.Children.Add(enemyShip.Sprite);
-                    if (enemyShip.hasSecondSprite)
-                    {
-                        this.canvas.Children.Add(enemyShip.Sprite2);
-                    }
-                    this.enemyShips.Add(enemyShip);
-                    this.originalEnemyPositions.Add(shipX);
+                    this.placeShips(row, i, shipSpacing, rowY);
                 }
             }
         }
 
+        private void placeShips(int row, int shipIndex, double shipSpacing, double rowY)
+        {
+            var enemyLevel = row + 1;
+            bool meetsShootingMin = enemyLevel >= ShootingMin;
+            EnemyShip enemyShip = this.createNewShip(enemyLevel, meetsShootingMin);
+            var shipX = shipSpacing + shipIndex * shipSpacing - enemyShip.Width / 2 ;
+            enemyShip.RenderAt(shipX, rowY);
+            this.canvas.Children.Add(enemyShip.Sprite);
+            if (enemyShip.HasSecondSprite)
+            {
+                this.canvas.Children.Add(enemyShip.Sprite2);
+            }
+            this.enemyShips.Add(enemyShip);
+            this.originalEnemyPositions.Add(shipX);
+        }
+
+
+        private EnemyShip createNewShip(int enemyLevel, bool meetsShootingMin)
+        {
+            EnemyShip enemyShip;
+            switch (enemyLevel)
+            {
+                case 1:
+                    enemyShip = new EnemyShip(new EnemyShipLevel1Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
+                    break;
+                case 2:
+                    enemyShip = new EnemyShip(new EnemyShipLevel2Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
+                    break;
+                case 3:
+                    enemyShip = new EnemyShip(new EnemyShipLevel3Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
+                    break;
+                case 4:
+                    enemyShip = new EnemyShip(new EnemyShipLevel4Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
+                    break;
+                default:
+                    enemyShip = new EnemyShip(new EnemyShipLevel1Sprite(), ShipSpeedX, ShipSpeedY, enemyLevel, meetsShootingMin);
+                    break;
+            }
+            return enemyShip;
+        }
 
         /// <summary>
         /// this updates how the enemy move around
         /// </summary>
-        private void UpdateEnemies()
+        private void updateEnemiesMovement()
         {
             if (this.enemyShips.Count == 0 || this.enemyShips.All(e => e == null))
             {
-                this.uiTextManager.endGame(true);
+                this.uiTextManager.EndGame(true);
                 return;
             }
-
             var firstEnemy = this.enemyShips.FirstOrDefault(e => e != null);
             if (firstEnemy == null)
             {
-                this.uiTextManager.endGame(true);
+                this.uiTextManager.EndGame(true);
                 return;
             }
-
             var moveAmount = this.movingRight ? EnemyMovementSpeed : -EnemyMovementSpeed;
             var currentDistanceFromStart = Math.Abs(firstEnemy.X - this.originalEnemyPositions[this.enemyShips.IndexOf(firstEnemy)]);
             if (currentDistanceFromStart + Math.Abs(moveAmount) > EnemyMaxMoveDistance)
@@ -227,7 +197,6 @@ namespace Galaga.Model
                 this.movingRight = !this.movingRight;
                 moveAmount = this.movingRight ? EnemyMovementSpeed : -EnemyMovementSpeed;
             }
-
             foreach (var enemy in this.enemyShips)
             {
                 if (enemy != null)
@@ -242,7 +211,7 @@ namespace Galaga.Model
         {
             Canvas.SetLeft(enemy.Sprite, enemy.X);
             Canvas.SetTop(enemy.Sprite, enemy.Y);
-            if (enemy.hasSecondSprite)
+            if (enemy.HasSecondSprite)
             {
                 Canvas.SetLeft(enemy.Sprite2, enemy.X);
                 Canvas.SetTop(enemy.Sprite2, enemy.Y);
@@ -253,9 +222,9 @@ namespace Galaga.Model
         /// this is how the enemy fires their fireball
         /// </summary>
         /// <param name="enemy">which enemy is firing</param>
-        private void FireEnemyBullet(EnemyShip enemy)
+        private void fireEnemyBullet(EnemyShip enemy)
         {
-            if (enemy != null && enemy.isShooter && !this.uiTextManager.gameOver)
+            if (enemy != null && enemy.IsShooter && !this.uiTextManager.GameOver)
             {
                 double renderX = enemy.X + enemy.Width / 2;
                 double renderY = enemy.Y + enemy.Height;
@@ -269,7 +238,7 @@ namespace Galaga.Model
             if (index >= 0)
             {
                 this.canvas.Children.Remove(enemy.Sprite);
-                if (enemy.hasSecondSprite)
+                if (enemy.HasSecondSprite)
                 {
                     this.canvas.Children.Remove(enemy.Sprite2);
                 }
@@ -287,7 +256,12 @@ namespace Galaga.Model
             this.enemyShips = remainingEnemies;
         }
 
-        public bool checkCollision(Bullet playerBullet)
+        /// <summary>
+        /// Check if a bullet passed in has collided with any enemy ships
+        /// </summary>
+        /// <param name="playerBullet"> the bullet being checked if it hits an enemy ship</param>
+        /// <returns> bool if the bullet has hit a target that way the bullet manager knows to also remove the bullet</returns>
+        public bool CheckCollision(Bullet playerBullet)
         {
             bool isHit = false;
             if (playerBullet != null)
@@ -299,7 +273,7 @@ namespace Galaga.Model
                     if (this.isCollision(playerBullet, enemy))
                     {
                         this.destroyEnemy(enemy);
-                        this.uiTextManager.updateScore(enemy);
+                        this.uiTextManager.UpdateScore(enemy);
                         break;
                     }
                 }

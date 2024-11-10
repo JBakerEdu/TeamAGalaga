@@ -1,51 +1,55 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
-using Galaga.View.Sprites;
-using System.Reflection;
 
 namespace Galaga.Model
 {
+    /// <summary>
+    /// This is the manager for the player ship
+    /// </summary>
     public class PlayerManager
     {
-
         #region Data members
-
         private const double PlayerOffsetFromBottom = 30;
         private readonly Canvas canvas;
         private readonly double canvasHeight;
         private readonly double canvasWidth;
         private Player player;
-        private int lifeCount;
-        private UITextManager uiTextManager;
-        private BulletManager bulletManger;
+        private readonly UiTextManager uiTextManager;
+        private readonly BulletManager bulletManger;
         private DateTime lastFireTime;
         private readonly TimeSpan fireCooldown = TimeSpan.FromMilliseconds(200);
+        private int playerLives;
 
         /// <summary>
         /// calls objects moveLeft
         /// </summary>
         public void MoveLeft() => this.player.MoveLeft();
+
         /// <summary>
         /// calls objects moveRight
         /// </summary>
         public void MoveRight() => this.player.MoveRight(this.canvasWidth);
-
         #endregion
 
         #region Constructors
 
-        public PlayerManager(Canvas canvas, int playerLives, BulletManager bulletManger, UITextManager uiTextManager)
+        /// <summary>
+        /// Constructs the player manager with all needed information 
+        /// </summary>
+        /// <param name="lives"> the lives a player has</param>
+        /// <param name="canvas"> the canvas that the player will be added onto</param>
+        /// <param name="bulletManger"></param>
+        /// <param name="uiTextManager"></param>
+        public PlayerManager(int lives, Canvas canvas, BulletManager bulletManger, UiTextManager uiTextManager)
         {
             this.canvas = canvas;
             this.canvasHeight = canvas.Height;
             this.canvasWidth = canvas.Width;
-            this.lifeCount = playerLives;
+            this.playerLives = lives;
             this.uiTextManager = uiTextManager;
             this.createAndPlacePlayer();
             this.bulletManger = bulletManger;
-            lastFireTime = DateTime.Now - fireCooldown;
+            this.lastFireTime = DateTime.Now - this.fireCooldown;
         }
 
         #endregion
@@ -72,36 +76,40 @@ namespace Galaga.Model
 
         private void handlePlayerHit()
         {
-            this.lifeCount--;
-            this.uiTextManager.updatePlayerLives(this.lifeCount);
-            if (this.lifeCount <= 0)
+            this.playerLives--;
+            this.uiTextManager.UpdatePlayerLives(this.playerLives);
+            if (this.playerLives <= 0)
             {
                 this.canvas.Children.Remove(this.player.Sprite);
-                this.uiTextManager.endGame(false);
+                this.uiTextManager.EndGame(false);
             }
         }
-
 
         /// <summary>
         /// This is how the player fires their bullet; the space bar calls here.
         /// </summary>
         public void FireBullet()
         {
-            if (!this.uiTextManager.gameOver)
+            if (!this.uiTextManager.GameOver)
             {
                 DateTime currentTime = DateTime.Now;
-                if (currentTime - lastFireTime >= fireCooldown)
+                if (currentTime - this.lastFireTime >= this.fireCooldown)
                 {
                     double renderX = this.player.X + this.player.Width / 2;
                     double renderY = this.canvasHeight - PlayerOffsetFromBottom;
 
-                    this.bulletManger.playerFiresBullet(renderX, renderY);
-                    lastFireTime = currentTime; // Update the last fire time
+                    this.bulletManger.PlayerFiresBullet(renderX, renderY);
+                    this.lastFireTime = currentTime;
                 }
             }
         }
 
-        public bool checkCollision(Bullet enemyBullet)
+        /// <summary>
+        /// Checks if a passed in bullet hits the players ship
+        /// </summary>
+        /// <param name="enemyBullet"></param>
+        /// <returns></returns>
+        public bool CheckCollision(Bullet enemyBullet)
         {
             bool isHit = this.isCollision(enemyBullet, this.player);
             if (enemyBullet != null && isHit)
@@ -136,37 +144,5 @@ namespace Galaga.Model
 
             return false;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

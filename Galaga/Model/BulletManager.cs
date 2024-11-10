@@ -6,6 +6,9 @@ using Galaga.View.Sprites;
 
 namespace Galaga.Model
 {
+    /// <summary>
+    /// This manages all bullet object
+    /// </summary>
     public class BulletManager
     {
         #region Data members
@@ -14,14 +17,19 @@ namespace Galaga.Model
         private const double BulletSpeed = 10;
         private readonly Canvas canvas;
         private readonly double canvasHeight;
-        private readonly double canvasWidth;
         private const int FireIntervalMin = 30;
         private const int FireIntervalMax = 100;
         private readonly Random random = new Random();
         private readonly List<Bullet> activePlayerBullets;
         private readonly List<Bullet> activeEnemyBullets;
         private DispatcherTimer bulletMovementTimer;
+        /// <summary>
+        /// This sets the player manager so that the bullet manager can ask if a bullet has hit a ship
+        /// </summary>
         public PlayerManager PlayerManager { get; set; }
+        /// <summary>
+        /// This sets the enemy manager so that the bullet manager can ask if a bullet has hit a ship
+        /// </summary>
         public EnemyManager EnemyManager { get; set; }
 
         #endregion
@@ -37,15 +45,11 @@ namespace Galaga.Model
         {
             this.canvas = canvas;
             this.canvasHeight = canvas.Height;
-            this.canvasWidth = canvas.Width;
             this.activePlayerBullets = new List<Bullet>();
             this.activeEnemyBullets = new List<Bullet>();
             this.initializeBulletTimer();
         }
-
         #endregion
-
-
 
         private void initializeBulletTimer()
         {
@@ -72,11 +76,11 @@ namespace Galaga.Model
 
                 if (bullet.IsOffScreen(this.canvasHeight))
                 {
-                    this.removeBullet(i);
+                    this.removePlayerBullet(i);
                 }
                 else
                 {
-                    this.checkPlayerBulletCollisions(i);
+                    this.CheckPlayerBulletCollisions(i);
                 }
             }
         }
@@ -93,13 +97,12 @@ namespace Galaga.Model
                 }
                 else
                 {
-                    this.checkEnemyBulletCollisions(i);
+                    this.CheckEnemyBulletCollisions(i);
                 }
             }
         }
 
-
-        private void removeBullet(int index)
+        private void removePlayerBullet(int index)
         {
             var bullet = this.activePlayerBullets[index];
             if (bullet != null)
@@ -119,7 +122,7 @@ namespace Galaga.Model
         /// <summary>
         /// this is how the player fires their fireball, the space bar calls here
         /// </summary>
-        public void playerFiresBullet(double renderX, double renderY)
+        public void PlayerFiresBullet(double renderX, double renderY)
         {
             if (this.activePlayerBullets.Count < MaxBulletsAllowed)
             {
@@ -135,7 +138,8 @@ namespace Galaga.Model
         /// <summary>
         /// this is how the enemy fires their fireball
         /// </summary>
-        /// <param name="enemy">which enemy is firing</param>
+        /// <param name="renderX">where to render the x of the sprite</param>
+        /// <param name="renderY">where to render the y of the sprite</param>
         public void FireEnemyBullet(double renderX, double renderY)
         {
             var bullet = new Bullet(new BulletSprite(), 0, 5);
@@ -145,19 +149,27 @@ namespace Galaga.Model
             this.activeEnemyBullets.Add(bullet);
         }
 
-        public void checkPlayerBulletCollisions(int index)
+        /// <summary>
+        /// Checks if a players bullet hits any enemyships
+        /// </summary>
+        /// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
+        public void CheckPlayerBulletCollisions(int index)
         {
             var playerBullet = this.activePlayerBullets[index];
-            if (playerBullet != null && this.EnemyManager.checkCollision(playerBullet))
+            if (playerBullet != null && this.EnemyManager.CheckCollision(playerBullet))
             {
-                this.removeBullet(index);
+                this.removePlayerBullet(index);
             }
         }
 
-        public void checkEnemyBulletCollisions(int index)
+        /// <summary>
+        /// checks if an Enemy bullet hits the player
+        /// </summary>
+        /// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
+        public void CheckEnemyBulletCollisions(int index)
         {
             var enemyBullet = this.activeEnemyBullets[index];
-            if (enemyBullet != null && this.PlayerManager.checkCollision(enemyBullet))
+            if (enemyBullet != null && this.PlayerManager.CheckCollision(enemyBullet))
             {
                 this.removeEnemyBullet(index);
             }
