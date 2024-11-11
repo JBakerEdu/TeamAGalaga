@@ -38,7 +38,7 @@
         <Line X1="40" Y1="5" X2="40" Y2="45" Stroke="{StaticResource WingTipColor}" StrokeThickness="4"/>
         <Line X1="40" Y1="27" X2="40" Y2="32" Stroke="{StaticResource MainAccentColor}" StrokeThickness="5"/>
 
-        <Rectangle Width="6" Height="10" Fill="GreenYellow" Canvas.Left="24" Canvas.Top="10"/>
+        <Rectangle Width="6" Height="10" Fill="MediumPurple" Canvas.Left="24" Canvas.Top="10"/>
 
     </Canvas>
 </local:EnemyShipLevel3Sprite>

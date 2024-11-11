@@ -5,12 +5,12 @@ namespace Galaga.View.Sprites
     /// <summary>
     /// Defines Bullet Sprite from which all sprites inherit.
     /// </summary>
-    public partial class BulletSprite : BaseSprite
+    public partial class BulletSprite
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BulletSprite"/> class.
         /// </summary>
-        public BulletSprite() : base()
+        public BulletSprite()
         {
             this.InitializeComponent();
         }

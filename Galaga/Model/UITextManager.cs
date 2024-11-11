@@ -13,6 +13,9 @@ namespace Galaga.Model
         private TextBlock scoreTextBlock;
         private TextBlock playerLivesTextBlock;
         private int score;
+        /// <summary>
+        /// Marks when game is over
+        /// </summary>
         public bool GameOver { get; private set; }
         private TextBlock gameOverTextBlock;
 

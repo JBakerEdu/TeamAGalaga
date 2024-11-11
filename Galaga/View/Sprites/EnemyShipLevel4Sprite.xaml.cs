@@ -5,12 +5,12 @@ namespace Galaga.View.Sprites
     /// <summary>
     /// Defines EnemyShipLevel4Sprite from which all sprites inherit.
     /// </summary>
-    public partial class EnemyShipLevel4Sprite : BaseSprite
+    public partial class EnemyShipLevel4Sprite
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EnemyShipLevel4Sprite"/> class.
         /// </summary>
-        public EnemyShipLevel4Sprite() : base()
+        public EnemyShipLevel4Sprite()
         {
             this.InitializeComponent();
         }
