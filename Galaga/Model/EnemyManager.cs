@@ -169,7 +169,6 @@ namespace Galaga.Model
                 return;
             }
 
-            // Determine movement direction
             var moveAmount = this.movingRight ? EnemyMovementSpeed : -EnemyMovementSpeed;
             var currentDistanceFromStart = Math.Abs(firstEnemy.X - this.originalEnemyPositions[this.enemyShips.IndexOf(firstEnemy)]);
 
@@ -179,7 +178,6 @@ namespace Galaga.Model
                 moveAmount = this.movingRight ? EnemyMovementSpeed : -EnemyMovementSpeed;
             }
 
-            // Move and switch sprites for each enemy
             foreach (var enemy in this.enemyShips)
             {
                 if (enemy == null)
@@ -190,7 +188,6 @@ namespace Galaga.Model
                 enemy.Move(moveAmount);
                 this.UpdateEnemyPosition(enemy);
 
-                // Switch sprites on each movement
                 if (enemy.HasSecondSprite)
                 {
                     if (enemy.Sprite.Visibility == Visibility.Visible)
@@ -249,8 +246,6 @@ namespace Galaga.Model
                 this.enemyShips.RemoveAt(index);
                 this.originalEnemyPositions.RemoveAt(index);
             }
-
-            // Filter out null ships
             this.enemyShips = this.enemyShips.Where(ship => ship != null).ToList();
         }
 
