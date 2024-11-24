@@ -33,9 +33,6 @@ namespace Galaga.Model
         private const int ShipSpeedX = 1;
         private const int ShipSpeedY = 0;
         private const int ShootingMin = 3;
-        private const int VisibleTicks = 60;
-        private const int InvisibleTicks = 60;
-        private int visibilityTickCounter;
 
         #endregion
 
@@ -51,15 +48,15 @@ namespace Galaga.Model
         {
             this.canvas = canvas;
             this.canvasWidth = canvas.Width;
-            this.initializeEnemies();
+            this.InitializeEnemies();
             this.uiTextManager = uiTextManager;
             this.bulletManager = bulletManager;
-            this.initializeTimer();
+            this.InitializeTimer();
         }
 
         #endregion
 
-        private void initializeTimer()
+        private void InitializeTimer()
         {
             this.enemyMovementTimer = new DispatcherTimer
             {
@@ -71,11 +68,11 @@ namespace Galaga.Model
 
         private void OnEnemyTimerTick(object sender, object e)
         {
-            this.updateEnemiesMovement();
-            this.updateFiring();
+            this.UpdateEnemiesMovement();
+            this.UpdateFiring();
         }
 
-        private void updateFiring()
+        private void UpdateFiring()
         {
             this.tickCounter++;
             if (this.enemyShips.Count > 0 && this.tickCounter >= FireIntervalMin)
@@ -86,12 +83,12 @@ namespace Galaga.Model
                 {
                     int randomIndex = this.random.Next(this.enemyShips.Count);
                     var enemy = this.enemyShips[randomIndex];
-                    this.fireEnemyBullet(enemy);
+                    this.FireEnemyBullet(enemy);
                 }
             }
         }
 
-        private void initializeEnemies()
+        private void InitializeEnemies()
         {
             this.enemyShips = new List<EnemyShip>();
             this.originalEnemyPositions = new List<double>();
@@ -102,29 +99,35 @@ namespace Galaga.Model
                 var shipSpacing = (this.canvasWidth - shipCount) / (shipCount + 1);
                 for (var i = 0; i < shipCount; i++)
                 {
-                    this.placeShips(row, i, shipSpacing, rowY);
+                    this.PlaceShips(row, i, shipSpacing, rowY);
                 }
             }
         }
 
-        private void placeShips(int row, int shipIndex, double shipSpacing, double rowY)
+        private void PlaceShips(int row, int shipIndex, double shipSpacing, double rowY)
         {
             var enemyLevel = row + 1;
             bool meetsShootingMin = enemyLevel >= ShootingMin;
-            EnemyShip enemyShip = this.createNewShip(enemyLevel, meetsShootingMin);
+
+            EnemyShip enemyShip = this.CreateNewShip(enemyLevel, meetsShootingMin);
+
             var shipX = shipSpacing + shipIndex * shipSpacing - enemyShip.Width / 2;
             enemyShip.RenderAt(shipX, rowY);
+
             this.canvas.Children.Add(enemyShip.Sprite);
+
             if (enemyShip.HasSecondSprite)
             {
                 this.canvas.Children.Add(enemyShip.Sprite2);
             }
+
             this.enemyShips.Add(enemyShip);
             this.originalEnemyPositions.Add(shipX);
         }
 
 
-        private EnemyShip createNewShip(int enemyLevel, bool meetsShootingMin)
+
+        private EnemyShip CreateNewShip(int enemyLevel, bool meetsShootingMin)
         {
             EnemyShip enemyShip;
             switch (enemyLevel)
@@ -151,7 +154,7 @@ namespace Galaga.Model
         /// <summary>
         /// this updates how the enemy move around
         /// </summary>
-        private void updateEnemiesMovement()
+        private void UpdateEnemiesMovement()
         {
             if (this.enemyShips.Count == 0 || this.enemyShips.All(e => e == null))
             {
@@ -169,6 +172,7 @@ namespace Galaga.Model
             // Determine movement direction
             var moveAmount = this.movingRight ? EnemyMovementSpeed : -EnemyMovementSpeed;
             var currentDistanceFromStart = Math.Abs(firstEnemy.X - this.originalEnemyPositions[this.enemyShips.IndexOf(firstEnemy)]);
+
             if (currentDistanceFromStart + Math.Abs(moveAmount) > EnemyMaxMoveDistance)
             {
                 this.movingRight = !this.movingRight;
@@ -178,30 +182,33 @@ namespace Galaga.Model
             // Move and switch sprites for each enemy
             foreach (var enemy in this.enemyShips)
             {
-                if (enemy != null)
+                if (enemy == null)
                 {
-                    enemy.Move(moveAmount);
-                    this.updateEnemyPosition(enemy);
+                    continue;
+                }
 
-                    // Switch sprites on each movement
-                    if (enemy.HasSecondSprite)
+                enemy.Move(moveAmount);
+                this.UpdateEnemyPosition(enemy);
+
+                // Switch sprites on each movement
+                if (enemy.HasSecondSprite)
+                {
+                    if (enemy.Sprite.Visibility == Visibility.Visible)
                     {
-                        if (enemy.Sprite.Visibility == Visibility.Visible)
-                        {
-                            enemy.Sprite.Visibility = Visibility.Collapsed;
-                            enemy.Sprite2.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            enemy.Sprite.Visibility = Visibility.Visible;
-                            enemy.Sprite2.Visibility = Visibility.Collapsed;
-                        }
+                        enemy.Sprite.Visibility = Visibility.Collapsed;
+                        enemy.Sprite2.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        enemy.Sprite.Visibility = Visibility.Visible;
+                        enemy.Sprite2.Visibility = Visibility.Collapsed;
                     }
                 }
             }
         }
 
-        private void updateEnemyPosition(EnemyShip enemy)
+
+        private void UpdateEnemyPosition(EnemyShip enemy)
         {
             Canvas.SetLeft(enemy.Sprite, enemy.X);
             Canvas.SetTop(enemy.Sprite, enemy.Y);
@@ -216,7 +223,7 @@ namespace Galaga.Model
         /// this is how the enemy fires their fireball
         /// </summary>
         /// <param name="enemy">which enemy is firing</param>
-        private void fireEnemyBullet(EnemyShip enemy)
+        private void FireEnemyBullet(EnemyShip enemy)
         {
             if (enemy != null && enemy.IsShooter && !this.uiTextManager.GameOver)
             {
@@ -226,28 +233,25 @@ namespace Galaga.Model
             }
         }
 
-        private void destroyEnemy(EnemyShip enemy)
+        private void DestroyEnemy(EnemyShip enemy)
         {
             int index = this.enemyShips.IndexOf(enemy);
+
             if (index >= 0)
             {
                 this.canvas.Children.Remove(enemy.Sprite);
+
                 if (enemy.HasSecondSprite)
                 {
                     this.canvas.Children.Remove(enemy.Sprite2);
                 }
+
                 this.enemyShips.RemoveAt(index);
                 this.originalEnemyPositions.RemoveAt(index);
             }
-            var remainingEnemies = new List<EnemyShip>();
-            foreach (var ship in this.enemyShips)
-            {
-                if (ship != null)
-                {
-                    remainingEnemies.Add(ship);
-                }
-            }
-            this.enemyShips = remainingEnemies;
+
+            // Filter out null ships
+            this.enemyShips = this.enemyShips.Where(ship => ship != null).ToList();
         }
 
         /// <summary>
@@ -257,25 +261,27 @@ namespace Galaga.Model
         /// <returns> bool if the bullet has hit a target that way the bullet manager knows to also remove the bullet</returns>
         public bool CheckCollision(Bullet playerBullet)
         {
-            bool isHit = false;
-            if (playerBullet != null)
+            if (playerBullet == null)
             {
-                for (var i = this.enemyShips.Count - 1; i >= 0; i--)
+                return false;
+            }
+
+            for (var i = this.enemyShips.Count - 1; i >= 0; i--)
+            {
+                var enemy = this.enemyShips[i];
+
+                if (this.IsCollision(playerBullet, enemy))
                 {
-                    var enemy = this.enemyShips[i];
-                    isHit = this.isCollision(playerBullet, enemy);
-                    if (this.isCollision(playerBullet, enemy))
-                    {
-                        this.destroyEnemy(enemy);
-                        this.uiTextManager.UpdateScore(enemy);
-                        break;
-                    }
+                    this.DestroyEnemy(enemy);
+                    this.uiTextManager.UpdateScore(enemy);
+                    return true;
                 }
             }
-            return isHit;
+
+            return false;
         }
 
-        private bool isCollision(Bullet bullet, GameObject ship)
+        private bool IsCollision(Bullet bullet, GameObject ship)
         {
             var bulletLeft = bullet.X;
             var bulletRight = bullet.X + bullet.Width;
