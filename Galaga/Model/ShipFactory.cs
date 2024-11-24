@@ -52,6 +52,16 @@ namespace Galaga.Model
 
         #endregion
 
+        #region Bonus Ship Creation
+        /// <summary>
+        /// Creates a new bonus ship with default settings.
+        /// </summary>
+        public static BonusShip CreateBonusShip()
+        {
+            return new BonusShip();
+        }
+        #endregion
+
         #region Player Ship Creation
 
         /// <summary>

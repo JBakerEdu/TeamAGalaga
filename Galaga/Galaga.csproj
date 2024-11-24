@@ -130,6 +130,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\BonusShip.cs" />
+    <Compile Include="Model\BonusShipManager.cs" />
     <Compile Include="Model\Bullet.cs" />
     <Compile Include="Model\BulletManager.cs" />
     <Compile Include="Model\EnemyManager.cs" />
