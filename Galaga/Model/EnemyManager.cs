@@ -14,15 +14,15 @@ namespace Galaga.Model
     {
         #region Data members
 
-        private const double EnemyMovementSpeed = 5;
-        private const double EnemyMaxMoveDistance = 30;
+        private const double EnemyMovementSpeed = 0.2;
+        private const double EnemyMaxMoveDistance = 10;
         private readonly Canvas canvas;
         private readonly double canvasWidth;
         private int tickCounter;
-        private const int FireIntervalMin = 1;
-        private readonly int[] shipsPerRow = { 3, 4, 4, 5};
-        private readonly double[] rowHeights = {260, 200, 120, 40 };
-        private const int FireIntervalMax = 1;
+        private const int FireIntervalMin = 30;
+        private readonly int[] shipsPerRow = { 3, 4, 4, 5 };
+        private readonly double[] rowHeights = { 260, 200, 120, 40 };
+        private const int FireIntervalMax = 100;
         private readonly Random random = new Random();
         private List<EnemyShip> enemyShips;
         private List<double> originalEnemyPositions;
@@ -33,6 +33,9 @@ namespace Galaga.Model
         private const int ShipSpeedX = 1;
         private const int ShipSpeedY = 0;
         private const int ShootingMin = 3;
+        private const int VisibleTicks = 60;
+        private const int InvisibleTicks = 60;
+        private int visibilityTickCounter;
 
         #endregion
 
@@ -60,7 +63,7 @@ namespace Galaga.Model
         {
             this.enemyMovementTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(1000)
+                Interval = TimeSpan.FromMilliseconds(100)
             };
             this.enemyMovementTimer.Tick += this.OnEnemyTimerTick;
             this.enemyMovementTimer.Start();
@@ -109,7 +112,7 @@ namespace Galaga.Model
             var enemyLevel = row + 1;
             bool meetsShootingMin = enemyLevel >= ShootingMin;
             EnemyShip enemyShip = this.createNewShip(enemyLevel, meetsShootingMin);
-            var shipX = shipSpacing + shipIndex * shipSpacing - enemyShip.Width / 2 ;
+            var shipX = shipSpacing + shipIndex * shipSpacing - enemyShip.Width / 2;
             enemyShip.RenderAt(shipX, rowY);
             this.canvas.Children.Add(enemyShip.Sprite);
             if (enemyShip.HasSecondSprite)
@@ -155,6 +158,7 @@ namespace Galaga.Model
                 this.uiTextManager.EndGame(true);
                 return;
             }
+
             var firstEnemy = this.enemyShips.FirstOrDefault(e => e != null);
             if (firstEnemy == null)
             {
@@ -196,7 +200,6 @@ namespace Galaga.Model
                 }
             }
         }
-
 
         private void updateEnemyPosition(EnemyShip enemy)
         {
