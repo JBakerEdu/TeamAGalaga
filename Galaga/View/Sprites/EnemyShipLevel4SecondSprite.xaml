@@ -16,34 +16,8 @@
     </UserControl.Resources>
 
     <Canvas>
-        <Line X1="5" Y1="50" X2="5" Y2="30" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-        <Line X1="5" Y1="20" X2="15" Y2="10" Stroke="{StaticResource WingTipColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-        <Line X1="5" Y1="20" X2="5" Y2="30" Stroke="{StaticResource WingTipColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
         <Line X1="5" Y1="45" X2="5" Y2="50" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-
-        <Line X1="50" Y1="50" X2="50" Y2="30" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-        <Line X1="50" Y1="20" X2="50" Y2="30" Stroke="{StaticResource WingTipColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-        <Line X1="50" Y1="20" X2="40" Y2="10" Stroke="{StaticResource WingTipColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
         <Line X1="50" Y1="45" X2="50" Y2="50" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-
-        <Ellipse Width="45" Height="15" Fill="{StaticResource OvalColor}" Canvas.Left="5" Canvas.Top="25" />
-        <Ellipse Width="42" Height="12" Fill="{StaticResource OvalColor}" Canvas.Left="6" Canvas.Top="34" />
-        <Ellipse Width="34" Height="11" Fill="{StaticResource OvalColor}" Canvas.Left="10" Canvas.Top="42" />
-
-        <Line X1="27" Y1="2" X2="27" Y2="55" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="6" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-1"/>
-        <Line X1="27" Y1="10" X2="27" Y2="20" Stroke="{StaticResource CockpitColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-
-        <Line X1="20" Y1="5" X2="20" Y2="50" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="2" VerticalAlignment="Top"/>
-        <Line X1="20" Y1="18" X2="20" Y2="27" Stroke="{StaticResource SecondaryAccentColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-        <Line X1="15" Y1="8" X2="15" Y2="45" Stroke="{StaticResource WingTipColor}" StrokeThickness="4" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-        <Line X1="15" Y1="27" X2="15" Y2="32" Stroke="{StaticResource MainAccentColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-
-        <Line X1="35" Y1="5" X2="35" Y2="50" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="2" VerticalAlignment="Top"/>
-        <Line X1="35" Y1="18" X2="35" Y2="27" Stroke="{StaticResource SecondaryAccentColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-        <Line X1="40" Y1="8" X2="40" Y2="45" Stroke="{StaticResource WingTipColor}" StrokeThickness="4" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-        <Line X1="40" Y1="27" X2="40" Y2="32" Stroke="{StaticResource MainAccentColor}" StrokeThickness="5" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
-
-        <Ellipse Width="8.9" Height="62" Fill="{StaticResource CockpitColor}" Canvas.Left="23" Opacity="0.8" RenderTransformOrigin="1.397,0.609" Canvas.Top="7" />
         <Line X1="50" Y1="55" X2="50" Y2="60" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Left" Canvas.Left="-15" VerticalAlignment="Top" Canvas.Top="-3"/>
         <Line X1="50" Y1="55" X2="50" Y2="60" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Left" Canvas.Left="-30" VerticalAlignment="Top" Canvas.Top="-3"/>
     </Canvas>
