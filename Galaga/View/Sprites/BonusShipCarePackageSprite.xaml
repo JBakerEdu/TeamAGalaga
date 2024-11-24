@@ -13,23 +13,14 @@
 
     <UserControl.Resources>
         <SolidColorBrush x:Key="ShipBaseColor" Color="#2E8B57"/>
-
         <SolidColorBrush x:Key="CockpitColor" Color="#FFFFFF"/>
-        
         <SolidColorBrush x:Key="WingTipColor" Color="#00C"/>
-        
         <SolidColorBrush x:Key="MainAccentColor" Color="DarkOrchid"/>
-
         <SolidColorBrush x:Key="SecondaryAccentColor" Color="CornflowerBlue"/>
-
         <SolidColorBrush x:Key="OvalColor" Color="#A2F5A2"/>
-
         <SolidColorBrush x:Key="CrateBaseColor" Color="#8B4513" />
-        
         <SolidColorBrush x:Key="CrateTopColor" Color="#D2B48C" />
-        
         <SolidColorBrush x:Key="CrateSecondaryColor" Color="#A52A2A" />
-
         <SolidColorBrush x:Key="ScrewColor" Color="DarkGray" />
     </UserControl.Resources>
 
