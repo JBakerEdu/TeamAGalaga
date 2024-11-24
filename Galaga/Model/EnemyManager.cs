@@ -190,7 +190,7 @@ namespace Galaga.Model
 
                 if (enemy.HasSecondSprite)
                 {
-                    if (enemy.Sprite2.Visibility == Visibility.Visible)
+                    if (enemy.Sprite2.Visibility != Visibility.Visible)
                     {
                         enemy.Sprite2.Visibility = Visibility.Visible;
                     }

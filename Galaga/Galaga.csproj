@@ -138,7 +138,6 @@
     <Compile Include="Model\GameObject.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\PlayerManager.cs" />
-    <Compile Include="Model\UiTextManager.cs" />
     <Compile Include="View\AudioManager.cs" />
     <Compile Include="View\GameCanvas.xaml.cs">
       <DependentUpon>GameCanvas.xaml</DependentUpon>
@@ -172,6 +171,7 @@
     <Compile Include="View\Sprites\PlayerSprite.xaml.cs">
       <DependentUpon>PlayerSprite.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UiTextManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
