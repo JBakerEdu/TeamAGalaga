@@ -1,19 +1,36 @@
 ﻿using System;
-using Windows.UI.Xaml.Controls;
+using System.Diagnostics;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 
 namespace Galaga.View
 {
     internal static class AudioManager
     {
-        // Path to the folder containing audio files
-        private const string AudioFilesFolder = "AudioFiles";
+        private const string AudioFilesFolder = "View/AudioFiles";
 
         /// <summary>
         /// Plays the sound for enemy blowing up.
         /// </summary>
         public static void PlayEnemyBlowUp()
         {
-            PlaySound("enemyBlowUp.wav");
+            playSound("enemyBlowUp.wav");
+        }
+
+        /// <summary>
+        /// Plays the sound for enemy shooting.
+        /// </summary>
+        public static void PlayEnemyShoot()
+        {
+            playSound("enemyShoot.wav");
+        }
+
+        /// <summary>
+        /// Plays the sound for the ending of a game.
+        /// </summary>
+        public static void PlayGameOver()
+        {
+            playSound("gameOver.wav");
         }
 
         /// <summary>
@@ -21,24 +38,33 @@ namespace Galaga.View
         /// </summary>
         public static void PlayPlayerBlowUp()
         {
-            PlaySound("playerBlowUp.wav");
+            playSound("playerBlowUp.wav");
+        }
+
+        /// <summary>
+        /// Plays the sound for player shooting.
+        /// </summary>
+        public static void PlayPlayerShoot()
+        {
+            playSound("playerShoot.wav");
         }
 
         /// <summary>
         /// General method to play a sound file.
         /// </summary>
         /// <param name="fileName">The name of the .wav file to play.</param>
-        private static async void PlaySound(string fileName)
+        private static async void playSound(string fileName)
         {
+            Debug.Print("Called playSound");
+
             try
             {
                 var uri = new Uri($"ms-appx:///{AudioFilesFolder}/{fileName}");
-                MediaElement mediaElement = new MediaElement
-                {
-                    AutoPlay = true
-                };
-                mediaElement.Source = uri;
-                mediaElement.Play();
+
+                var mediaPlayer = new MediaPlayer();
+                mediaPlayer.Source = MediaSource.CreateFromUri(uri);
+                mediaPlayer.Volume = 1.0;
+                mediaPlayer.Play();
             }
             catch (Exception ex)
             {
