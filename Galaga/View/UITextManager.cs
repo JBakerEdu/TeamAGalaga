@@ -40,7 +40,7 @@ namespace Galaga.Model
                 Text = "Score: 0",
                 FontSize = 24,
                 Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White),
-                Margin = new Thickness(this.canvas.Width - this.canvas.Width / 4 , 10, 0, 0)
+                Margin = new Thickness(this.canvas.Width - this.canvas.Width / 4, 10, 0, 0)
             };
             this.canvas.Children.Add(this.scoreTextBlock);
         }
