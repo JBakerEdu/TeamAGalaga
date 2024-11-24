@@ -19,10 +19,10 @@ namespace Galaga.Model
         private readonly Canvas canvas;
         private readonly double canvasWidth;
         private int tickCounter;
-        private const int FireIntervalMin = 30;
+        private const int FireIntervalMin = 5;
         private readonly int[] shipsPerRow = { 3, 4, 4, 5 };
         private readonly double[] rowHeights = { 260, 200, 120, 40 };
-        private const int FireIntervalMax = 100;
+        private const int FireIntervalMax = 25;
         private readonly Random random = new Random();
         private List<EnemyShip> enemyShips;
         private List<double> originalEnemyPositions;
