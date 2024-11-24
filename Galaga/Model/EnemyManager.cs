@@ -24,8 +24,8 @@ namespace Galaga.Model
         private readonly double[] rowHeights = { 260, 200, 120, 40 };
         private const int FireIntervalMax = 100;
         private readonly Random random = new Random();
-        private List<EnemyShip> enemyShips;
-        private List<double> originalEnemyPositions;
+        private IList<EnemyShip> enemyShips;
+        private IList<double> originalEnemyPositions;
         private bool movingRight = true;
         private DispatcherTimer enemyMovementTimer;
         private readonly BulletManager bulletManager;
@@ -193,14 +193,12 @@ namespace Galaga.Model
                 // Switch sprites on each movement
                 if (enemy.HasSecondSprite)
                 {
-                    if (enemy.Sprite.Visibility == Visibility.Visible)
+                    if (enemy.Sprite2.Visibility == Visibility.Visible)
                     {
-                        enemy.Sprite.Visibility = Visibility.Collapsed;
                         enemy.Sprite2.Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        enemy.Sprite.Visibility = Visibility.Visible;
                         enemy.Sprite2.Visibility = Visibility.Collapsed;
                     }
                 }
