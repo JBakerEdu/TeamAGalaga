@@ -56,7 +56,7 @@ namespace Galaga.Model
 
         private void createAndPlacePlayer()
         {
-            this.player = new Player();
+            this.player = ShipFactory.CreatePlayerShip();
             this.canvas.Children.Add(this.player.Sprite);
             this.placePlayerNearBottom();
         }
