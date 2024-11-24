@@ -14,15 +14,15 @@ namespace Galaga.Model
     {
         #region Data members
 
-        private const double EnemyMovementSpeed = 0.2;
-        private const double EnemyMaxMoveDistance = 10;
+        private const double EnemyMovementSpeed = 5;
+        private const double EnemyMaxMoveDistance = 30;
         private readonly Canvas canvas;
         private readonly double canvasWidth;
         private int tickCounter;
-        private const int FireIntervalMin = 30;
+        private const int FireIntervalMin = 1;
         private readonly int[] shipsPerRow = { 3, 4, 4, 5};
         private readonly double[] rowHeights = {260, 200, 120, 40 };
-        private const int FireIntervalMax = 100;
+        private const int FireIntervalMax = 1;
         private readonly Random random = new Random();
         private List<EnemyShip> enemyShips;
         private List<double> originalEnemyPositions;
@@ -33,9 +33,6 @@ namespace Galaga.Model
         private const int ShipSpeedX = 1;
         private const int ShipSpeedY = 0;
         private const int ShootingMin = 3;
-        private const int VisibleTicks = 60;
-        private const int InvisibleTicks = 60;
-        private int visibilityTickCounter;
 
         #endregion
 
@@ -63,7 +60,7 @@ namespace Galaga.Model
         {
             this.enemyMovementTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(16)
+                Interval = TimeSpan.FromMilliseconds(1000)
             };
             this.enemyMovementTimer.Tick += this.OnEnemyTimerTick;
             this.enemyMovementTimer.Start();
@@ -72,7 +69,6 @@ namespace Galaga.Model
         private void OnEnemyTimerTick(object sender, object e)
         {
             this.updateEnemiesMovement();
-            this.updateSwitching();
             this.updateFiring();
         }
 
@@ -88,31 +84,6 @@ namespace Galaga.Model
                     int randomIndex = this.random.Next(this.enemyShips.Count);
                     var enemy = this.enemyShips[randomIndex];
                     this.fireEnemyBullet(enemy);
-                }
-            }
-        }
-
-        private void updateSwitching()
-        {
-            this.visibilityTickCounter++;
-            foreach (var enemy in this.enemyShips)
-            {
-                if (enemy != null && enemy.HasSecondSprite)
-                {
-                    if (this.visibilityTickCounter < VisibleTicks)
-                    {
-                        enemy.Sprite.Visibility = Visibility.Visible;
-                        enemy.Sprite2.Visibility = Visibility.Collapsed;
-                    }
-                    else if (this.visibilityTickCounter < VisibleTicks + InvisibleTicks)
-                    {
-                        enemy.Sprite2.Visibility = Visibility.Visible;
-                        enemy.Sprite.Visibility = Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        this.visibilityTickCounter = 0;
-                    }
                 }
             }
         }
@@ -190,6 +161,8 @@ namespace Galaga.Model
                 this.uiTextManager.EndGame(true);
                 return;
             }
+
+            // Determine movement direction
             var moveAmount = this.movingRight ? EnemyMovementSpeed : -EnemyMovementSpeed;
             var currentDistanceFromStart = Math.Abs(firstEnemy.X - this.originalEnemyPositions[this.enemyShips.IndexOf(firstEnemy)]);
             if (currentDistanceFromStart + Math.Abs(moveAmount) > EnemyMaxMoveDistance)
@@ -197,15 +170,33 @@ namespace Galaga.Model
                 this.movingRight = !this.movingRight;
                 moveAmount = this.movingRight ? EnemyMovementSpeed : -EnemyMovementSpeed;
             }
+
+            // Move and switch sprites for each enemy
             foreach (var enemy in this.enemyShips)
             {
                 if (enemy != null)
                 {
                     enemy.Move(moveAmount);
                     this.updateEnemyPosition(enemy);
+
+                    // Switch sprites on each movement
+                    if (enemy.HasSecondSprite)
+                    {
+                        if (enemy.Sprite.Visibility == Visibility.Visible)
+                        {
+                            enemy.Sprite.Visibility = Visibility.Collapsed;
+                            enemy.Sprite2.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            enemy.Sprite.Visibility = Visibility.Visible;
+                            enemy.Sprite2.Visibility = Visibility.Collapsed;
+                        }
+                    }
                 }
             }
         }
+
 
         private void updateEnemyPosition(EnemyShip enemy)
         {

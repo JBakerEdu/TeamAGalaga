@@ -17,11 +17,9 @@ namespace Galaga.Model
         private const double BulletSpeed = 10;
         private readonly Canvas canvas;
         private readonly double canvasHeight;
-        private const int FireIntervalMin = 30;
-        private const int FireIntervalMax = 100;
-        private readonly Random random = new Random();
-        private readonly List<Bullet> activePlayerBullets;
-        private readonly List<Bullet> activeEnemyBullets;
+
+        private readonly IList<Bullet> activePlayerBullets;
+        private readonly IList<Bullet> activeEnemyBullets;
         private DispatcherTimer bulletMovementTimer;
         /// <summary>
         /// This sets the player manager so that the bullet manager can ask if a bullet has hit a ship
