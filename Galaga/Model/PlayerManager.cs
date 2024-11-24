@@ -9,7 +9,7 @@ namespace Galaga.Model
     public class PlayerManager
     {
         #region Data members
-        private const double PlayerOffsetFromBottom = 30;
+        private const double OffsetFromBottom = 30;
         private readonly Canvas canvas;
         private readonly double canvasHeight;
         private readonly double canvasWidth;
@@ -18,7 +18,7 @@ namespace Galaga.Model
         private readonly BulletManager bulletManger;
         private DateTime lastFireTime;
         private readonly TimeSpan fireCooldown = TimeSpan.FromMilliseconds(200);
-        private int playerLives;
+        private int lives;
 
         /// <summary>
         /// calls objects moveLeft
@@ -45,7 +45,7 @@ namespace Galaga.Model
             this.canvas = canvas;
             this.canvasHeight = canvas.Height;
             this.canvasWidth = canvas.Width;
-            this.playerLives = lives;
+            this.lives = lives;
             this.uiTextManager = uiTextManager;
             this.createAndPlacePlayer();
             this.bulletManger = bulletManger;
@@ -56,7 +56,7 @@ namespace Galaga.Model
 
         private void createAndPlacePlayer()
         {
-            this.player = new Player();
+            this.player = ShipFactory.CreatePlayerShip();
             this.canvas.Children.Add(this.player.Sprite);
             this.placePlayerNearBottom();
         }
@@ -64,7 +64,7 @@ namespace Galaga.Model
         private void placePlayerNearBottom()
         {
             this.player.X = this.canvasWidth / 2 - this.player.Width / 2.0;
-            this.player.Y = this.canvasHeight - this.player.Height - PlayerOffsetFromBottom;
+            this.player.Y = this.canvasHeight - this.player.Height - OffsetFromBottom;
             this.updatePlayerPosition();
         }
 
@@ -76,9 +76,9 @@ namespace Galaga.Model
 
         private void handlePlayerHit()
         {
-            this.playerLives--;
-            this.uiTextManager.UpdatePlayerLives(this.playerLives);
-            if (this.playerLives <= 0)
+            this.lives--;
+            this.uiTextManager.UpdatePlayerLives(this.lives);
+            if (this.lives <= 0)
             {
                 this.canvas.Children.Remove(this.player.Sprite);
                 this.uiTextManager.EndGame(false);
@@ -96,7 +96,7 @@ namespace Galaga.Model
                 if (currentTime - this.lastFireTime >= this.fireCooldown)
                 {
                     double renderX = this.player.X + this.player.Width / 2;
-                    double renderY = this.canvasHeight - PlayerOffsetFromBottom;
+                    double renderY = this.canvasHeight - OffsetFromBottom;
 
                     this.bulletManger.PlayerFiresBullet(renderX, renderY);
                     this.lastFireTime = currentTime;
