@@ -108,6 +108,7 @@
     <Prefer32Bit>true</Prefer32Bit>
     <UseWinFormsOutOfProcDesigner>True</UseWinFormsOutOfProcDesigner>
     <DocumentationFile>bin\x64\Debug\Galaga.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>SecurityRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -138,6 +139,7 @@
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\PlayerManager.cs" />
     <Compile Include="Model\UiTextManager.cs" />
+    <Compile Include="View\AudioManager.cs" />
     <Compile Include="View\GameCanvas.xaml.cs">
       <DependentUpon>GameCanvas.xaml</DependentUpon>
     </Compile>
@@ -185,6 +187,11 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="View\AudioFiles\enemyBlowUp.wav" />
+    <Content Include="View\AudioFiles\enemyShoot.wav" />
+    <Content Include="View\AudioFiles\gameOver.wav" />
+    <Content Include="View\AudioFiles\playerBlowUp.wav" />
+    <Content Include="View\AudioFiles\playerShoot.wav" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
