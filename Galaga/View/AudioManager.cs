@@ -50,6 +50,14 @@ namespace Galaga.View
         }
 
         /// <summary>
+        /// Plays the sound for when a bonus ship appears and in on canvas
+        /// </summary>
+        public static void PlayActiveBonusShip()
+        {
+            playSound("bonusShipActive.wav");
+        }
+
+        /// <summary>
         /// General method to play a sound file.
         /// </summary>
         /// <param name="fileName">The name of the .wav file to play.</param>
