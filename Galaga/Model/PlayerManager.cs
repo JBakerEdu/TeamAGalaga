@@ -85,6 +85,12 @@ namespace Galaga.Model
             }
         }
 
+        public void addLife()
+        {
+            this.playerLives++;
+            this.uiTextManager.UpdatePlayerLives(this.playerLives);
+        }
+
         /// <summary>
         /// This is how the player fires their bullet; the space bar calls here.
         /// </summary>
