@@ -63,8 +63,6 @@ namespace Galaga.View
         /// <param name="fileName">The name of the .wav file to play.</param>
         private static async void playSound(string fileName)
         {
-            Debug.Print("Called playSound");
-
             try
             {
                 var uri = new Uri($"ms-appx:///{AudioFilesFolder}/{fileName}");
