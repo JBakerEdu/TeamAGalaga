@@ -58,6 +58,11 @@ namespace Galaga.Model
             this.bonusShipManager.BonusShipSpawn = spawn;
         }
 
+        public void playerPowerUp(PowerUps powerUp)
+        {
+            this.playerManager.ApplyPowerUp(powerUp);
+        }
+
         #endregion
     }
 }

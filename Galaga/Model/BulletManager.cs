@@ -14,7 +14,7 @@ namespace Galaga.Model
     {
         #region Data members
 
-        private const int MaxBulletsAllowed = 3;
+        public int maxBulletsAllowed { get; set; }
         private readonly Canvas canvas;
         private readonly double canvasHeight;
 
@@ -34,6 +34,7 @@ namespace Galaga.Model
         public BulletManager(Canvas canvas)
         {
             this.canvas = canvas;
+            this.maxBulletsAllowed = 3;
             this.canvasHeight = canvas.Height;
             this.activePlayerBullets = new List<Bullet>();
             this.activeEnemyBullets = new List<Bullet>();
@@ -106,7 +107,7 @@ namespace Galaga.Model
         /// </summary>
         public void PlayerFiresBullet(double renderX, double renderY)
         {
-            if (this.activePlayerBullets.Count < MaxBulletsAllowed)
+            if (this.activePlayerBullets.Count < this.maxBulletsAllowed)
             {
                 var bullet = new Bullet(new BulletSprite(), 0, 5);
                 renderX = renderX - bullet.Width / 2;

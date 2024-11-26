@@ -2,6 +2,7 @@
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Galaga.View;
+using System.Threading.Tasks;
 
 namespace Galaga.Model
 {
@@ -25,15 +26,22 @@ namespace Galaga.Model
         private int playerLives;
         private DispatcherTimer collisionCheckTimer;
 
+        private bool shieldActive = false;
+        private DateTime powerUpEndTime;
+        private const int SpeedBoostMultiplier = 2;  // Double speed boost
+        private const int BulletCountMultiplier = 3;  // Triple bullets
+        private DispatcherTimer powerUpTimer;  // Timer for power-up expiration
+
         /// <summary>
-        /// calls objects moveLeft
+        /// Calls objects moveLeft
         /// </summary>
         public void MoveLeft() => this.player.MoveLeft();
 
         /// <summary>
-        /// calls objects moveRight
+        /// Calls objects moveRight
         /// </summary>
         public void MoveRight() => this.player.MoveRight(this.canvasWidth);
+
         #endregion
 
         #region Constructors
@@ -56,6 +64,7 @@ namespace Galaga.Model
             this.bulletManager = bulletManager;
             this.lastFireTime = DateTime.Now - this.fireCooldown;
             this.initializeCollisionCheckTimer();
+            this.InitializePowerUpTimer();
         }
 
         #endregion
@@ -87,7 +96,7 @@ namespace Galaga.Model
             this.playerLives--;
             AudioManager.PlayPlayerBlowUp();
             this.uiTextManager.UpdatePlayerLives(this.playerLives);
-            
+
             if (this.playerLives <= 0)
             {
                 this.canvas.Children.Remove(this.player.Sprite);
@@ -107,7 +116,7 @@ namespace Galaga.Model
 
         private void CheckCollision()
         {
-            if (this.bulletManager.CheckSpriteCollision(this.player, true))
+            if (!this.shieldActive && this.bulletManager.CheckSpriteCollision(this.player, true))
             {
                 this.handlePlayerHit();
             }
@@ -136,6 +145,106 @@ namespace Galaga.Model
                     this.lastFireTime = currentTime;
                 }
             }
+        }
+
+        #endregion
+
+        #region BonusPowerUps
+
+        public void ApplyPowerUp(PowerUps powerUp)
+        {
+            switch (powerUp)
+            {
+                case PowerUps.ExtraLife:
+                    AddLife();
+                    break;
+                case PowerUps.SpeedBoost:
+                    ApplySpeedBoost();
+                    break;
+                case PowerUps.Shield:
+                    ActivateShield();
+                    break;
+                case PowerUps.TripleBulletCap:
+                    EnableTripleBullet();
+                    break;
+            }
+        }
+
+        private void AddLife()
+        {
+            this.playerLives++;
+            this.uiTextManager.UpdatePlayerLives(this.playerLives);
+        }
+
+        private void ApplySpeedBoost()
+        {
+            if (this.player != null)
+            {
+                this.player.SpeedX *= SpeedBoostMultiplier;
+                SetPowerUpEndTime(() => ResetSpeedBoost());  // Start timer, and reset speed when done
+            }
+        }
+
+        private void ActivateShield()
+        {
+            this.shieldActive = true;
+            SetPowerUpEndTime(() => ResetShield());  // Start timer, and reset shield when done
+        }
+
+        private void EnableTripleBullet()
+        {
+            this.bulletManager.maxBulletsAllowed *= BulletCountMultiplier;  // Enable triple bullets
+            SetPowerUpEndTime(() => ResetTripleBullet());  // Start timer, and reset bullet count when done
+        }
+
+        private void SetPowerUpEndTime(Action resetMethod)
+        {
+            // Set power-up duration (example: 10 seconds)
+            powerUpEndTime = DateTime.Now.AddSeconds(10);
+            // Store the reset method to call when the time is up
+            this.resetMethod = resetMethod;
+        }
+
+        private Action resetMethod;
+
+        private void InitializePowerUpTimer()
+        {
+            this.powerUpTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)  // Update every second
+            };
+            this.powerUpTimer.Tick += (sender, args) => UpdatePowerUps();
+            this.powerUpTimer.Start();
+        }
+
+        private void UpdatePowerUps()
+        {
+            if (DateTime.Now >= powerUpEndTime && resetMethod != null)
+            {
+                // Call the reset method for this power-up
+                resetMethod.Invoke();
+                resetMethod = null;  // Clear the reset method to avoid repeated calls
+            }
+        }
+
+        // Reset methods for each power-up
+
+        private void ResetSpeedBoost()
+        {
+            if (this.player != null)
+            {
+                this.player.SpeedX /= SpeedBoostMultiplier;  // Reset speed boost
+            }
+        }
+
+        private void ResetShield()
+        {
+            this.shieldActive = false;  // Deactivate shield
+        }
+
+        private void ResetTripleBullet()
+        {
+            this.bulletManager.maxBulletsAllowed /= BulletCountMultiplier;  // Reset to normal bullet count
         }
 
         #endregion

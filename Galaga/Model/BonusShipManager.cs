@@ -66,7 +66,7 @@ namespace Galaga.Model
         {
             while (this.bonusShipActive && this.bonusShip.X + this.bonusShip.Width > 0)
             {
-                await Task.Delay(16);
+                await Task.Delay(30);
                 this.bonusShip.X -= BonusShipSpeed;
                 this.UpdateBonusShipPosition();
                 if (CheckCollision())
@@ -169,7 +169,11 @@ namespace Galaga.Model
         private void HandleBonusShipHit()
         {
             RemoveBonusShip();
-            this.gameManager.AddLifeToPlayer();
+            this.gameManager.AddLifeToPlayer(); // Add life or any other default behavior.
+
+            // Randomly assign a power-up to the player
+            PowerUps randomPowerUp = (PowerUps)this.random.Next(Enum.GetValues(typeof(PowerUps)).Length);
+            this.gameManager.playerPowerUp(randomPowerUp);
         }
 
         #endregion
