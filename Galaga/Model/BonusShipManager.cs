@@ -12,6 +12,7 @@ namespace Galaga.Model
         private const int TopOffset = 10;
         private readonly Canvas canvas;
         private readonly BulletManager bulletManager;
+        private readonly GameManager gameManager;
         private BonusShip bonusShip;
         private readonly Random random;
         private bool bonusShipActive;
@@ -26,8 +27,9 @@ namespace Galaga.Model
         #endregion
 
         #region Constructor
-        public BonusShipManager(Canvas canvas, BulletManager bulletManager)
+        public BonusShipManager(Canvas canvas, BulletManager bulletManager, GameManager gameManager)
         {
+            this.gameManager = gameManager;
             this.canvas = canvas;
             this.bulletManager = bulletManager;
             this.random = new Random();
@@ -151,11 +153,8 @@ namespace Galaga.Model
         /// </summary>
         private void HandleBonusShipHit()
         {
-            Debug.WriteLine("Bonus ship hit!");
             RemoveBonusShip();
-
-            // Add bonus score or other effects as needed
-            // Example: uiTextManager.UpdateScore(bonusScore);
+            this.gameManager.AddLifeToPlayer();
         }
 
         #endregion

@@ -27,23 +27,27 @@ namespace Galaga.Model
             UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives);
             this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, uiTextManager);
             EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager);
-            BonusShipManager bonusShipManager = new BonusShipManager(canvas, bulletManager);
+            BonusShipManager bonusShipManager = new BonusShipManager(canvas, bulletManager, this);
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// calls objects moveLeft
+        /// calls players moveLeft
         /// </summary>
         public void MovePlayerLeft() => this.playerManager.MoveLeft();
         /// <summary>
-        /// calls objects moveRight
+        /// calls players moveRight
         /// </summary>
         public void MovePlayerRight() => this.playerManager.MoveRight();
         /// <summary>
-        /// calls objects fire
+        /// calls players fire
         /// </summary>
         public void FireBullet() => this.playerManager.FireBullet();
+        /// <summary>
+        /// calls player to add a life
+        /// </summary>
+        public void AddLifeToPlayer() => this.playerManager.addLife();
         #endregion
     }
 }
