@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
+using Galaga.View;
 
 namespace Galaga.Model
 {
@@ -20,9 +20,14 @@ namespace Galaga.Model
         private const int BonusSpawnChance = 5;
         private const int BonusFireChance = 1;
         private const int TimerIntervalMilliseconds = 1000;
-        public static bool EnableBonusShipTimer = true;
+        private const int SoundEffectMilliseconds = 500;
         private bool canFire = true;
         private const int FireCooldownMilliseconds = 500;
+
+        /// <summary>
+        /// Turns off the spawn of the bonus ship giving control to turn off spawn chance. 
+        /// </summary>
+        public bool BonusShipSpawn { get; set; }
 
         #endregion
 
@@ -34,8 +39,8 @@ namespace Galaga.Model
             this.bulletManager = bulletManager;
             this.random = new Random();
             this.bonusShipActive = false;
-
-            StartBonusShipTimer();
+            this.StartBonusShipTimer();
+            this.BonusShipSpawn = true;
         }
         #endregion
 
@@ -47,16 +52,14 @@ namespace Galaga.Model
             {
                 return;
             }
-
             this.bonusShip = new BonusShip();
             this.canvas.Children.Add(this.bonusShip.Sprite);
-
             this.bonusShip.X = this.canvas.Width;
             this.bonusShip.Y = TopOffset;
             this.UpdateBonusShipPosition();
-
             this.bonusShipActive = true;
             this.MoveBonusShip();
+            this.StartBonusShipActivityLoop();
         }
 
         private async void MoveBonusShip()
@@ -66,8 +69,6 @@ namespace Galaga.Model
                 await Task.Delay(16);
                 this.bonusShip.X -= BonusShipSpeed;
                 this.UpdateBonusShipPosition();
-
-                // Check for collisions with player bullets
                 if (CheckCollision())
                 {
                     HandleBonusShipHit();
@@ -96,7 +97,7 @@ namespace Galaga.Model
 
         private void FireBullet()
         {
-            if (this.bonusShip == null)
+            if (this.bonusShip == null || !this.BonusShipSpawn)
             {
                 return;
             }
@@ -112,11 +113,25 @@ namespace Galaga.Model
             {
                 await Task.Delay(TimerIntervalMilliseconds);
 
-                if (EnableBonusShipTimer)
+                if (this.BonusShipSpawn)
                 {
                     this.TrySpawnBonusShip();
                 }
             }
+        }
+
+        private async void StartBonusShipActivityLoop()
+        {
+            while (this.bonusShipActive)
+            {
+                PlayActiveBonusShip();
+                await Task.Delay(SoundEffectMilliseconds);
+            }
+        }
+
+        private static void PlayActiveBonusShip()
+        {
+            AudioManager.PlayActiveBonusShip();
         }
 
         private void RemoveBonusShip()
@@ -145,7 +160,7 @@ namespace Galaga.Model
                 return false;
             }
 
-            return this.bulletManager.CheckSpriteCollision(this.bonusShip, false); // `true` for player bullets
+            return this.bulletManager.CheckSpriteCollision(this.bonusShip, false);
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ namespace Galaga.Model
     public class UiTextManager
     {
         private readonly Canvas canvas;
+        private readonly GameManager gameManager;
         private TextBlock scoreTextBlock;
         private TextBlock playerLivesTextBlock;
         private int score;
@@ -24,9 +25,10 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="canvas">the canvas to add the text onto</param>
         /// <param name="playerLives">the life count for the player ship</param>
-        public UiTextManager(Canvas canvas, int playerLives)
+        public UiTextManager(Canvas canvas, int playerLives, GameManager gameManager)
         {
             this.canvas = canvas;
+            this.gameManager = gameManager;
             this.GameOver = false;
             this.initializeScoreGame();
             this.initializePlayerLives(playerLives);
@@ -90,6 +92,7 @@ namespace Galaga.Model
             {
                 String gameOverText = win ? "You Win!!!" : "You Loose!!!";
                 this.GameOver = true;
+                this.gameManager.BonusShipSpawn(false);
                 this.gameOverTextBlock = new TextBlock
                 {
                     Text = gameOverText,
