@@ -10,6 +10,7 @@ namespace Galaga.Model
     {
         #region Data members
         private readonly PlayerManager playerManager;
+        private readonly BonusShipManager bonusShipManager;
         private readonly int playerLives = 3;
         #endregion
 
@@ -24,26 +25,39 @@ namespace Galaga.Model
         {
             canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
             BulletManager bulletManager = new BulletManager(canvas);
-            UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives);
+            UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives, this);
             this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, uiTextManager);
             EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager);
-            BonusShipManager bonusShipManager = new BonusShipManager(canvas, bulletManager);
+            this.bonusShipManager = new BonusShipManager(canvas, bulletManager, this);
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// calls objects moveLeft
+        /// calls players moveLeft
         /// </summary>
         public void MovePlayerLeft() => this.playerManager.MoveLeft();
         /// <summary>
-        /// calls objects moveRight
+        /// calls players moveRight
         /// </summary>
         public void MovePlayerRight() => this.playerManager.MoveRight();
         /// <summary>
-        /// calls objects fire
+        /// calls players fire
         /// </summary>
         public void FireBullet() => this.playerManager.FireBullet();
+        /// <summary>
+        /// calls player to add a life
+        /// </summary>
+        public void AddLifeToPlayer() => this.playerManager.addLife();
+        /// <summary>
+        /// calls the Bonus ship spawn to ensure that the bonus ship does not spawn at the wrong time
+        /// </summary>
+        /// <param name="spawn"></param>
+        public void BonusShipSpawn(bool spawn)
+        {
+            this.bonusShipManager.BonusShipSpawn = spawn;
+        }
+
         #endregion
     }
 }
