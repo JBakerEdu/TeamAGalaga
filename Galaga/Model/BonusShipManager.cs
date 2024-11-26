@@ -5,9 +5,6 @@ using Windows.UI.Xaml.Controls;
 
 namespace Galaga.Model
 {
-    /// <summary>
-    /// This is the manager for the bonus ships
-    /// </summary>
     public class BonusShipManager
     {
         #region Data Members
@@ -29,11 +26,6 @@ namespace Galaga.Model
         #endregion
 
         #region Constructor
-        /// <summary>
-        /// Constructs the BonusShipManager
-        /// </summary>
-        /// <param name="canvas">The game canvas</param>
-        /// <param name="bulletManager">The bullet manager for managing enemy bullets</param>
         public BonusShipManager(Canvas canvas, BulletManager bulletManager)
         {
             this.canvas = canvas;
@@ -47,16 +39,13 @@ namespace Galaga.Model
 
         #region Methods
 
-        /// <summary>
-        /// Attempts to spawn a bonus ship randomly.
-        /// </summary>
         public void TrySpawnBonusShip()
         {
-            if (bonusShipActive || random.Next(0, 100) >= BonusSpawnChance)
+            if (this.bonusShipActive || this.random.Next(0, 100) >= BonusSpawnChance)
             {
                 return;
             }
-            
+
             this.bonusShip = new BonusShip();
             this.canvas.Children.Add(this.bonusShip.Sprite);
 
@@ -68,9 +57,6 @@ namespace Galaga.Model
             this.MoveBonusShip();
         }
 
-        /// <summary>
-        /// Moves the bonus ship from right to left.
-        /// </summary>
         private async void MoveBonusShip()
         {
             while (this.bonusShipActive && this.bonusShip.X + this.bonusShip.Width > 0)
@@ -79,10 +65,17 @@ namespace Galaga.Model
                 this.bonusShip.X -= BonusShipSpeed;
                 this.UpdateBonusShipPosition();
 
+                // Check for collisions with player bullets
+                if (CheckCollision())
+                {
+                    HandleBonusShipHit();
+                    return;
+                }
+
                 if (canFire && this.random.Next(0, 100) < BonusFireChance)
                 {
                     this.FireBullet();
-                    StartFireCooldown();
+                    this.StartFireCooldown();
                 }
             }
 
@@ -92,21 +85,13 @@ namespace Galaga.Model
             }
         }
 
-        /// <summary>
-        /// Starts the cooldown period after firing a shot.
-        /// </summary>
         private async void StartFireCooldown()
         {
-            canFire = false;
+            this.canFire = false;
             await Task.Delay(FireCooldownMilliseconds);
-            canFire = true;
+            this.canFire = true;
         }
 
-
-
-        /// <summary>
-        /// Fires a bullet from the bonus ship using the BulletManager.
-        /// </summary>
         private void FireBullet()
         {
             if (this.bonusShip == null)
@@ -119,9 +104,6 @@ namespace Galaga.Model
             this.bulletManager.FireEnemyBullet(bulletX, bulletY);
         }
 
-        /// <summary>
-        /// Timer loop that runs as long as EnableBonusShipTimer is true.
-        /// </summary>
         private async void StartBonusShipTimer()
         {
             while (true)
@@ -130,14 +112,11 @@ namespace Galaga.Model
 
                 if (EnableBonusShipTimer)
                 {
-                    TrySpawnBonusShip();
+                    this.TrySpawnBonusShip();
                 }
             }
         }
 
-        /// <summary>
-        /// Removes the bonus ship from the canvas and deactivates it.
-        /// </summary>
         private void RemoveBonusShip()
         {
             if (this.bonusShip != null)
@@ -148,14 +127,37 @@ namespace Galaga.Model
             }
         }
 
-        /// <summary>
-        /// Updates the bonus ship's position on the canvas.
-        /// </summary>
         private void UpdateBonusShipPosition()
         {
             Canvas.SetLeft(this.bonusShip.Sprite, this.bonusShip.X);
             Canvas.SetTop(this.bonusShip.Sprite, this.bonusShip.Y);
         }
+
+        /// <summary>
+        /// Checks if the bonus ship has collided with any player bullet.
+        /// </summary>
+        private bool CheckCollision()
+        {
+            if (this.bonusShip == null)
+            {
+                return false;
+            }
+
+            return this.bulletManager.CheckSpriteCollision(this.bonusShip, false); // `true` for player bullets
+        }
+
+        /// <summary>
+        /// Handles the case when the bonus ship is hit by a bullet.
+        /// </summary>
+        private void HandleBonusShipHit()
+        {
+            Debug.WriteLine("Bonus ship hit!");
+            RemoveBonusShip();
+
+            // Add bonus score or other effects as needed
+            // Example: uiTextManager.UpdateScore(bonusScore);
+        }
+
         #endregion
     }
 }
