@@ -2,6 +2,7 @@
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
+using Galaga.View;
 using Galaga.View.Sprites;
 
 namespace Galaga.Model
@@ -112,6 +113,7 @@ namespace Galaga.Model
                 renderY = renderY - bullet.Height;
                 bullet.RenderAt(renderX, renderY);
                 this.canvas.Children.Add(bullet.Sprite);
+                AudioManager.PlayPlayerShoot();
                 this.activePlayerBullets.Add(bullet);
             }
         }
@@ -127,57 +129,23 @@ namespace Galaga.Model
             renderX = renderX - bullet.Width / 2;
             bullet.RenderAt(renderX, renderY);
             this.canvas.Children.Add(bullet.Sprite);
+            AudioManager.PlayEnemyShoot();
             this.activeEnemyBullets.Add(bullet);
         }
 
-        ///// <summary>
-        ///// Checks if a players bullet hits any enemyships
-        ///// </summary>
-        ///// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
-        //public void CheckPlayerBulletCollisions(int index)
-        //{
-        //    var playerBullet = this.activePlayerBullets[index];
-        //    if (playerBullet != null && this.EnemyManager.CheckCollision(playerBullet))
-        //    {
-        //        this.removePlayerBullet(index);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// checks if an Enemy bullet hits the player
-        ///// </summary>
-        ///// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
-        //public void CheckEnemyBulletCollisions(int index)
-        //{
-        //    var enemyBullet = this.activeEnemyBullets[index];
-        //    if (enemyBullet != null && this.PlayerManager.CheckCollision(enemyBullet))
-        //    {
-        //        this.removeEnemyBullet(index);
-        //    }
-        //}
-
         public bool CheckSpriteCollision(GameObject ship, bool isPlayer)
         {
-            // Determine the list of bullets to check based on whether it's a player or enemy ship
             var bullets = isPlayer ? this.activeEnemyBullets : this.activePlayerBullets;
-
             for (int i = bullets.Count - 1; i >= 0; i--)
             {
                 var bullet = bullets[i];
-
-                // Check if the bullet has collided with the ship
                 if (IsCollision(bullet, ship))
                 {
-                    // Remove the bullet from the canvas and the active bullets list
                     this.canvas.Children.Remove(bullet.Sprite);
                     bullets.RemoveAt(i);
-
-                    // Return true to indicate a collision occurred
                     return true;
                 }
             }
-
-            // No collisions detected
             return false;
         }
 
@@ -193,17 +161,10 @@ namespace Galaga.Model
             var shipTop = ship.Y;
             var shipBottom = ship.Y + ship.Height;
 
-            // Check for overlapping bounding boxes
             return bulletBottom >= shipTop &&
                    bulletTop <= shipBottom &&
                    bulletRight >= shipLeft &&
                    bulletLeft <= shipRight;
         }
-
-
-
-
-
-
     }
 }

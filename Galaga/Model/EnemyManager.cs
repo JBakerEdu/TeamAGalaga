@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Galaga.View.Sprites;
 using System.Linq;
+using Galaga.View;
 
 namespace Galaga.Model
 {
@@ -243,20 +244,6 @@ namespace Galaga.Model
             this.ships = this.ships.Where(ship => ship != null).ToList();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private void CheckCollision()
         {
             foreach (var enemy in this.ships.ToList())
@@ -264,77 +251,10 @@ namespace Galaga.Model
                 if (enemy != null && this.bulletManager.CheckSpriteCollision(enemy, false))
                 {
                     this.DestroyEnemy(enemy);
+                    AudioManager.PlayEnemyBlowUp();
                     this.uiTextManager.UpdateScore(enemy);
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        ///// <summary>
-        ///// Check if a bullet passed in has collided with any enemy ships
-        ///// </summary>
-        ///// <param name="playerBullet"> the bullet being checked if it hits an enemy ship</param>
-        ///// <returns> bool if the bullet has hit a target that way the bullet manager knows to also remove the bullet</returns>
-        //public bool CheckCollision(Bullet playerBullet)
-        //{
-        //    if (playerBullet == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    for (var i = this.ships.Count - 1; i >= 0; i--)
-        //    {
-        //        var enemy = this.ships[i];
-
-        //        if (this.IsCollision(playerBullet, enemy))
-        //        {
-        //            this.DestroyEnemy(enemy);
-        //            this.uiTextManager.UpdateScore(enemy);
-        //            return true;
-        //        }
-        //    }
-
-        //    return false;
-        //}
-
-        //private bool IsCollision(Bullet bullet, GameObject ship)
-        //{
-        //    var bulletLeft = bullet.X;
-        //    var bulletRight = bullet.X + bullet.Width;
-        //    var bulletTop = bullet.Y;
-        //    var bulletBottom = bullet.Y + bullet.Height;
-
-        //    var enemyLeft = ship.X;
-        //    var enemyWidth = ship.Width;
-        //    var enemyHeight = ship.Height;
-
-        //    var enemyRight = ship.X + enemyWidth;
-        //    var enemyTop = ship.Y;
-        //    var enemyBottom = ship.Y + enemyHeight;
-        //    if (bulletBottom >= enemyTop && bulletTop <= enemyBottom)
-        //    {
-        //        return bulletRight > enemyLeft && bulletLeft < enemyRight;
-        //    }
-        //    return false;
-        //}
     }
 }
