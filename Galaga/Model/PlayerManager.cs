@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml;
 
 namespace Galaga.Model
 {
@@ -9,16 +10,19 @@ namespace Galaga.Model
     public class PlayerManager
     {
         #region Data members
+
         private const double PlayerOffsetFromBottom = 30;
         private readonly Canvas canvas;
         private readonly double canvasHeight;
         private readonly double canvasWidth;
         private Player player;
         private readonly UiTextManager uiTextManager;
-        private readonly BulletManager bulletManger;
+        private readonly BulletManager bulletManager;
         private DateTime lastFireTime;
         private readonly TimeSpan fireCooldown = TimeSpan.FromMilliseconds(200);
+        private const int CollisionCheckIntervalMs = 50;
         private int playerLives;
+        private DispatcherTimer collisionCheckTimer;
 
         /// <summary>
         /// calls objects moveLeft
@@ -38,9 +42,9 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="lives"> the lives a player has</param>
         /// <param name="canvas"> the canvas that the player will be added onto</param>
-        /// <param name="bulletManger"></param>
+        /// <param name="bulletManager"></param>
         /// <param name="uiTextManager"></param>
-        public PlayerManager(int lives, Canvas canvas, BulletManager bulletManger, UiTextManager uiTextManager)
+        public PlayerManager(int lives, Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager)
         {
             this.canvas = canvas;
             this.canvasHeight = canvas.Height;
@@ -48,11 +52,14 @@ namespace Galaga.Model
             this.playerLives = lives;
             this.uiTextManager = uiTextManager;
             this.createAndPlacePlayer();
-            this.bulletManger = bulletManger;
+            this.bulletManager = bulletManager;
             this.lastFireTime = DateTime.Now - this.fireCooldown;
+            this.initializeCollisionCheckTimer();
         }
 
         #endregion
+
+        #region Methods
 
         private void createAndPlacePlayer()
         {
@@ -85,6 +92,24 @@ namespace Galaga.Model
             }
         }
 
+        private void initializeCollisionCheckTimer()
+        {
+            this.collisionCheckTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(CollisionCheckIntervalMs)
+            };
+            this.collisionCheckTimer.Tick += (sender, args) => this.CheckCollision();
+            this.collisionCheckTimer.Start();
+        }
+
+        private void CheckCollision()
+        {
+            if (this.bulletManager.CheckSpriteCollision(this.player, true))
+            {
+                this.handlePlayerHit();
+            }
+        }
+
         public void addLife()
         {
             this.playerLives++;
@@ -104,51 +129,12 @@ namespace Galaga.Model
                     double renderX = this.player.X + this.player.Width / 2;
                     double renderY = this.canvasHeight - PlayerOffsetFromBottom;
 
-                    this.bulletManger.PlayerFiresBullet(renderX, renderY);
+                    this.bulletManager.PlayerFiresBullet(renderX, renderY);
                     this.lastFireTime = currentTime;
                 }
             }
         }
 
-        /// <summary>
-        /// Checks if a passed in bullet hits the players ship
-        /// </summary>
-        /// <param name="enemyBullet"></param>
-        /// <returns></returns>
-        public bool CheckCollision(Bullet enemyBullet)
-        {
-            bool isHit = this.isCollision(enemyBullet, this.player);
-            if (enemyBullet != null && isHit)
-            { 
-                this.handlePlayerHit();
-            }
-            return isHit;
-        }
-
-        private bool isCollision(Bullet bullet, GameObject ship)
-        {
-            var bulletLeft = bullet.X;
-            var bulletRight = bullet.X + bullet.Width;
-            var bulletTop = bullet.Y;
-            var bulletBottom = bullet.Y + bullet.Height;
-
-            var enemyLeft = ship.X;
-            var enemyWidth = ship.Width;
-            var enemyHeight = ship.Height;
-
-            var enemyRight = ship.X + enemyWidth;
-            var enemyTop = ship.Y;
-            var enemyBottom = ship.Y + enemyHeight;
-            if (enemyWidth <= 0 || enemyHeight <= 0)
-            {
-                return false;
-            }
-            if (bulletBottom >= enemyTop && bulletTop <= enemyBottom)
-            {
-                return bulletRight > enemyLeft && bulletLeft < enemyRight;
-            }
-
-            return false;
-        }
+        #endregion
     }
 }
