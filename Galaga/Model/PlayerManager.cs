@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
+using Galaga.View;
 
 namespace Galaga.Model
 {
@@ -84,7 +85,9 @@ namespace Galaga.Model
         private void handlePlayerHit()
         {
             this.playerLives--;
+            AudioManager.PlayPlayerBlowUp();
             this.uiTextManager.UpdatePlayerLives(this.playerLives);
+            
             if (this.playerLives <= 0)
             {
                 this.canvas.Children.Remove(this.player.Sprite);

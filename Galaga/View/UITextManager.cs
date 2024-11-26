@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Galaga.View;
 
 namespace Galaga.Model
 {
@@ -101,6 +102,7 @@ namespace Galaga.Model
                     Margin = new Thickness(10, this.canvas.Height - 40, 0, 0)
                 };
                 this.canvas.Children.Add(this.gameOverTextBlock);
+                AudioManager.PlayGameOver();
             }
         }
     }
