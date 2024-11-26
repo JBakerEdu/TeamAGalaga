@@ -14,21 +14,12 @@ namespace Galaga.Model
         #region Data members
 
         private const int MaxBulletsAllowed = 3;
-        private const double BulletSpeed = 10;
         private readonly Canvas canvas;
         private readonly double canvasHeight;
 
         private readonly IList<Bullet> activePlayerBullets;
         private readonly IList<Bullet> activeEnemyBullets;
         private DispatcherTimer bulletMovementTimer;
-        /// <summary>
-        /// This sets the player manager so that the bullet manager can ask if a bullet has hit a ship
-        /// </summary>
-        public PlayerManager PlayerManager { get; set; }
-        /// <summary>
-        /// This sets the enemy manager so that the bullet manager can ask if a bullet has hit a ship
-        /// </summary>
-        public EnemyManager EnemyManager { get; set; }
 
         #endregion
 
@@ -76,10 +67,6 @@ namespace Galaga.Model
                 {
                     this.removePlayerBullet(i);
                 }
-                else
-                {
-                    this.CheckPlayerBulletCollisions(i);
-                }
             }
         }
 
@@ -92,10 +79,6 @@ namespace Galaga.Model
                 if (bullet.IsOffScreen(this.canvasHeight))
                 {
                     this.removeEnemyBullet(i);
-                }
-                else
-                {
-                    this.CheckEnemyBulletCollisions(i);
                 }
             }
         }
@@ -147,31 +130,80 @@ namespace Galaga.Model
             this.activeEnemyBullets.Add(bullet);
         }
 
-        /// <summary>
-        /// Checks if a players bullet hits any enemyships
-        /// </summary>
-        /// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
-        public void CheckPlayerBulletCollisions(int index)
+        ///// <summary>
+        ///// Checks if a players bullet hits any enemyships
+        ///// </summary>
+        ///// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
+        //public void CheckPlayerBulletCollisions(int index)
+        //{
+        //    var playerBullet = this.activePlayerBullets[index];
+        //    if (playerBullet != null && this.EnemyManager.CheckCollision(playerBullet))
+        //    {
+        //        this.removePlayerBullet(index);
+        //    }
+        //}
+
+        ///// <summary>
+        ///// checks if an Enemy bullet hits the player
+        ///// </summary>
+        ///// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
+        //public void CheckEnemyBulletCollisions(int index)
+        //{
+        //    var enemyBullet = this.activeEnemyBullets[index];
+        //    if (enemyBullet != null && this.PlayerManager.CheckCollision(enemyBullet))
+        //    {
+        //        this.removeEnemyBullet(index);
+        //    }
+        //}
+
+        public bool CheckSpriteCollision(GameObject ship, bool isPlayer)
         {
-            var playerBullet = this.activePlayerBullets[index];
-            if (playerBullet != null && this.EnemyManager.CheckCollision(playerBullet))
+            // Determine the list of bullets to check based on whether it's a player or enemy ship
+            var bullets = isPlayer ? this.activeEnemyBullets : this.activePlayerBullets;
+
+            for (int i = bullets.Count - 1; i >= 0; i--)
             {
-                this.removePlayerBullet(index);
+                var bullet = bullets[i];
+
+                // Check if the bullet has collided with the ship
+                if (IsCollision(bullet, ship))
+                {
+                    // Remove the bullet from the canvas and the active bullets list
+                    this.canvas.Children.Remove(bullet.Sprite);
+                    bullets.RemoveAt(i);
+
+                    // Return true to indicate a collision occurred
+                    return true;
+                }
             }
+
+            // No collisions detected
+            return false;
         }
 
-        /// <summary>
-        /// checks if an Enemy bullet hits the player
-        /// </summary>
-        /// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
-        public void CheckEnemyBulletCollisions(int index)
+        private bool IsCollision(Bullet bullet, GameObject ship)
         {
-            var enemyBullet = this.activeEnemyBullets[index];
-            if (enemyBullet != null && this.PlayerManager.CheckCollision(enemyBullet))
-            {
-                this.removeEnemyBullet(index);
-            }
+            var bulletLeft = bullet.X;
+            var bulletRight = bullet.X + bullet.Width;
+            var bulletTop = bullet.Y;
+            var bulletBottom = bullet.Y + bullet.Height;
+
+            var shipLeft = ship.X;
+            var shipRight = ship.X + ship.Width;
+            var shipTop = ship.Y;
+            var shipBottom = ship.Y + ship.Height;
+
+            // Check for overlapping bounding boxes
+            return bulletBottom >= shipTop &&
+                   bulletTop <= shipBottom &&
+                   bulletRight >= shipLeft &&
+                   bulletLeft <= shipRight;
         }
+
+
+
+
+
 
     }
 }

@@ -27,8 +27,6 @@ namespace Galaga.Model
             UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives);
             this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, uiTextManager);
             EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager);
-            bulletManager.EnemyManager = enemyManager;
-            bulletManager.PlayerManager = this.playerManager;
             BonusShipManager bonusShipManager = new BonusShipManager(canvas, bulletManager);
         }
         #endregion
