@@ -20,6 +20,7 @@ namespace Galaga.Model
         /// </summary>
         public bool GameOver { get; private set; }
         private TextBlock gameOverTextBlock;
+        private TextBlock powerUpTextBlock;
 
         /// <summary>
         /// This is the constructor for the UiTextManager and will set and initialize the correct data onto the canvas. 
@@ -48,6 +49,40 @@ namespace Galaga.Model
             this.canvas.Children.Add(this.scoreTextBlock);
         }
 
+        /// <summary>
+        /// Adds or updates the text field at the top of the canvas to display the active power-up.
+        /// </summary>
+        /// <param name="powerUpName">The name of the active power-up.</param>
+        public void SetPowerUpText(string powerUpName)
+        {
+            string powerUpText = $"Active Power-Up: {powerUpName}";
+
+            if (this.powerUpTextBlock != null)
+            {
+                // Update the text if the TextBlock already exists
+                this.powerUpTextBlock.Text = powerUpText;
+            }
+            else
+            {
+                // Create the TextBlock
+                this.powerUpTextBlock = new TextBlock
+                {
+                    Text = powerUpText,
+                    FontSize = 15,
+                    Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.Yellow)
+                };
+
+                // Temporarily add to the canvas to measure size
+                this.canvas.Children.Add(this.powerUpTextBlock);
+                this.powerUpTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+                var textSize = this.powerUpTextBlock.DesiredSize;
+
+                // Adjust position based on measured size
+                Canvas.SetLeft(this.powerUpTextBlock, (this.canvas.Width - textSize.Width) / 2); // Center horizontally
+                Canvas.SetTop(this.powerUpTextBlock, 10); // Fixed distance from the top
+            }
+        }
+
         private void initializePlayerLives(int playerLives)
         {
             this.playerLivesTextBlock = new TextBlock
@@ -61,7 +96,7 @@ namespace Galaga.Model
         }
 
         /// <summary>
-        /// this updates the score on screen witht the enemy ships point value added to current score
+        /// this updates the score on screen with the enemy ships point value added to current score
         /// </summary>
         /// <param name="enemy"> the enemy ship so it can get the correct point value</param>
         public void UpdateScore(EnemyShip enemy)

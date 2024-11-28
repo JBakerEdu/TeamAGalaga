@@ -25,7 +25,7 @@ namespace Galaga.Model
         private const int CollisionCheckIntervalMs = 50;
         private int playerLives;
         private DispatcherTimer collisionCheckTimer;
-
+        private const string NoCurrentPowerUp = "No Current Power-Up";
         private bool shieldActive = false;
         private DateTime powerUpEndTime;
         private const int SpeedBoostMultiplier = 2;  // Double speed boost
@@ -60,6 +60,7 @@ namespace Galaga.Model
             this.canvasWidth = canvas.Width;
             this.playerLives = lives;
             this.uiTextManager = uiTextManager;
+            this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
             this.createAndPlacePlayer();
             this.bulletManager = bulletManager;
             this.lastFireTime = DateTime.Now - this.fireCooldown;
@@ -153,6 +154,8 @@ namespace Galaga.Model
 
         public void ApplyPowerUp(PowerUps powerUp)
         {
+            AudioManager.PlayActivePowerUp();
+            this.uiTextManager.SetPowerUpText(powerUp.ToString());
             switch (powerUp)
             {
                 case PowerUps.ExtraLife:
@@ -178,30 +181,26 @@ namespace Galaga.Model
 
         private void ApplySpeedBoost()
         {
-            if (this.player != null)
-            {
-                this.player.SpeedX *= SpeedBoostMultiplier;
-                SetPowerUpEndTime(() => ResetSpeedBoost());  // Start timer, and reset speed when done
-            }
+            this.player.SpeedX *= SpeedBoostMultiplier;
+            SetPowerUpEndTime(() => ResetSpeedBoost());
+            
         }
 
         private void ActivateShield()
         {
             this.shieldActive = true;
-            SetPowerUpEndTime(() => ResetShield());  // Start timer, and reset shield when done
+            SetPowerUpEndTime(() => ResetShield());
         }
 
         private void EnableTripleBullet()
         {
-            this.bulletManager.maxBulletsAllowed *= BulletCountMultiplier;  // Enable triple bullets
-            SetPowerUpEndTime(() => ResetTripleBullet());  // Start timer, and reset bullet count when done
+            this.bulletManager.maxBulletsAllowed *= BulletCountMultiplier;
+            SetPowerUpEndTime(() => ResetTripleBullet());
         }
 
         private void SetPowerUpEndTime(Action resetMethod)
         {
-            // Set power-up duration (example: 10 seconds)
-            powerUpEndTime = DateTime.Now.AddSeconds(10);
-            // Store the reset method to call when the time is up
+            powerUpEndTime = DateTime.Now.AddSeconds(12);
             this.resetMethod = resetMethod;
         }
 
@@ -211,7 +210,7 @@ namespace Galaga.Model
         {
             this.powerUpTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromSeconds(1)  // Update every second
+                Interval = TimeSpan.FromSeconds(1)
             };
             this.powerUpTimer.Tick += (sender, args) => UpdatePowerUps();
             this.powerUpTimer.Start();
@@ -221,30 +220,33 @@ namespace Galaga.Model
         {
             if (DateTime.Now >= powerUpEndTime && resetMethod != null)
             {
-                // Call the reset method for this power-up
                 resetMethod.Invoke();
-                resetMethod = null;  // Clear the reset method to avoid repeated calls
+                resetMethod = null;
             }
         }
 
-        // Reset methods for each power-up
 
         private void ResetSpeedBoost()
         {
-            if (this.player != null)
-            {
-                this.player.SpeedX /= SpeedBoostMultiplier;  // Reset speed boost
-            }
+            this.player.SpeedX /= SpeedBoostMultiplier;
+            this.resetUIPowerUpText();
         }
 
         private void ResetShield()
         {
-            this.shieldActive = false;  // Deactivate shield
+            this.shieldActive = false;
+            this.resetUIPowerUpText();
         }
 
         private void ResetTripleBullet()
         {
-            this.bulletManager.maxBulletsAllowed /= BulletCountMultiplier;  // Reset to normal bullet count
+            this.bulletManager.maxBulletsAllowed /= BulletCountMultiplier;
+            this.resetUIPowerUpText();
+        }
+
+        private void resetUIPowerUpText()
+        {
+            this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
         }
 
         #endregion

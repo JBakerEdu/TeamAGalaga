@@ -199,6 +199,7 @@
     <Content Include="View\AudioFiles\enemyShoot.wav" />
     <Content Include="View\AudioFiles\gameOver.wav" />
     <Content Include="View\AudioFiles\playerBlowUp.wav" />
+    <Content Include="View\AudioFiles\playerPowerUp.wav" />
     <Content Include="View\AudioFiles\playerShoot.wav" />
   </ItemGroup>
   <ItemGroup>
