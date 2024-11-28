@@ -30,6 +30,7 @@ public class UiTextManager
 
     public UiTextManager(Canvas canvas, int playerLives, GameManager gameManager)
     {
+
         this.canvas = canvas;
         this.gameManager = gameManager;
         this.GameOver = false;
@@ -116,6 +117,7 @@ public class UiTextManager
                 Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White),
                 Margin = new Thickness(10, this.canvas.Height - 40, 0, 0)
             };
+
             this.canvas.Children.Add(this.gameOverTextBlock);
             AudioManager.PlayGameOver();
 

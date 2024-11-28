@@ -50,6 +50,14 @@ namespace Galaga.View
         }
 
         /// <summary>
+        /// Plays the sound for player has the power up active
+        /// </summary>
+        public static void PlayActivePowerUp()
+        {
+            playSound("playerPowerUp.wav");
+        }
+
+        /// <summary>
         /// Plays the sound for when a bonus ship appears and in on canvas
         /// </summary>
         public static void PlayActiveBonusShip()

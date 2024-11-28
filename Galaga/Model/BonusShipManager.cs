@@ -17,12 +17,15 @@ namespace Galaga.Model
         private readonly Random random;
         private bool bonusShipActive;
         private const double BonusShipSpeed = 2.0;
-        private const int BonusSpawnChance = 5;
+        private const int BonusSpawnChance = 100;
         private const int BonusFireChance = 1;
         private const int TimerIntervalMilliseconds = 1000;
         private const int SoundEffectMilliseconds = 500;
-        private bool canFire = true;
         private const int FireCooldownMilliseconds = 500;
+        private const int MinimumSpawnDelayMilliseconds = 25000; // 15 seconds
+
+        private bool canFire = true;
+        private DateTime lastSpawnTime; // Tracks the last spawn time
 
         /// <summary>
         /// Turns off the spawn of the bonus ship giving control to turn off spawn chance. 
@@ -39,6 +42,7 @@ namespace Galaga.Model
             this.bulletManager = bulletManager;
             this.random = new Random();
             this.bonusShipActive = false;
+            this.lastSpawnTime = DateTime.MinValue; // Initialize to a very old time
             this.StartBonusShipTimer();
             this.BonusShipSpawn = true;
         }
@@ -48,16 +52,21 @@ namespace Galaga.Model
 
         public void TrySpawnBonusShip()
         {
-            if (this.bonusShipActive || this.random.Next(0, 100) >= BonusSpawnChance)
+            // Check if enough time has passed since the last spawn
+            if (this.bonusShipActive ||
+                this.random.Next(0, 100) >= BonusSpawnChance ||
+                (DateTime.Now - this.lastSpawnTime).TotalMilliseconds < MinimumSpawnDelayMilliseconds)
             {
                 return;
             }
+
             this.bonusShip = new BonusShip();
             this.canvas.Children.Add(this.bonusShip.Sprite);
             this.bonusShip.X = this.canvas.Width;
             this.bonusShip.Y = TopOffset;
             this.UpdateBonusShipPosition();
             this.bonusShipActive = true;
+            this.lastSpawnTime = DateTime.Now; // Update the last spawn time
             this.MoveBonusShip();
             this.StartBonusShipActivityLoop();
         }
