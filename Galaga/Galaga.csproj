@@ -185,6 +185,9 @@
     <Compile Include="View\Sprites\PlayerSprite.xaml.cs">
       <DependentUpon>PlayerSprite.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\StartScreenPage.xaml.cs">
+      <DependentUpon>StartScreenPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UiTextManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -258,6 +261,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Sprites\PlayerSprite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StartScreenPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
