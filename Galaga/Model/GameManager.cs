@@ -9,7 +9,7 @@ namespace Galaga.Model
     public class GameManager
     {
         #region Data members
-        private readonly PlayerManager playerManager;
+        public readonly PlayerManager playerManager;
         private readonly BonusShipManager bonusShipManager;
         private readonly int playerLives = 3;
         #endregion
@@ -27,7 +27,7 @@ namespace Galaga.Model
             BulletManager bulletManager = new BulletManager(canvas);
             UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives, this);
             this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, uiTextManager);
-            EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager);
+            EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, playerManager);
             this.bonusShipManager = new BonusShipManager(canvas, bulletManager, this);
         }
         #endregion

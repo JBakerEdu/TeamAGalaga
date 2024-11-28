@@ -86,7 +86,7 @@ namespace Galaga.Model
 
                 if (canFire && this.random.Next(0, 100) < BonusFireChance)
                 {
-                    this.FireBullet();
+                    this.FireBullet(this.gameManager.playerManager.player);
                     this.StartFireCooldown();
                 }
             }
@@ -104,7 +104,7 @@ namespace Galaga.Model
             this.canFire = true;
         }
 
-        private void FireBullet()
+        private void FireBullet(Player player)
         {
             if (this.bonusShip == null || !this.BonusShipSpawn)
             {
@@ -113,8 +113,10 @@ namespace Galaga.Model
 
             var bulletX = this.bonusShip.X + this.bonusShip.Width / 2;
             var bulletY = this.bonusShip.Y + this.bonusShip.Height;
-            this.bulletManager.FireEnemyBullet(bulletX, bulletY);
+
+            this.bulletManager.FireEnemyBullet(bulletX, bulletY, player.X + player.Width / 2, player.Y + player.Height / 2, true);
         }
+
 
         private async void StartBonusShipTimer()
         {

@@ -17,7 +17,7 @@ namespace Galaga.Model
         private readonly Canvas canvas;
         private readonly double canvasHeight;
         private readonly double canvasWidth;
-        private Player player;
+        public Player player { get; private set; }
         private readonly UiTextManager uiTextManager;
         private readonly BulletManager bulletManager;
         private DateTime lastFireTime;

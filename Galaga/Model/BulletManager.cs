@@ -63,7 +63,7 @@ namespace Galaga.Model
             for (var i = this.activePlayerBullets.Count - 1; i >= 0; i--)
             {
                 var bullet = this.activePlayerBullets[i];
-                bullet.MoveUp();
+                bullet.Move();
 
                 if (bullet.IsOffScreen(this.canvasHeight))
                 {
@@ -77,7 +77,7 @@ namespace Galaga.Model
             for (var i = this.activeEnemyBullets.Count - 1; i >= 0; i--)
             {
                 var bullet = this.activeEnemyBullets[i];
-                bullet.MoveDown();
+                bullet.Move();
                 if (bullet.IsOffScreen(this.canvasHeight))
                 {
                     this.removeEnemyBullet(i);
@@ -109,9 +109,9 @@ namespace Galaga.Model
         {
             if (this.activePlayerBullets.Count < this.maxBulletsAllowed)
             {
-                var bullet = new Bullet(new BulletSprite(), 0, 5);
-                renderX = renderX - bullet.Width / 2;
-                renderY = renderY - bullet.Height;
+                var bullet = new Bullet(new BulletSprite(), 0, -5);
+                renderX = renderX - bullet.Sprite.Width / 2;
+                renderY = renderY - bullet.Sprite.Height;
                 bullet.RenderAt(renderX, renderY);
                 this.canvas.Children.Add(bullet.Sprite);
                 AudioManager.PlayPlayerShoot();
@@ -124,15 +124,29 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="renderX">where to render the x of the sprite</param>
         /// <param name="renderY">where to render the y of the sprite</param>
-        public void FireEnemyBullet(double renderX, double renderY)
+        public void FireEnemyBullet(double renderX, double renderY, double playerX = 0, double playerY = 0, bool aimedAtPlayer = false)
         {
-            var bullet = new Bullet(new BulletSprite(), 0, 5);
+            double velocityX = 0;
+            double velocityY = 5;
+
+            if (aimedAtPlayer)
+            {
+                double deltaX = playerX - renderX;
+                double deltaY = playerY - renderY;
+
+                double magnitude = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+                velocityX = (deltaX / magnitude) * 5;
+                velocityY = (deltaY / magnitude) * 5;
+            }
+
+            var bullet = new Bullet(new BulletSprite(), velocityX, velocityY);
             renderX = renderX - bullet.Width / 2;
             bullet.RenderAt(renderX, renderY);
             this.canvas.Children.Add(bullet.Sprite);
             AudioManager.PlayEnemyShoot();
             this.activeEnemyBullets.Add(bullet);
         }
+
 
         public bool CheckSpriteCollision(GameObject ship, bool isPlayer)
         {
