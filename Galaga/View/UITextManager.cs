@@ -15,6 +15,8 @@ public class UiTextManager
     private TextBlock scoreTextBlock;
     private TextBlock playerLivesTextBlock;
     private int score;
+    private const int smallFontSize = 15;
+    private const int largeFontSize = 25; 
 
     /// <summary>
     /// Marks when game is over
@@ -62,27 +64,23 @@ public class UiTextManager
 
         if (this.powerUpTextBlock != null)
         {
-            // Update the text if the TextBlock already exists
             this.powerUpTextBlock.Text = powerUpText;
         }
         else
         {
-            // Create the TextBlock
             this.powerUpTextBlock = new TextBlock
             {
                 Text = powerUpText,
-                FontSize = 15,
+                FontSize = smallFontSize,
                 Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.Yellow)
             };
 
-            // Temporarily add to the canvas to measure size
             this.canvas.Children.Add(this.powerUpTextBlock);
             this.powerUpTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
             var textSize = this.powerUpTextBlock.DesiredSize;
 
-            // Adjust position based on measured size
-            Canvas.SetLeft(this.powerUpTextBlock, (this.canvas.Width - textSize.Width) / 2); // Center horizontally
-            Canvas.SetTop(this.powerUpTextBlock, 10); // Fixed distance from the top
+            Canvas.SetLeft(this.powerUpTextBlock, (this.canvas.Width - textSize.Width) / 2);
+            Canvas.SetTop(this.powerUpTextBlock, 10);
         }
     }
 
@@ -91,11 +89,16 @@ public class UiTextManager
         this.scoreTextBlock = new TextBlock
         {
             Text = "Score: 0",
-            FontSize = 24,
-            Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White),
-            Margin = new Thickness(this.canvas.Width - this.canvas.Width / 4, 10, 0, 0)
+            FontSize = smallFontSize,
+            Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White)
         };
+
         this.canvas.Children.Add(this.scoreTextBlock);
+        this.scoreTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        var textSize = this.scoreTextBlock.DesiredSize;
+
+        Canvas.SetLeft(this.scoreTextBlock, this.canvas.Width - textSize.Width - 10);
+        Canvas.SetTop(this.scoreTextBlock, 10);
     }
 
     private void initializePlayerLives(int playerLives)
@@ -103,7 +106,7 @@ public class UiTextManager
         this.playerLivesTextBlock = new TextBlock
         {
             Text = $"Lives: {playerLives}",
-            FontSize = 24,
+            FontSize = smallFontSize,
             Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White),
             Margin = new Thickness(10, 10, 0, 0)
         };
@@ -111,15 +114,19 @@ public class UiTextManager
     }
 
     /// <summary>
-    /// this updates the score on screen witht the enemy ships point value added to current score
+    /// Updates the score on screen with the enemy ship's point value added to the current score.
     /// </summary>
-    /// <param name="enemy"> the enemy ship so it can get the correct point value</param>
-
+    /// <param name="enemy">The enemy ship to get the correct point value from.</param>
     public void UpdateScore(EnemyShip enemy)
     {
         this.score += enemy.Score;
         this.scoreTextBlock.Text = $"Score: {this.score}";
+        this.scoreTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        var textSize = this.scoreTextBlock.DesiredSize;
+        Canvas.SetLeft(this.scoreTextBlock, this.canvas.Width - textSize.Width - 10);
+        Canvas.SetTop(this.scoreTextBlock, 10);
     }
+
 
     /// <summary>
     /// this updates the players lives left removing lives as the player gets hit
@@ -135,29 +142,31 @@ public class UiTextManager
 
 
     /// <summary>
-    /// will set the end game out put based on the boolean value of if the player wins or not
+    /// Sets the end game output based on whether the player wins or loses,
+    /// and displays the message centered on the screen.
     /// </summary>
-    /// <param name="win">if the player wins or looses</param>
+    /// <param name="win">True if the player wins, false if they lose.</param>
     public async void EndGame(bool win)
     {
         if (!this.GameOver)
         {
-            String gameOverText = win ? "You Win!!!" : "You Lose!!!";
+            string gameOverText = win ? "You Win!!!" : "You Lose!!!";
             this.GameOver = true;
             this.gameManager.BonusShipSpawn(false);
             this.gameOverTextBlock = new TextBlock
             {
                 Text = gameOverText,
-                FontSize = 24,
-                Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White),
-                Margin = new Thickness(10, this.canvas.Height - 40, 0, 0)
+                FontSize = largeFontSize,
+                Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White)
             };
 
             this.canvas.Children.Add(this.gameOverTextBlock);
+            this.gameOverTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            var textSize = this.gameOverTextBlock.DesiredSize;
+            Canvas.SetLeft(this.gameOverTextBlock, (this.canvas.Width - textSize.Width) / 2);
+            Canvas.SetTop(this.gameOverTextBlock, (this.canvas.Height - textSize.Height) / 2);
             AudioManager.PlayGameOver();
-
             await Task.Delay(3000);
-
             (Window.Current.Content as Frame)?.Navigate(typeof(HighScorePage), this.score);
         }
     }

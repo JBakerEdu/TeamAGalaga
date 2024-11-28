@@ -9,7 +9,7 @@ namespace Galaga.Model
     {
         #region Data Members
 
-        private const int TopOffset = 10;
+        private const int TopOffset = 40;
         private readonly Canvas canvas;
         private readonly BulletManager bulletManager;
         private readonly GameManager gameManager;
@@ -178,6 +178,7 @@ namespace Galaga.Model
         private void HandleBonusShipHit()
         {
             RemoveBonusShip();
+            AudioManager.PlayEnemyBlowUp();
             this.gameManager.AddLifeToPlayer(); // Add life or any other default behavior.
 
             // Randomly assign a power-up to the player
