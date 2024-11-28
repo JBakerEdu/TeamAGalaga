@@ -21,7 +21,7 @@ namespace Galaga.Model
         private readonly double canvasWidth;
         private int tickCounter;
         private const int FireIntervalMin = 5;
-        private readonly int[] shipsPerRow = { 3, 4, 4, 5 };
+        private readonly int[] shipsPerRow = { 3 };
         private readonly double[] rowHeights = { 260, 200, 120, 40 };
         private const int FireIntervalMax = 25;
         private readonly Random random = new Random();
@@ -31,6 +31,9 @@ namespace Galaga.Model
         private DispatcherTimer enemyMovementTimer;
         private readonly BulletManager bulletManager;
         private readonly UiTextManager uiTextManager;
+
+        public static Action<bool> OnGameEnd; // `true` for win, `false` for loss
+
 
         #endregion
 
@@ -156,14 +159,14 @@ namespace Galaga.Model
         {
             if (this.ships.Count == 0 || this.ships.All(e => e == null))
             {
-                this.uiTextManager.EndGame(true);
+                OnGameEnd?.Invoke(true);
                 return;
             }
 
             var firstEnemy = this.ships.FirstOrDefault(e => e != null);
             if (firstEnemy == null)
             {
-                this.uiTextManager.EndGame(true);
+                OnGameEnd?.Invoke(true);
                 return;
             }
 

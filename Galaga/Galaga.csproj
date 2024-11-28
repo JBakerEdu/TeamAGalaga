@@ -18,6 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -138,6 +139,9 @@
     <Compile Include="Model\EnemyShip.cs" />
     <Compile Include="Model\GameManager.cs" />
     <Compile Include="Model\GameObject.cs" />
+    <Compile Include="Model\HighScoreEntry.cs" />
+    <Compile Include="Model\HighScoreManager.cs" />
+    <Compile Include="Model\HighScoreViewModel.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\PlayerManager.cs" />
     <Compile Include="Model\PowerUps.cs" />
@@ -147,6 +151,9 @@
       <DependentUpon>GameCanvas.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\HighScorePage.xaml.cs">
+      <DependentUpon>HighScorePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Sprites\BulletSprite.xaml.cs">
       <DependentUpon>BulletSprite.xaml</DependentUpon>
     </Compile>
@@ -208,6 +215,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="View\GameCanvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HighScorePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

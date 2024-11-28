@@ -70,5 +70,11 @@ namespace Galaga.View
                 this.gameManager.MovePlayerRight();
             }
         }
+
+        private void ShowHighScoreBoard()
+        {
+            Frame.Navigate(typeof(HighScorePage)); // Ensure HighScorePage.xaml is set up with the ViewModel binding
+        }
+
     }
 }
