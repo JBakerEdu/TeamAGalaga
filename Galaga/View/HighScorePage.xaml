@@ -5,8 +5,13 @@
     xmlns:local="using:Galaga"
     DataContext="{Binding RelativeSource={RelativeSource Self}}" Height="510" Width="695">
 
-    <Grid>
-        <ListView x:Name="ScoreListView" ItemsSource="{Binding HighScores}" Margin="10">
+    <Grid Width="700" Height="500">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <ListView x:Name="ScoreListView" Grid.Row="1" ItemsSource="{Binding HighScores}" Margin="10">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -18,6 +23,7 @@
             </ListView.ItemTemplate>
         </ListView>
         <ComboBox x:Name="SortSelector"
+                  Grid.Row="0"
                   SelectionChanged="SortSelector_SelectionChanged"
                   HorizontalAlignment="Left" VerticalAlignment="Top">
             <ComboBoxItem Content="Score" />
