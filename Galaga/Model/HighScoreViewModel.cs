@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Controls;
 
 public class HighScoreViewModel : INotifyPropertyChanged
 {
-    private readonly HighScoreManager _manager;
+    private readonly HighScoreManager manager;
 
     public ObservableCollection<HighScoreEntry> highScores;
 
@@ -43,13 +43,15 @@ public class HighScoreViewModel : INotifyPropertyChanged
 
     public HighScoreViewModel(int score)
     {
-        _manager = new HighScoreManager();
-        this.HighScores = new ObservableCollection<HighScoreEntry>(_manager.HighScores);
-        if (CheckIfTop10(score))
+        this.manager = new HighScoreManager();
+        this.HighScores = new ObservableCollection<HighScoreEntry>(this.manager.HighScores);
+        if (score >= 0 && CheckIfTop10(score))
         {
             PromptForNameAndAddScore(score);
         }
     }
+
+    public HighScoreViewModel() : this(-1) { }
 
     private void SortHighScores()
     {
@@ -60,14 +62,13 @@ public class HighScoreViewModel : INotifyPropertyChanged
             _ => HighScores.OrderByDescending(h => h.Score).ThenBy(h => h.PlayerName).ThenByDescending(h => h.Level),
         };
 
-        // Replace the collection with a new sorted one
-        HighScores = new ObservableCollection<HighScoreEntry>(sortedScores);
+        this.HighScores = new ObservableCollection<HighScoreEntry>(sortedScores);
     }
 
     private bool CheckIfTop10(int score)
     {
-        return _manager.HighScores.Count < 10 ||
-               _manager.HighScores.Any(entry => score > entry.Score);
+        return this.manager.HighScores.Count < 10 ||
+               this.manager.HighScores.Any(entry => score > entry.Score);
     }
 
     private async void PromptForNameAndAddScore(int score)
@@ -86,9 +87,9 @@ public class HighScoreViewModel : INotifyPropertyChanged
         if (await nameInputDialog.ShowAsync() == ContentDialogResult.Primary)
         {
             string playerName = ((TextBox)nameInputDialog.Content).Text;
-            _manager.AddScore(playerName, score);
+            manager.AddScore(playerName, score);
 
-            HighScores = new ObservableCollection<HighScoreEntry>(_manager.HighScores);
+            this.HighScores = new ObservableCollection<HighScoreEntry>(this.manager.HighScores);
         }
     }
 }

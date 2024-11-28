@@ -8,10 +8,22 @@
     <Grid Width="700" Height="500">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
-        <ListView x:Name="ScoreListView" Grid.Row="1" ItemsSource="{Binding HighScores}" Margin="10">
+
+        <Button Content="Back to Start" Grid.Row="0" Click="BackToStart_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
+
+        <ComboBox x:Name="SortSelector"
+              Grid.Row="1"
+              SelectionChanged="SortSelector_SelectionChanged"
+              HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
+            <ComboBoxItem Content="Score" />
+            <ComboBoxItem Content="Name" />
+            <ComboBoxItem Content="Level" />
+        </ComboBox>
+
+        <ListView x:Name="ScoreListView" Grid.Row="2" ItemsSource="{Binding HighScores}" Margin="10">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -22,13 +34,5 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ComboBox x:Name="SortSelector"
-                  Grid.Row="0"
-                  SelectionChanged="SortSelector_SelectionChanged"
-                  HorizontalAlignment="Left" VerticalAlignment="Top">
-            <ComboBoxItem Content="Score" />
-            <ComboBoxItem Content="Name" />
-            <ComboBoxItem Content="Level" />
-        </ComboBox>
     </Grid>
 </Page>
