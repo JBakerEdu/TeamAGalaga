@@ -2,21 +2,19 @@
 using Galaga.View;
 using System;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml;
 using System.Threading.Tasks;
 
 public class UiTextManager
 {
-    public event Action<bool> GameEnded;
-
     private readonly Canvas canvas;
     private readonly GameManager gameManager;
     private TextBlock scoreTextBlock;
     private TextBlock playerLivesTextBlock;
     private int score;
     private const int smallFontSize = 15;
-    private const int largeFontSize = 25; 
+    private const int largeFontSize = 25;
+    private const int waitTime = 3000;
 
     /// <summary>
     /// Marks when game is over
@@ -24,6 +22,8 @@ public class UiTextManager
     public bool GameOver { get; private set; }
     private TextBlock gameOverTextBlock;
     private TextBlock powerUpTextBlock;
+    private TextBlock levelTextBlock;
+    private TextBlock largeLevelTextBlock;
 
     /// <summary>
     /// This is the constructor for the UiTextManager and will set and initialize the correct data onto the canvas. 
@@ -39,6 +39,7 @@ public class UiTextManager
         this.GameOver = false;
         this.initializeScoreGame();
         this.initializePlayerLives(playerLives);
+        this.InitializeLevel();
 
         EnemyManager.OnGameEnd += isWin =>
         {
@@ -84,6 +85,23 @@ public class UiTextManager
         }
     }
 
+    private void InitializeLevel()
+    {
+        this.levelTextBlock = new TextBlock
+        {
+            Text = "Level: 0",
+            FontSize = smallFontSize,
+            Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White)
+        };
+
+        this.canvas.Children.Add(this.levelTextBlock);
+        this.scoreTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        var textSize = this.levelTextBlock.DesiredSize;
+
+        Canvas.SetLeft(this.levelTextBlock, (this.canvas.Width - textSize.Width) / 2);
+        Canvas.SetTop(this.levelTextBlock, this.canvas.Height - textSize.Height - 10);
+    }
+
     private void initializeScoreGame()
     {
         this.scoreTextBlock = new TextBlock
@@ -114,6 +132,31 @@ public class UiTextManager
     }
 
     /// <summary>
+    /// Updates the level on screen by showing it in large text in the center, then small text at the bottom.
+    /// </summary>
+    /// <param name="level">The current level to display.</param>
+    /// <param name="waitTime">The time to wait before switching to the smaller display.</param>
+    public async void UpdateLevel(int level)
+    {
+        this.levelTextBlock.FontSize = largeFontSize;
+        this.levelTextBlock.Text = $"Level: {level}";
+
+        this.levelTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        var firstTextSize = this.levelTextBlock.DesiredSize;
+        Canvas.SetLeft(this.levelTextBlock, (this.canvas.Width - firstTextSize.Width) / 2);
+        Canvas.SetTop(this.levelTextBlock, (this.canvas.Height - firstTextSize.Height) / 2);
+
+        await Task.Delay(waitTime);
+
+        this.levelTextBlock.FontSize = smallFontSize;
+
+        this.levelTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        var secondTextSize = this.levelTextBlock.DesiredSize;
+        Canvas.SetLeft(this.levelTextBlock, (this.canvas.Width - secondTextSize.Width) / 2);
+        Canvas.SetTop(this.levelTextBlock, this.canvas.Height - secondTextSize.Height - 10);
+    }
+
+    /// <summary>
     /// Updates the score on screen with the enemy ship's point value added to the current score.
     /// </summary>
     /// <param name="enemy">The enemy ship to get the correct point value from.</param>
@@ -138,8 +181,6 @@ public class UiTextManager
         playerLives = Math.Max(0, playerLives);
         this.playerLivesTextBlock.Text = $"Lives: {playerLives}";
     }
-
-
 
     /// <summary>
     /// Sets the end game output based on whether the player wins or loses,
@@ -166,7 +207,7 @@ public class UiTextManager
             Canvas.SetLeft(this.gameOverTextBlock, (this.canvas.Width - textSize.Width) / 2);
             Canvas.SetTop(this.gameOverTextBlock, (this.canvas.Height - textSize.Height) / 2);
             AudioManager.PlayGameOver();
-            await Task.Delay(3000);
+            await Task.Delay(waitTime);
             (Window.Current.Content as Frame)?.Navigate(typeof(HighScorePage), this.score);
         }
     }

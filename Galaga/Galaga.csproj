@@ -142,6 +142,7 @@
     <Compile Include="Model\HighScoreEntry.cs" />
     <Compile Include="Model\HighScoreManager.cs" />
     <Compile Include="Model\HighScoreViewModel.cs" />
+    <Compile Include="Model\LevelManager.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\PlayerManager.cs" />
     <Compile Include="Model\PowerUps.cs" />
