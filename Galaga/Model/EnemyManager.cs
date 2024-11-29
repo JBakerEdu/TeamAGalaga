@@ -20,10 +20,10 @@ namespace Galaga.Model
         private readonly Canvas canvas;
         private readonly double canvasWidth;
         private int tickCounter;
-        private const int FireIntervalMin = 5;
-        private readonly int[] shipsPerRow = { 3, 4, 4, 5 };
+        private int FireIntervalMin = 5;
+        private int[] shipsPerRow = { 3, 4, 4, 5 };
         private readonly double[] rowHeights = { 320, 260, 180, 100 };
-        private const int FireIntervalMax = 25;
+        private int FireIntervalMax = 25;
         private readonly Random random = new Random();
         private IList<EnemyShip> ships;
         private IList<double> originalShipPositions;
@@ -32,6 +32,7 @@ namespace Galaga.Model
         private readonly BulletManager bulletManager;
         private readonly UiTextManager uiTextManager;
         private readonly PlayerManager playerManager;
+        private readonly GameManager gameManager;
 
         public static Action<bool> OnGameEnd;
 
@@ -46,18 +47,25 @@ namespace Galaga.Model
         /// <param name="canvas">the canvas to work on</param>
         /// <param name="bulletManager">the bullet manager so it can talk about if a bullet hits an enemy </param>
         /// <param name="uiTextManager"> the UiTextManger so it can call when games ends and to add a score of the enemies when hit</param>
-        public EnemyManager(Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager, PlayerManager playerManager)
+        public EnemyManager(Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager, PlayerManager playerManager, GameManager gameManager)
         {
             this.canvas = canvas;
             this.canvasWidth = canvas.Width;
-            this.InitializeEnemies();
             this.uiTextManager = uiTextManager;
             this.bulletManager = bulletManager;
             this.playerManager = playerManager;
+            this.gameManager = gameManager;
             this.InitializeTimer();
         }
 
         #endregion
+
+        public void UpdateLevelSettings(int[] shipsPerRow, int fireIntervalMin, int fireIntervalMax)
+        {
+            this.shipsPerRow = shipsPerRow;
+            this.FireIntervalMin = fireIntervalMin;
+            this.FireIntervalMax = fireIntervalMax;
+        }
 
         private void InitializeTimer()
         {
@@ -92,7 +100,7 @@ namespace Galaga.Model
             }
         }
 
-        private void InitializeEnemies()
+        public void InitializeEnemies()
         {
             this.ships = new List<EnemyShip>();
             this.originalShipPositions = new List<double>();
@@ -161,14 +169,14 @@ namespace Galaga.Model
         {
             if (this.ships.Count == 0 || this.ships.All(e => e == null))
             {
-                OnGameEnd?.Invoke(true);
+                this.gameManager.NextLevel();
                 return;
             }
 
             var firstEnemy = this.ships.FirstOrDefault(e => e != null);
             if (firstEnemy == null)
             {
-                OnGameEnd?.Invoke(true);
+                this.gameManager.NextLevel();
                 return;
             }
 
@@ -226,8 +234,6 @@ namespace Galaga.Model
             {
                 double renderX = enemy.X + enemy.Width / 2;
                 double renderY = enemy.Y + enemy.Height;
-
-                // Check if the enemy is level 4 and aim at the player if true.
                 bool aimedAtPlayer = enemy.Level == 4;
                 this.bulletManager.FireEnemyBullet(renderX, renderY, player.X + player.Width / 2, player.Y + player.Height / 2, aimedAtPlayer);
             }
