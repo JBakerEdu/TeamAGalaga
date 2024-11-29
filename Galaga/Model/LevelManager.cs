@@ -12,6 +12,16 @@ namespace Galaga.Model
 
         private int currentLevel;
         private const int MaxLevel = 3;
+        private const int MinPossibleFireRateMin = 4;
+        private const int MinPossibleFireRateMax = 10;
+        private const int FireRateMin = 12;
+        private const int FireRateMax = 35;
+
+        private const int FirstRowShips = 1;
+        private const int SecondRowShips = 2;
+        private const int ThirdRowShips = 2;
+        private const int FourthRowShips = 3;
+
 
         /// <summary>
         /// Constructor to initialize LevelManager with dependencies
@@ -31,15 +41,15 @@ namespace Galaga.Model
         /// </summary>
         public void SetLevelParameters()
         {
-            if (currentLevel > MaxLevel)
+            if (this.currentLevel > MaxLevel)
             {
                 this.uiTextManager.EndGame(true);
                 return;
             }
 
-            int[] shipsPerRow = { 1 + this.currentLevel, 2 + this.currentLevel, 3 + this.currentLevel, 4 + this.currentLevel };
-            int fireIntervalMin = Math.Max(5 - currentLevel, 1);
-            int fireIntervalMax = Math.Max(25 - currentLevel * 2, 5);
+            int[] shipsPerRow = { FirstRowShips + this.currentLevel, SecondRowShips + this.currentLevel, ThirdRowShips + this.currentLevel, FourthRowShips + this.currentLevel };
+            int fireIntervalMin = Math.Max(FireRateMin - this.currentLevel, MinPossibleFireRateMin);
+            int fireIntervalMax = Math.Max(FireRateMax - this.currentLevel * 2, MinPossibleFireRateMax);
 
             this.enemyManager.UpdateLevelSettings(shipsPerRow, fireIntervalMin, fireIntervalMax);
             this.uiTextManager.UpdateLevel(this.currentLevel);
@@ -50,10 +60,10 @@ namespace Galaga.Model
         /// </summary>
         public void NextLevel()
         {
-            if (currentLevel < MaxLevel)
+            if (this.currentLevel < MaxLevel)
             {
-                currentLevel++;
-                SetLevelParameters();
+                this.currentLevel++;
+                this.SetLevelParameters();
                 this.enemyManager.InitializeEnemies();
             }
             else
@@ -67,8 +77,8 @@ namespace Galaga.Model
         /// </summary>
         public void StartGame()
         {
-            currentLevel = 1;
-            SetLevelParameters();
+            this.currentLevel = 1;
+            this.SetLevelParameters();
             this.enemyManager.InitializeEnemies();
         }
     }
