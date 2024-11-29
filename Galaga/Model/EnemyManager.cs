@@ -28,6 +28,15 @@ namespace Galaga.Model
         private IList<EnemyShip> ships;
         private IList<double> originalShipPositions;
         private bool movingRight = true;
+
+        private DispatcherTimer attackTimer;
+        private readonly Random randomAttack = new Random();
+        private readonly double attackSpeed = 2.5; 
+        private const int minAttackInterval = 5000;
+        private const int maxAttackInterval = 15000;
+        private readonly IList<EnemyShip> attackingShips = new List<EnemyShip>();
+
+
         private DispatcherTimer enemyMovementTimer;
         private readonly BulletManager bulletManager;
         private readonly UiTextManager uiTextManager;
@@ -56,6 +65,7 @@ namespace Galaga.Model
             this.playerManager = playerManager;
             this.gameManager = gameManager;
             this.InitializeTimer();
+            this.InitializeAttackTimer();
         }
 
         #endregion
@@ -76,6 +86,78 @@ namespace Galaga.Model
             this.enemyMovementTimer.Tick += this.OnEnemyTimerTick;
             this.enemyMovementTimer.Start();
         }
+
+        private void InitializeAttackTimer()
+        {
+            attackTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(random.Next(minAttackInterval, maxAttackInterval))
+            };
+            attackTimer.Tick += OnAttackTimerTick;
+            attackTimer.Start();
+        }
+
+        private void OnAttackTimerTick(object sender, object e)
+        {
+            var level4Ships = ships.Where(ship => ship.Level == 4 && !attackingShips.Contains(ship)).ToList();
+
+            if (level4Ships.Count > 0)
+            {
+                var attackingShip = level4Ships[random.Next(level4Ships.Count)];
+                attackingShips.Add(attackingShip);
+                StartAttackPattern(attackingShip, playerManager.player);
+            }
+
+            attackTimer.Interval = TimeSpan.FromMilliseconds(random.Next(minAttackInterval, maxAttackInterval));
+        }
+
+        private void StartAttackPattern(EnemyShip attackingShip, Player player)
+        {
+            if (uiTextManager.GameOver || attackingShip == null) return;
+
+            var playerShip = player;
+            if (playerShip == null) return;
+
+            var attackTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
+            double targetX = playerShip.X;
+            double targetY = playerShip.Y;
+            double speedX = (targetX - attackingShip.X) / 500.0 * attackSpeed;
+            double speedY = (targetY - attackingShip.Y) / 500.0 * attackSpeed;
+
+            attackTimer.Tick += (s, e) =>
+            {
+                attackingShip.X += speedX;
+                attackingShip.Y += speedY;
+
+                Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
+                Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
+
+                if (random.Next(0, 1000) < 3)
+                {
+                    bulletManager.FireEnemyBullet(attackingShip.X + attackingShip.Width / 2, attackingShip.Y + attackingShip.Height, playerShip.X, playerShip.Y, true);
+                }
+
+                if (Math.Abs(attackingShip.X - targetX) < 5 && Math.Abs(attackingShip.Y - targetY) < 5)
+                {
+                    attackTimer.Stop();
+                    attackingShips.Remove(attackingShip);
+                    ResetEnemyPosition(attackingShip);
+                }
+            };
+
+            attackTimer.Start();
+        }
+
+        private void ResetEnemyPosition(EnemyShip attackingShip)
+        {
+            var originalIndex = ships.IndexOf(attackingShip);
+            attackingShip.X = originalShipPositions[originalIndex];
+            attackingShip.Y = rowHeights[attackingShip.Level - 1];
+
+            Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
+            Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
+        }
+
 
         private void OnEnemyTimerTick(object sender, object e)
         {
