@@ -31,6 +31,7 @@ namespace Galaga.Model
         private DispatcherTimer enemyMovementTimer;
         private readonly BulletManager bulletManager;
         private readonly UiTextManager uiTextManager;
+        private readonly PlayerManager playerManager;
 
         public static Action<bool> OnGameEnd;
 
@@ -45,13 +46,14 @@ namespace Galaga.Model
         /// <param name="canvas">the canvas to work on</param>
         /// <param name="bulletManager">the bullet manager so it can talk about if a bullet hits an enemy </param>
         /// <param name="uiTextManager"> the UiTextManger so it can call when games ends and to add a score of the enemies when hit</param>
-        public EnemyManager(Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager)
+        public EnemyManager(Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager, PlayerManager playerManager)
         {
             this.canvas = canvas;
             this.canvasWidth = canvas.Width;
             this.InitializeEnemies();
             this.uiTextManager = uiTextManager;
             this.bulletManager = bulletManager;
+            this.playerManager = playerManager;
             this.InitializeTimer();
         }
 
@@ -85,7 +87,7 @@ namespace Galaga.Model
                 {
                     int randomIndex = this.random.Next(this.ships.Count);
                     var enemy = this.ships[randomIndex];
-                    this.FireEnemyBullet(enemy);
+                    this.FireEnemyBullet(enemy, this.playerManager.player);
                 }
             }
         }
@@ -215,18 +217,22 @@ namespace Galaga.Model
         }
 
         /// <summary>
-        /// this is how the enemy fires their fireball
+        /// This is how the enemy fires their fireball.
         /// </summary>
-        /// <param name="enemy">which enemy is firing</param>
-        private void FireEnemyBullet(EnemyShip enemy)
+        /// <param name="enemy">The enemy firing the bullet.</param>
+        private void FireEnemyBullet(EnemyShip enemy, Player player)
         {
             if (enemy != null && enemy.IsShooter && !this.uiTextManager.GameOver)
             {
                 double renderX = enemy.X + enemy.Width / 2;
                 double renderY = enemy.Y + enemy.Height;
-                this.bulletManager.FireEnemyBullet(renderX, renderY);
+
+                // Check if the enemy is level 4 and aim at the player if true.
+                bool aimedAtPlayer = enemy.Level == 4;
+                this.bulletManager.FireEnemyBullet(renderX, renderY, player.X + player.Width / 2, player.Y + player.Height / 2, aimedAtPlayer);
             }
         }
+
 
         private void DestroyEnemy(EnemyShip enemy)
         {
