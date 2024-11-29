@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.Diagnostics;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Galaga.View
 {
@@ -28,30 +17,90 @@ namespace Galaga.View
         public HighScorePage()
         {
             this.InitializeComponent();
+
+            this.Loaded += OnPageLoaded;
         }
 
         private void SortSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var viewModel = this.HighScoreViewModel;
-            viewModel.SortOrder = ((ComboBoxItem)((ComboBox)sender).SelectedItem).Content.ToString();
+            HighScoreViewModel.SortOrder = ((ComboBoxItem)((ComboBox)sender).SelectedItem).Content.ToString();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            this.Loaded += (sender, args) =>
-            {
-                var rootGrid = (Grid)this.Content; // Assuming the root is a Grid
-                double containerWidth = rootGrid.ActualWidth;
-                double containerHeight = rootGrid.ActualHeight;
+            CheckNavigationSource(e);
 
-                // Resize the window to match the container size
-                ApplicationView.GetForCurrentView().TryResizeView(new Windows.Foundation.Size(containerWidth, containerHeight));
-            };
-
-            this.HighScoreViewModel = new HighScoreViewModel((int)e.Parameter);
             this.DataContext = this.HighScoreViewModel;
+        }
+
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
+            var containerWidth = this.ActualWidth;
+            var containerHeight = this.ActualHeight;
+
+            ApplicationView.GetForCurrentView()
+                .TryResizeView(new Size(containerWidth, containerHeight));
+        }
+
+        private void BackToStart_Click(object sender, RoutedEventArgs e)
+        {
+            (Window.Current.Content as Frame)?.Navigate(typeof(StartScreenPage));
+        }
+
+        private void CheckNavigationSource(NavigationEventArgs e)
+        {
+            if (this.Frame.BackStackDepth > 0)
+            {
+                var previousPage = this.Frame.BackStack[this.Frame.BackStack.Count - 1];
+                var sourcePageType = previousPage.SourcePageType;
+
+                if (sourcePageType == typeof(StartScreenPage))
+                {
+                    HandleNavigationFromStartScreen();
+                }
+                else if (sourcePageType == typeof(GameCanvas))
+                {
+                    HandleNavigationFromGameCanvas(e);
+                }
+                else
+                {
+                    HandleUnknownNavigationSource();
+                }
+            }
+            else
+            {
+                HandleFirstNavigation();
+            }
+        }
+
+        private void HandleNavigationFromStartScreen()
+        {
+            this.HighScoreViewModel = new HighScoreViewModel();
+        }
+
+        private void HandleNavigationFromGameCanvas(NavigationEventArgs e)
+        {
+            if (e.Parameter is int score)
+            {
+                this.HighScoreViewModel = new HighScoreViewModel(score);
+            }
+            else
+            {
+                Debug.WriteLine("Invalid parameter from GameCanvas. Defaulting ViewModel.");
+                this.HighScoreViewModel = new HighScoreViewModel();
+            }
+        }
+
+        private void HandleUnknownNavigationSource()
+        {
+            Debug.WriteLine("Unknown navigation source");
+        }
+
+        private void HandleFirstNavigation()
+        {
+            this.HighScoreViewModel = new HighScoreViewModel();
         }
     }
 }

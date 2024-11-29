@@ -68,4 +68,11 @@ public class HighScoreManager
             .Take(10));
         SaveHighScores();
     }
+
+    public void ResetHighScores()
+    {
+        HighScores.Clear();
+        SaveHighScores();
+    }
+
 }
