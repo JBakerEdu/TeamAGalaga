@@ -12,7 +12,7 @@
     Width="55">
 
     <Canvas>
-
+        <local:EnemyShipLevel3Sprite></local:EnemyShipLevel3Sprite>
         <Rectangle Width="6" Height="10" Fill="MediumPurple" Canvas.Left="24" Canvas.Top="10"/>
 
     </Canvas>
