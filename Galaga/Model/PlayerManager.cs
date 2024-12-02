@@ -115,8 +115,6 @@ namespace Galaga.Model
             this.playerLives = lives;
             this.players = new List<Player>();
             this.createAndPlacePlayer();
-
-
             this.initializeCollisionCheckTimer();
             this.InitializePowerUpTimer();
         }
@@ -217,6 +215,7 @@ namespace Galaga.Model
                 DateTime currentTime = DateTime.Now;
                 if (currentTime - this.lastFireTime >= this.fireCooldown)
                 {
+                    this.bulletManager.PlayersFiring = this.players.Count;
                     foreach (var player in players)
                     {
                         double renderX = player.X + player.Width / 2;
@@ -335,10 +334,6 @@ namespace Galaga.Model
         {
             this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
         }
-
-        #endregion
-
-        #region double player clone
 
         private void CreateClonePlayer()
         {
