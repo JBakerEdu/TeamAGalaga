@@ -148,6 +148,7 @@
     <Compile Include="Model\PowerUps.cs" />
     <Compile Include="Model\ShipFactory.cs" />
     <Compile Include="View\AudioManager.cs" />
+    <Compile Include="View\ExplosionAnimationManager.cs" />
     <Compile Include="View\GameCanvas.xaml.cs">
       <DependentUpon>GameCanvas.xaml</DependentUpon>
     </Compile>

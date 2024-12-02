@@ -328,7 +328,10 @@ namespace Galaga.Model
 
             if (index >= 0)
             {
+                var explosionX = enemy.X;
+                var explosionY = enemy.Y;
                 this.canvas.Children.Remove(enemy.Sprite);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
 
                 if (enemy.HasSecondSprite)
                 {

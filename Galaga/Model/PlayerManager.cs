@@ -3,6 +3,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Galaga.View;
 using System.Threading.Tasks;
+using Galaga.View.Sprites;
 
 namespace Galaga.Model
 {
@@ -95,13 +96,18 @@ namespace Galaga.Model
         private void handlePlayerHit()
         {
             this.playerLives--;
-            AudioManager.PlayPlayerBlowUp();
             this.uiTextManager.UpdatePlayerLives(this.playerLives);
-
-            if (this.playerLives <= 0)
+            if (this.playerLives >= 0)
             {
+                AudioManager.PlayPlayerBlowUp();
+            }
+            if (this.playerLives == 0)
+            {
+                var explosionX = this.player.X;
+                var explosionY = this.player.Y;
                 this.canvas.Children.Remove(this.player.Sprite);
                 this.uiTextManager.EndGame(false);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
             }
         }
 
