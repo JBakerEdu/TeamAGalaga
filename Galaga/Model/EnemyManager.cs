@@ -150,6 +150,7 @@ namespace Galaga.Model
 
         private void ResetEnemyPosition(EnemyShip attackingShip)
         {
+            // Check if attackingShip exists in the ships list to prevent index out of range
             var originalIndex = ships.IndexOf(attackingShip);
             if (originalIndex >= 0 && originalIndex < originalShipPositions.Count)
             {
@@ -339,12 +340,14 @@ namespace Galaga.Model
             {
                 var explosionX = enemy.X;
                 var explosionY = enemy.Y;
+
                 this.canvas.Children.Remove(enemy.Sprite);
                 _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
                 if (enemy.HasSecondSprite)
                 {
                     this.canvas.Children.Remove(enemy.Sprite2);
                 }
+
                 this.ships.RemoveAt(index);
                 this.originalShipPositions.RemoveAt(index);
             }
