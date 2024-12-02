@@ -181,9 +181,14 @@ namespace Galaga.Model
         {
             RemoveBonusShip();
             AudioManager.PlayEnemyBlowUp();
-            this.gameManager.AddLifeToPlayer(); // Add life or any other default behavior.
-
-            // Randomly assign a power-up to the player
+            if (this.gameManager.CurrentGameLevel() > 1)
+            {
+                this.gameManager.ClonePlayerShip();
+            }
+            else
+            {
+                this.gameManager.AddLifeToPlayer();
+            }
             PowerUps randomPowerUp = (PowerUps)this.random.Next(Enum.GetValues(typeof(PowerUps)).Length);
             this.gameManager.playerPowerUp(randomPowerUp);
         }

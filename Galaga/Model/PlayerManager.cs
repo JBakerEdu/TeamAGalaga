@@ -335,7 +335,7 @@ namespace Galaga.Model
             this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
         }
 
-        private void CreateClonePlayer()
+        public void CreateClonePlayer()
         {
             if (this.players.Count < MaxPlayerClones)
             {

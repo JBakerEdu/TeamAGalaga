@@ -10,7 +10,7 @@ namespace Galaga.Model
         private readonly EnemyManager enemyManager;
         private readonly UiTextManager uiTextManager;
 
-        private int currentLevel;
+        public int currentLevel { get; private set; }
         private const int MaxLevel = 3;
         private const int MinPossibleFireRateMin = 4;
         private const int MinPossibleFireRateMax = 10;
