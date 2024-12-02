@@ -31,7 +31,7 @@ namespace Galaga.Model
 
         private DispatcherTimer attackTimer;
         private readonly Random randomAttack = new Random();
-        private readonly double attackSpeed = 2.5; 
+        private readonly double attackSpeed = 2.5;
         private const int minAttackInterval = 5000;
         private const int maxAttackInterval = 15000;
         private readonly IList<EnemyShip> attackingShips = new List<EnemyShip>();
@@ -105,7 +105,7 @@ namespace Galaga.Model
             {
                 var attackingShip = level4Ships[random.Next(level4Ships.Count)];
                 attackingShips.Add(attackingShip);
-                StartAttackPattern(attackingShip, playerManager.player);
+                StartAttackPattern(attackingShip, this.playerManager.player);
             }
 
             attackTimer.Interval = TimeSpan.FromMilliseconds(random.Next(minAttackInterval, maxAttackInterval));
@@ -150,13 +150,25 @@ namespace Galaga.Model
 
         private void ResetEnemyPosition(EnemyShip attackingShip)
         {
+            // Check if attackingShip exists in the ships list to prevent index out of range
             var originalIndex = ships.IndexOf(attackingShip);
-            attackingShip.X = originalShipPositions[originalIndex];
-            attackingShip.Y = rowHeights[attackingShip.Level - 1];
+            if (originalIndex >= 0 && originalIndex < originalShipPositions.Count)
+            {
+                attackingShip.X = originalShipPositions[originalIndex];
+                attackingShip.Y = rowHeights[attackingShip.Level - 1];
 
-            Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
-            Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
+                Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
+                Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
+            }
+            else
+            {
+                // Handle the case where attackingShip doesn't have a valid index
+                // Possibly log this or reset its position to a default value
+                attackingShip.X = 0;  // Example default position
+                attackingShip.Y = rowHeights[0];  // Example default position
+            }
         }
+
 
 
         private void OnEnemyTimerTick(object sender, object e)
@@ -330,19 +342,25 @@ namespace Galaga.Model
             {
                 var explosionX = enemy.X;
                 var explosionY = enemy.Y;
+
                 this.canvas.Children.Remove(enemy.Sprite);
                 _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
 
+                // Play explosion animation
+                //_ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
+
+                // Remove the enemy's second sprite, if it exists
                 if (enemy.HasSecondSprite)
                 {
                     this.canvas.Children.Remove(enemy.Sprite2);
                 }
 
+                // Remove the enemy from the ships list and the original positions list
                 this.ships.RemoveAt(index);
                 this.originalShipPositions.RemoveAt(index);
             }
-            this.ships = this.ships.Where(ship => ship != null).ToList();
         }
+
 
         private void CheckCollision()
         {
