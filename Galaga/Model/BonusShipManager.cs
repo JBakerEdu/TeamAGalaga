@@ -86,7 +86,7 @@ namespace Galaga.Model
 
                 if (canFire && this.random.Next(0, 100) < BonusFireChance)
                 {
-                    this.FireBullet(this.gameManager.playerManager.player);
+                    this.FireBullet(this.gameManager.playerManager.players[0]);
                     this.StartFireCooldown();
                 }
             }
