@@ -31,7 +31,7 @@ namespace Galaga.Model
 
         private DispatcherTimer attackTimer;
         private readonly Random randomAttack = new Random();
-        private readonly double attackSpeed = 2.5; 
+        private readonly double attackSpeed = 2.5;
         private const int minAttackInterval = 5000;
         private const int maxAttackInterval = 15000;
         private readonly IList<EnemyShip> attackingShips = new List<EnemyShip>();
@@ -105,7 +105,7 @@ namespace Galaga.Model
             {
                 var attackingShip = level4Ships[random.Next(level4Ships.Count)];
                 attackingShips.Add(attackingShip);
-                StartAttackPattern(attackingShip, playerManager.player);
+                StartAttackPattern(attackingShip, this.playerManager.players[0]);
             }
 
             attackTimer.Interval = TimeSpan.FromMilliseconds(random.Next(minAttackInterval, maxAttackInterval));
@@ -151,12 +151,21 @@ namespace Galaga.Model
         private void ResetEnemyPosition(EnemyShip attackingShip)
         {
             var originalIndex = ships.IndexOf(attackingShip);
-            attackingShip.X = originalShipPositions[originalIndex];
-            attackingShip.Y = rowHeights[attackingShip.Level - 1];
+            if (originalIndex >= 0 && originalIndex < originalShipPositions.Count)
+            {
+                attackingShip.X = originalShipPositions[originalIndex];
+                attackingShip.Y = rowHeights[attackingShip.Level - 1];
 
-            Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
-            Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
+                Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
+                Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
+            }
+            else
+            {
+                attackingShip.X = 0;
+                attackingShip.Y = rowHeights[0];
+            }
         }
+
 
 
         private void OnEnemyTimerTick(object sender, object e)
@@ -177,7 +186,7 @@ namespace Galaga.Model
                 {
                     int randomIndex = this.random.Next(this.ships.Count);
                     var enemy = this.ships[randomIndex];
-                    this.FireEnemyBullet(enemy, this.playerManager.player);
+                    this.FireEnemyBullet(enemy, this.playerManager.players[0]);
                 }
             }
         }
@@ -332,17 +341,15 @@ namespace Galaga.Model
                 var explosionY = enemy.Y;
                 this.canvas.Children.Remove(enemy.Sprite);
                 _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
-
                 if (enemy.HasSecondSprite)
                 {
                     this.canvas.Children.Remove(enemy.Sprite2);
                 }
-
                 this.ships.RemoveAt(index);
                 this.originalShipPositions.RemoveAt(index);
             }
-            this.ships = this.ships.Where(ship => ship != null).ToList();
         }
+
 
         private void CheckCollision()
         {
