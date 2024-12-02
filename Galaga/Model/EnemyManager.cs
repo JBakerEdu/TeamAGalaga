@@ -343,8 +343,8 @@ namespace Galaga.Model
                 var explosionX = enemy.X;
                 var explosionY = enemy.Y;
 
-                // Remove the enemy's sprite from the canvas
                 this.canvas.Children.Remove(enemy.Sprite);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
 
                 // Play explosion animation
                 //_ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
