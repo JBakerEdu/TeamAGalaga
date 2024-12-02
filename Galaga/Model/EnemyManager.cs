@@ -105,7 +105,7 @@ namespace Galaga.Model
             {
                 var attackingShip = level4Ships[random.Next(level4Ships.Count)];
                 attackingShips.Add(attackingShip);
-                StartAttackPattern(attackingShip, this.playerManager.player);
+                StartAttackPattern(attackingShip, this.playerManager.players[0]);
             }
 
             attackTimer.Interval = TimeSpan.FromMilliseconds(random.Next(minAttackInterval, maxAttackInterval));
@@ -162,10 +162,8 @@ namespace Galaga.Model
             }
             else
             {
-                // Handle the case where attackingShip doesn't have a valid index
-                // Possibly log this or reset its position to a default value
-                attackingShip.X = 0;  // Example default position
-                attackingShip.Y = rowHeights[0];  // Example default position
+                attackingShip.X = 0;
+                attackingShip.Y = rowHeights[0];
             }
         }
 
@@ -189,7 +187,7 @@ namespace Galaga.Model
                 {
                     int randomIndex = this.random.Next(this.ships.Count);
                     var enemy = this.ships[randomIndex];
-                    this.FireEnemyBullet(enemy, this.playerManager.player);
+                    this.FireEnemyBullet(enemy, this.playerManager.players[0]);
                 }
             }
         }
@@ -345,17 +343,11 @@ namespace Galaga.Model
 
                 this.canvas.Children.Remove(enemy.Sprite);
                 _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
-
-                // Play explosion animation
-                //_ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
-
-                // Remove the enemy's second sprite, if it exists
                 if (enemy.HasSecondSprite)
                 {
                     this.canvas.Children.Remove(enemy.Sprite2);
                 }
 
-                // Remove the enemy from the ships list and the original positions list
                 this.ships.RemoveAt(index);
                 this.originalShipPositions.RemoveAt(index);
             }

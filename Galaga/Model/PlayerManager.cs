@@ -4,21 +4,24 @@ using Windows.UI.Xaml;
 using Galaga.View;
 using System.Threading.Tasks;
 using Galaga.View.Sprites;
+using System.Collections.Generic;
 
 namespace Galaga.Model
 {
     /// <summary>
-    /// This is the manager for the player ship
+    /// This is the manager for the player ships
     /// </summary>
     public class PlayerManager
     {
         #region Data members
 
         private const double PlayerOffsetFromBottom = 30;
+        private const double ClonesOffset = 30;
+        private readonly int MaxPlayerClones = 2;
         private readonly Canvas canvas;
         private readonly double canvasHeight;
         private readonly double canvasWidth;
-        public Player player { get; private set; }
+        public List<Player> players { get; private set; }
         private readonly UiTextManager uiTextManager;
         private readonly BulletManager bulletManager;
         private DateTime lastFireTime;
@@ -29,19 +32,65 @@ namespace Galaga.Model
         private const string NoCurrentPowerUp = "No Current Power-Up";
         private bool shieldActive = false;
         private DateTime powerUpEndTime;
-        private const int SpeedBoostMultiplier = 2;  // Double speed boost
-        private const int BulletCountMultiplier = 3;  // Triple bullets
-        private DispatcherTimer powerUpTimer;  // Timer for power-up expiration
+        private const int SpeedBoostMultiplier = 2;
+        private const int BulletCountMultiplier = 3;
+        private DispatcherTimer powerUpTimer;
 
         /// <summary>
-        /// Calls objects moveLeft
+        /// Calls objects moveLeft for each player, ensuring they don't move closer to each other
         /// </summary>
-        public void MoveLeft() => this.player.MoveLeft();
+        public void MoveLeft()
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i].X > 0)
+                {
+                    double targetX = players[i].X - players[i].SpeedX;
+                    if (CanMoveToPosition(i, targetX, players[i].Width))
+                    {
+                        players[i].MoveLeft();
+                    }
+                }
+            }
+        }
 
         /// <summary>
-        /// Calls objects moveRight
+        /// Calls objects moveRight for each player, ensuring they don't move closer to each other
         /// </summary>
-        public void MoveRight() => this.player.MoveRight(this.canvasWidth);
+        public void MoveRight()
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i].X + players[i].Width < this.canvasWidth)
+                {
+                    double targetX = players[i].X + players[i].SpeedX;
+                    if (CanMoveToPosition(i, targetX, players[i].Width))
+                    {
+                        players[i].MoveRight(this.canvasWidth);
+                    }
+                }
+            }
+        }
+
+        private bool CanMoveToPosition(int currentPlayerIndex, double targetX, double targetWidth)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (i != currentPlayerIndex)
+                {
+                    double otherPlayerX = players[i].X;
+                    double otherPlayerWidth = players[i].Width;
+                    if (Math.Abs(targetX - (otherPlayerX + otherPlayerWidth)) < ClonesOffset ||
+                        Math.Abs((targetX + targetWidth) - otherPlayerX) < ClonesOffset)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+
 
         #endregion
 
@@ -50,8 +99,8 @@ namespace Galaga.Model
         /// <summary>
         /// Constructs the player manager with all needed information 
         /// </summary>
-        /// <param name="lives"> the lives a player has</param>
-        /// <param name="canvas"> the canvas that the player will be added onto</param>
+        /// <param name="lives"> the lives each player has</param>
+        /// <param name="canvas"> the canvas that the players will be added onto</param>
         /// <param name="bulletManager"></param>
         /// <param name="uiTextManager"></param>
         public PlayerManager(int lives, Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager)
@@ -59,12 +108,13 @@ namespace Galaga.Model
             this.canvas = canvas;
             this.canvasHeight = canvas.Height;
             this.canvasWidth = canvas.Width;
-            this.playerLives = lives;
             this.uiTextManager = uiTextManager;
             this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
-            this.createAndPlacePlayer();
             this.bulletManager = bulletManager;
             this.lastFireTime = DateTime.Now - this.fireCooldown;
+            this.playerLives = lives;
+            this.players = new List<Player>();
+            this.createAndPlacePlayer();
             this.initializeCollisionCheckTimer();
             this.InitializePowerUpTimer();
         }
@@ -75,37 +125,51 @@ namespace Galaga.Model
 
         private void createAndPlacePlayer()
         {
-            this.player = ShipFactory.CreatePlayerShip();
-            this.canvas.Children.Add(this.player.Sprite);
-            this.placePlayerNearBottom();
+            Player newPlayer = ShipFactory.CreatePlayerShip();
+            this.players.Add(newPlayer);
+            this.canvas.Children.Add(newPlayer.Sprite);
+            this.placePlayerNearBottom(newPlayer);
         }
 
-        private void placePlayerNearBottom()
+        private void placePlayerNearBottom(Player player)
         {
-            this.player.X = this.canvasWidth / 2 - this.player.Width / 2.0;
-            this.player.Y = this.canvasHeight - this.player.Height - PlayerOffsetFromBottom;
-            this.updatePlayerPosition();
+            player.X = this.canvasWidth / 2 - player.Width / 2.0;
+            player.Y = this.canvasHeight - player.Height - PlayerOffsetFromBottom;
+            this.updatePlayerPosition(player);
         }
 
-        private void updatePlayerPosition()
+        private void updatePlayerPosition(Player player)
         {
-            Canvas.SetLeft(this.player.Sprite, this.player.X);
-            Canvas.SetTop(this.player.Sprite, this.player.Y);
+            Canvas.SetLeft(player.Sprite, player.X);
+            Canvas.SetTop(player.Sprite, player.Y);
         }
 
-        private void handlePlayerHit()
+        private void handlePlayerHit(int playerIndex)
         {
             this.playerLives--;
             this.uiTextManager.UpdatePlayerLives(this.playerLives);
+
+            if (this.players.Count > 1)
+            {
+                Player mostRecentPlayer = this.players[this.players.Count - 1];
+                var explosionX = mostRecentPlayer.X;
+                var explosionY = mostRecentPlayer.Y;
+                this.canvas.Children.Remove(mostRecentPlayer.Sprite);
+                this.players.Remove(mostRecentPlayer);
+                AudioManager.PlayPlayerBlowUp();
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
+            }
+
             if (this.playerLives >= 0)
             {
                 AudioManager.PlayPlayerBlowUp();
             }
+
             if (this.playerLives == 0)
             {
-                var explosionX = this.player.X;
-                var explosionY = this.player.Y;
-                this.canvas.Children.Remove(this.player.Sprite);
+                var explosionX = this.players[playerIndex].X;
+                var explosionY = this.players[playerIndex].Y;
+                this.canvas.Children.Remove(this.players[playerIndex].Sprite);
                 this.uiTextManager.EndGame(false);
                 _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
             }
@@ -123,20 +187,26 @@ namespace Galaga.Model
 
         private void CheckCollision()
         {
-            if (!this.shieldActive && this.bulletManager.CheckSpriteCollision(this.player, true))
+            for (int i = 0; i < players.Count; i++)
             {
-                this.handlePlayerHit();
+                if (!this.shieldActive && this.bulletManager.CheckSpriteCollision(this.players[i], true))
+                {
+                    this.handlePlayerHit(i);
+                }
             }
         }
 
         public void addLife()
         {
-            this.playerLives++;
-            this.uiTextManager.UpdatePlayerLives(this.playerLives);
+            for (int i = 0; i < players.Count; i++)
+            {
+                this.playerLives++;
+                this.uiTextManager.UpdatePlayerLives(this.playerLives);
+            }
         }
 
         /// <summary>
-        /// This is how the player fires their bullet; the space bar calls here.
+        /// This is how each player fires their bullet; the space bar calls here.
         /// </summary>
         public void FireBullet()
         {
@@ -145,10 +215,13 @@ namespace Galaga.Model
                 DateTime currentTime = DateTime.Now;
                 if (currentTime - this.lastFireTime >= this.fireCooldown)
                 {
-                    double renderX = this.player.X + this.player.Width / 2;
-                    double renderY = this.canvasHeight - PlayerOffsetFromBottom;
-
-                    this.bulletManager.PlayerFiresBullet(renderX, renderY);
+                    this.bulletManager.PlayersFiring = this.players.Count;
+                    foreach (var player in players)
+                    {
+                        double renderX = player.X + player.Width / 2;
+                        double renderY = this.canvasHeight - PlayerOffsetFromBottom;
+                        this.bulletManager.PlayerFiresBullet(renderX, renderY);
+                    }
                     this.lastFireTime = currentTime;
                 }
             }
@@ -181,15 +254,20 @@ namespace Galaga.Model
 
         private void AddLife()
         {
-            this.playerLives++;
-            this.uiTextManager.UpdatePlayerLives(this.playerLives);
+            for (int i = 0; i < players.Count; i++)
+            {
+                this.playerLives++;
+                this.uiTextManager.UpdatePlayerLives(this.playerLives);
+            }
         }
 
         private void ApplySpeedBoost()
         {
-            this.player.SpeedX *= SpeedBoostMultiplier;
+            foreach (var player in players)
+            {
+                player.SpeedX *= SpeedBoostMultiplier;
+            }
             SetPowerUpEndTime(() => ResetSpeedBoost());
-            
         }
 
         private void ActivateShield()
@@ -231,10 +309,12 @@ namespace Galaga.Model
             }
         }
 
-
         private void ResetSpeedBoost()
         {
-            this.player.SpeedX /= SpeedBoostMultiplier;
+            foreach (var player in players)
+            {
+                player.SpeedX /= SpeedBoostMultiplier;
+            }
             this.resetUIPowerUpText();
         }
 
@@ -253,6 +333,19 @@ namespace Galaga.Model
         private void resetUIPowerUpText()
         {
             this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
+        }
+
+        public void CreateClonePlayer()
+        {
+            if (this.players.Count < MaxPlayerClones)
+            {
+                Player clonePlayer = ShipFactory.CreatePlayerShip();
+                clonePlayer.X = this.players[this.players.Count - 1].X + clonePlayer.Width + ClonesOffset;
+                clonePlayer.Y = this.canvasHeight - clonePlayer.Height - PlayerOffsetFromBottom;
+                this.players.Add(clonePlayer);
+                this.canvas.Children.Add(clonePlayer.Sprite);
+                this.updatePlayerPosition(clonePlayer);
+            }
         }
 
         #endregion

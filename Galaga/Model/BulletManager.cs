@@ -17,7 +17,7 @@ namespace Galaga.Model
         public int maxBulletsAllowed { get; set; }
         private readonly Canvas canvas;
         private readonly double canvasHeight;
-
+        public int PlayersFiring { get; set; }
         private readonly IList<Bullet> activePlayerBullets;
         private readonly IList<Bullet> activeEnemyBullets;
         private DispatcherTimer bulletMovementTimer;
@@ -107,7 +107,7 @@ namespace Galaga.Model
         /// </summary>
         public void PlayerFiresBullet(double renderX, double renderY)
         {
-            if (this.activePlayerBullets.Count < this.maxBulletsAllowed)
+            if (this.activePlayerBullets.Count < this.maxBulletsAllowed * this.PlayersFiring)
             {
                 var bullet = new Bullet(new BulletSprite(), 0, -5);
                 renderX = renderX - bullet.Sprite.Width / 2;
