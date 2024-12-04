@@ -1,0 +1,38 @@
+﻿<local:HolidayShipExplosionFrame1
+    x:Class="Galaga.View.Sprites.HolidayShipExplosionFrame2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Galaga.View.Sprites"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="60"
+    d:DesignWidth="50"
+    Height="60"
+    Width="50">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="RedGift" Color="Red"/>
+        <SolidColorBrush x:Key="GreenGift" Color="Green"/>
+        <SolidColorBrush x:Key="BlueGift" Color="Blue"/>
+        <SolidColorBrush x:Key="YellowRibbon" Color="Yellow"/>
+    </UserControl.Resources>
+
+    <Canvas>
+        <local:HolidayShipExplosionFrame1></local:HolidayShipExplosionFrame1>
+
+        <!-- Presents -->
+        <Rectangle Fill="{StaticResource RedGift}" Width="10" Height="10" Canvas.Left="31" Canvas.Top="37" />
+        <Line X1="5" Y1="55" X2="15" Y2="55" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="26" VerticalAlignment="Top" Canvas.Top="-14" />
+        <Line X1="10" Y1="50" X2="10" Y2="60" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="28" VerticalAlignment="Top" Canvas.Top="-13" />
+
+        <Rectangle Fill="{StaticResource GreenGift}" Width="11" Height="14" Canvas.Left="37" Canvas.Top="45" />
+        
+        <Line X1="30" Y1="52" X2="39" Y2="52" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" Canvas.Left="9" Canvas.Top="1" />
+        <Line X1="34" Y1="48" X2="34" Y2="56" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="11" VerticalAlignment="Top" Canvas.Top="-3" />
+
+        <Rectangle Fill="{StaticResource BlueGift}" Width="12" Height="12" Canvas.Left="27" Canvas.Top="47" />
+        <Line X1="20" Y1="56" X2="32" Y2="56" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="7" VerticalAlignment="Top" Canvas.Top="-1" />
+        <Line X1="26" Y1="50" X2="26" Y2="62" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="4" VerticalAlignment="Top" Canvas.Top="-3" />
+    </Canvas>
+</local:HolidayShipExplosionFrame1>

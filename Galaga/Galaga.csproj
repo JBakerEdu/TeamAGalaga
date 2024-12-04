@@ -139,6 +139,7 @@
     <Compile Include="Model\EnemyShip.cs" />
     <Compile Include="Model\GameManager.cs" />
     <Compile Include="Model\GameObject.cs" />
+    <Compile Include="Model\GameType.cs" />
     <Compile Include="Model\HighScoreEntry.cs" />
     <Compile Include="Model\HighScoreManager.cs" />
     <Compile Include="Model\HighScoreViewModel.cs" />
@@ -156,44 +157,80 @@
     <Compile Include="View\HighScorePage.xaml.cs">
       <DependentUpon>HighScorePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\BulletSprite.xaml.cs">
+    <Compile Include="View\Sprites\HolidayGame\HolidayBonusShipCarePackageSprite.xaml.cs">
+      <DependentUpon>HolidayBonusShipCarePackageSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayBulletSprite.xaml.cs">
+      <DependentUpon>HolidayBulletSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel1Sprite.xaml.cs">
+      <DependentUpon>HolidayEnemyShipLevel1Sprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel2Sprite.xaml.cs">
+      <DependentUpon>HolidayEnemyShipLevel2Sprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel3SecondSprite.xaml.cs">
+      <DependentUpon>HolidayEnemyShipLevel3SecondSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel3Sprite.xaml.cs">
+      <DependentUpon>HolidayEnemyShipLevel3Sprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel4SecondSprite.xaml.cs">
+      <DependentUpon>HolidayEnemyShipLevel4SecondSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel4Sprite.xaml.cs">
+      <DependentUpon>HolidayEnemyShipLevel4Sprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayPlayerSprite.xaml.cs">
+      <DependentUpon>HolidayPlayerSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayShipExplosionFrame1.xaml.cs">
+      <DependentUpon>HolidayShipExplosionFrame1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayShipExplosionFrame2.xaml.cs">
+      <DependentUpon>HolidayShipExplosionFrame2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\HolidayGame\HolidayShipExplosionFrame3.xaml.cs">
+      <DependentUpon>HolidayShipExplosionFrame3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\OrgianlGame\BulletSprite.xaml.cs">
       <DependentUpon>BulletSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\BonusShipCarePackageSprite.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\BonusShipCarePackageSprite.xaml.cs">
       <DependentUpon>BonusShipCarePackageSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\ShipExplosionFrame3.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\ShipExplosionFrame3.xaml.cs">
       <DependentUpon>ShipExplosionFrame3.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\ShipExplosionFrame2.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\ShipExplosionFrame2.xaml.cs">
       <DependentUpon>ShipExplosionFrame2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\ShipExplosionFrame1.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\ShipExplosionFrame1.xaml.cs">
       <DependentUpon>ShipExplosionFrame1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\EnemyShipLevel3SecondSprite.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel3SecondSprite.xaml.cs">
       <DependentUpon>EnemyShipLevel3SecondSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\EnemyShipLevel4SecondSprite.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel4SecondSprite.xaml.cs">
       <DependentUpon>EnemyShipLevel4SecondSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\EnemyShipLevel4Sprite.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel4Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel4Sprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\EnemyShipLevel3Sprite.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel3Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel3Sprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\EnemyShipLevel2Sprite.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel2Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel2Sprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\EnemyShipLevel1Sprite.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel1Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel1Sprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sprites\BaseSprite.xaml.cs">
       <DependentUpon>BaseSprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sprites\ISpriteRenderer.cs" />
-    <Compile Include="View\Sprites\PlayerSprite.xaml.cs">
+    <Compile Include="View\Sprites\OrgianlGame\PlayerSprite.xaml.cs">
       <DependentUpon>PlayerSprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\StartScreenPage.xaml.cs">
@@ -236,47 +273,95 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Sprites\BulletSprite.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayBonusShipCarePackageSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\BonusShipCarePackageSprite.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayBulletSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\ShipExplosionFrame3.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel1Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\ShipExplosionFrame2.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel2Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\ShipExplosionFrame1.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel3SecondSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\EnemyShipLevel3SecondSprite.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel3Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\EnemyShipLevel4SecondSprite.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel4SecondSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\EnemyShipLevel4Sprite.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayEnemyShipLevel4Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\EnemyShipLevel3Sprite.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayPlayerSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\EnemyShipLevel2Sprite.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayShipExplosionFrame1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\EnemyShipLevel1Sprite.xaml">
+    <Page Include="View\Sprites\HolidayGame\HolidayShipExplosionFrame2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\HolidayGame\HolidayShipExplosionFrame3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\BulletSprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\BonusShipCarePackageSprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\ShipExplosionFrame3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\ShipExplosionFrame2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\ShipExplosionFrame1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel3SecondSprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel4SecondSprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel4Sprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel3Sprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel2Sprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel1Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -284,7 +369,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Sprites\PlayerSprite.xaml">
+    <Page Include="View\Sprites\OrgianlGame\PlayerSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
