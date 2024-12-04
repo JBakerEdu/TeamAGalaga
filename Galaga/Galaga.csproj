@@ -141,12 +141,15 @@
     <Compile Include="Model\GameObject.cs" />
     <Compile Include="Model\HighScoreEntry.cs" />
     <Compile Include="Model\HighScoreManager.cs" />
-    <Compile Include="Model\HighScoreViewModel.cs" />
+    <Compile Include="Model\NavigationService.cs" />
+    <Compile Include="Model\ViewModel\HighScoreViewModel.cs" />
     <Compile Include="Model\LevelManager.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\PlayerManager.cs" />
     <Compile Include="Model\PowerUps.cs" />
     <Compile Include="Model\ShipFactory.cs" />
+    <Compile Include="Model\ViewModel\RelayCommand.cs" />
+    <Compile Include="Model\WindowResizer.cs" />
     <Compile Include="View\AudioManager.cs" />
     <Compile Include="View\ExplosionAnimationManager.cs" />
     <Compile Include="View\GameCanvas.xaml.cs">
