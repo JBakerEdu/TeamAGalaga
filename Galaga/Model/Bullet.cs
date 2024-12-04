@@ -1,22 +1,50 @@
 ﻿using Galaga.View.Sprites;
+using Windows.UI.Xaml.Controls;
 
 namespace Galaga.Model
 {
     /// <summary>
-    /// This is a bullet object which will be fired from ships at others
+    /// This is a bullet object which will be fired from ships at others.
     /// </summary>
     public class Bullet : GameObject
     {
+        // Speed components for the bullet
+        private double xSpeed;
+        private double ySpeed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Bullet"/> class with the specified sprite.
         /// </summary>
         /// <param name="bulletSprite">The sprite to use for the bullet.</param>
-        /// <param name="xSpeed">seed of x axis</param>
-        /// <param name="ySpeed">speed of y axis</param>
-        public Bullet(BaseSprite bulletSprite, int xSpeed, int ySpeed)
+        /// <param name="xSpeed">Speed along the x-axis.</param>
+        /// <param name="ySpeed">Speed along the y-axis.</param>
+        public Bullet(BaseSprite bulletSprite, double xSpeed, double ySpeed)
         {
             Sprite = bulletSprite;
             SetSpeed(xSpeed, ySpeed);
+        }
+
+        /// <summary>
+        /// Sets the speed of the bullet.
+        /// </summary>
+        /// <param name="xSpeed">Speed along the x-axis.</param>
+        /// <param name="ySpeed">Speed along the y-axis.</param>
+        public void SetSpeed(double xSpeed, double ySpeed)
+        {
+            this.xSpeed = xSpeed;
+            this.ySpeed = ySpeed;
+        }
+
+        /// <summary>
+        /// Moves the bullet according to its current speed.
+        /// </summary>
+        public void Move()
+        {
+            X += xSpeed;
+            Y += ySpeed;
+
+            Canvas.SetLeft(Sprite, X);
+            Canvas.SetTop(Sprite, Y);
         }
 
         /// <summary>
@@ -37,7 +65,7 @@ namespace Galaga.Model
         /// <returns>True if the bullet is off-screen, otherwise false.</returns>
         public bool IsOffScreen(double screenHeight)
         {
-            return Y + Sprite.Height < 0 || Y > screenHeight;
+            return Y + Sprite.Height < 0 || Y > screenHeight || X + Sprite.Width < 0 || X > screenHeight;
         }
     }
 }

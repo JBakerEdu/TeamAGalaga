@@ -9,7 +9,9 @@ namespace Galaga.Model
     public class GameManager
     {
         #region Data members
-        private readonly PlayerManager playerManager;
+        public readonly PlayerManager playerManager;
+        private readonly BonusShipManager bonusShipManager;
+        private readonly LevelManager levelManager;
         private readonly int playerLives = 3;
         #endregion
 
@@ -24,27 +26,63 @@ namespace Galaga.Model
         {
             canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
             BulletManager bulletManager = new BulletManager(canvas);
-            UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives);
+            UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives, this);
             this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, uiTextManager);
-            EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager);
-            bulletManager.EnemyManager = enemyManager;
-            bulletManager.PlayerManager = this.playerManager;
+            EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, this.playerManager, this);
+            this.bonusShipManager = new BonusShipManager(canvas, bulletManager, this);
+
+            this.levelManager = new LevelManager(enemyManager, uiTextManager);
+            this.levelManager.StartGame();
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// calls objects moveLeft
+        /// calls players moveLeft
         /// </summary>
         public void MovePlayerLeft() => this.playerManager.MoveLeft();
         /// <summary>
-        /// calls objects moveRight
+        /// calls players moveRight
         /// </summary>
         public void MovePlayerRight() => this.playerManager.MoveRight();
         /// <summary>
-        /// calls objects fire
+        /// calls players fire
         /// </summary>
         public void FireBullet() => this.playerManager.FireBullet();
+        /// <summary>
+        /// calls player to add a life
+        /// </summary>
+        public void AddLifeToPlayer() => this.playerManager.addLife();
+        /// <summary>
+        /// calls to clone the players ship
+        /// </summary>
+        public void ClonePlayerShip() => this.playerManager.CreateClonePlayer();
+        /// <summary>
+        /// calls the Bonus ship spawn to ensure that the bonus ship does not spawn at the wrong time
+        /// </summary>
+        /// <param name="spawn"></param>
+        public void BonusShipSpawn(bool spawn)
+        {
+            this.bonusShipManager.BonusShipSpawn = spawn;
+        }
+        /// <summary>
+        /// Gives a power up to the player to handle using the power up
+        /// </summary>
+        /// <param name="powerUp"> the type of power up to give the player</param>
+        public void playerPowerUp(PowerUps powerUp)
+        {
+            this.playerManager.ApplyPowerUp(powerUp);
+        }
+        /// <summary>
+        /// calls to move on to next level
+        /// </summary>
+        public void NextLevel() => this.levelManager.NextLevel();
+
+        public int CurrentGameLevel()
+        {
+            return this.levelManager.currentLevel;
+        }
+
         #endregion
     }
 }

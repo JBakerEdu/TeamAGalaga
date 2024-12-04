@@ -18,6 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -130,21 +131,45 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\BonusShip.cs" />
+    <Compile Include="Model\BonusShipManager.cs" />
     <Compile Include="Model\Bullet.cs" />
     <Compile Include="Model\BulletManager.cs" />
     <Compile Include="Model\EnemyManager.cs" />
     <Compile Include="Model\EnemyShip.cs" />
     <Compile Include="Model\GameManager.cs" />
     <Compile Include="Model\GameObject.cs" />
+    <Compile Include="Model\HighScoreEntry.cs" />
+    <Compile Include="Model\HighScoreManager.cs" />
+    <Compile Include="Model\HighScoreViewModel.cs" />
+    <Compile Include="Model\LevelManager.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\PlayerManager.cs" />
+    <Compile Include="Model\PowerUps.cs" />
+    <Compile Include="Model\ShipFactory.cs" />
     <Compile Include="View\AudioManager.cs" />
+    <Compile Include="View\ExplosionAnimationManager.cs" />
     <Compile Include="View\GameCanvas.xaml.cs">
       <DependentUpon>GameCanvas.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\HighScorePage.xaml.cs">
+      <DependentUpon>HighScorePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Sprites\BulletSprite.xaml.cs">
       <DependentUpon>BulletSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\BonusShipCarePackageSprite.xaml.cs">
+      <DependentUpon>BonusShipCarePackageSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\ShipExplosionFrame3.xaml.cs">
+      <DependentUpon>ShipExplosionFrame3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\ShipExplosionFrame2.xaml.cs">
+      <DependentUpon>ShipExplosionFrame2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\ShipExplosionFrame1.xaml.cs">
+      <DependentUpon>ShipExplosionFrame1.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sprites\EnemyShipLevel3SecondSprite.xaml.cs">
       <DependentUpon>EnemyShipLevel3SecondSprite.xaml</DependentUpon>
@@ -171,6 +196,9 @@
     <Compile Include="View\Sprites\PlayerSprite.xaml.cs">
       <DependentUpon>PlayerSprite.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\StartScreenPage.xaml.cs">
+      <DependentUpon>StartScreenPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UiTextManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -187,10 +215,12 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="View\AudioFiles\bonusShipActive.wav" />
     <Content Include="View\AudioFiles\enemyBlowUp.wav" />
     <Content Include="View\AudioFiles\enemyShoot.wav" />
     <Content Include="View\AudioFiles\gameOver.wav" />
     <Content Include="View\AudioFiles\playerBlowUp.wav" />
+    <Content Include="View\AudioFiles\playerPowerUp.wav" />
     <Content Include="View\AudioFiles\playerShoot.wav" />
   </ItemGroup>
   <ItemGroup>
@@ -202,7 +232,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\HighScorePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Sprites\BulletSprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\BonusShipCarePackageSprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\ShipExplosionFrame3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\ShipExplosionFrame2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Sprites\ShipExplosionFrame1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -235,6 +285,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Sprites\PlayerSprite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StartScreenPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

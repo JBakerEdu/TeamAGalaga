@@ -2,6 +2,7 @@
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
+using Galaga.View;
 using Galaga.View.Sprites;
 
 namespace Galaga.Model
@@ -13,22 +14,13 @@ namespace Galaga.Model
     {
         #region Data members
 
-        private const int MaxBulletsAllowed = 3;
-        private const double BulletSpeed = 10;
+        public int maxBulletsAllowed { get; set; }
         private readonly Canvas canvas;
         private readonly double canvasHeight;
-
+        public int PlayersFiring { get; set; }
         private readonly IList<Bullet> activePlayerBullets;
         private readonly IList<Bullet> activeEnemyBullets;
         private DispatcherTimer bulletMovementTimer;
-        /// <summary>
-        /// This sets the player manager so that the bullet manager can ask if a bullet has hit a ship
-        /// </summary>
-        public PlayerManager PlayerManager { get; set; }
-        /// <summary>
-        /// This sets the enemy manager so that the bullet manager can ask if a bullet has hit a ship
-        /// </summary>
-        public EnemyManager EnemyManager { get; set; }
 
         #endregion
 
@@ -42,6 +34,7 @@ namespace Galaga.Model
         public BulletManager(Canvas canvas)
         {
             this.canvas = canvas;
+            this.maxBulletsAllowed = 3;
             this.canvasHeight = canvas.Height;
             this.activePlayerBullets = new List<Bullet>();
             this.activeEnemyBullets = new List<Bullet>();
@@ -70,15 +63,11 @@ namespace Galaga.Model
             for (var i = this.activePlayerBullets.Count - 1; i >= 0; i--)
             {
                 var bullet = this.activePlayerBullets[i];
-                bullet.MoveUp();
+                bullet.Move();
 
                 if (bullet.IsOffScreen(this.canvasHeight))
                 {
                     this.removePlayerBullet(i);
-                }
-                else
-                {
-                    this.CheckPlayerBulletCollisions(i);
                 }
             }
         }
@@ -88,14 +77,10 @@ namespace Galaga.Model
             for (var i = this.activeEnemyBullets.Count - 1; i >= 0; i--)
             {
                 var bullet = this.activeEnemyBullets[i];
-                bullet.MoveDown();
+                bullet.Move();
                 if (bullet.IsOffScreen(this.canvasHeight))
                 {
                     this.removeEnemyBullet(i);
-                }
-                else
-                {
-                    this.CheckEnemyBulletCollisions(i);
                 }
             }
         }
@@ -122,13 +107,14 @@ namespace Galaga.Model
         /// </summary>
         public void PlayerFiresBullet(double renderX, double renderY)
         {
-            if (this.activePlayerBullets.Count < MaxBulletsAllowed)
+            if (this.activePlayerBullets.Count < this.maxBulletsAllowed * this.PlayersFiring)
             {
-                var bullet = new Bullet(new BulletSprite(), 0, 5);
-                renderX = renderX - bullet.Width / 2;
-                renderY = renderY - bullet.Height;
+                var bullet = new Bullet(new BulletSprite(), 0, -5);
+                renderX = renderX - bullet.Sprite.Width / 2;
+                renderY = renderY - bullet.Sprite.Height;
                 bullet.RenderAt(renderX, renderY);
                 this.canvas.Children.Add(bullet.Sprite);
+                AudioManager.PlayPlayerShoot();
                 this.activePlayerBullets.Add(bullet);
             }
         }
@@ -138,40 +124,62 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="renderX">where to render the x of the sprite</param>
         /// <param name="renderY">where to render the y of the sprite</param>
-        public void FireEnemyBullet(double renderX, double renderY)
+        public void FireEnemyBullet(double renderX, double renderY, double playerX = 0, double playerY = 0, bool aimedAtPlayer = false)
         {
-            var bullet = new Bullet(new BulletSprite(), 0, 5);
+            double velocityX = 0;
+            double velocityY = 5;
+
+            if (aimedAtPlayer)
+            {
+                double deltaX = playerX - renderX;
+                double deltaY = playerY - renderY;
+
+                double magnitude = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+                velocityX = (deltaX / magnitude) * 5;
+                velocityY = (deltaY / magnitude) * 5;
+            }
+
+            var bullet = new Bullet(new BulletSprite(), velocityX, velocityY);
             renderX = renderX - bullet.Width / 2;
             bullet.RenderAt(renderX, renderY);
             this.canvas.Children.Add(bullet.Sprite);
+            AudioManager.PlayEnemyShoot();
             this.activeEnemyBullets.Add(bullet);
         }
 
-        /// <summary>
-        /// Checks if a players bullet hits any enemyships
-        /// </summary>
-        /// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
-        public void CheckPlayerBulletCollisions(int index)
+
+        public bool CheckSpriteCollision(GameObject ship, bool isPlayer)
         {
-            var playerBullet = this.activePlayerBullets[index];
-            if (playerBullet != null && this.EnemyManager.CheckCollision(playerBullet))
+            var bullets = isPlayer ? this.activeEnemyBullets : this.activePlayerBullets;
+            for (int i = bullets.Count - 1; i >= 0; i--)
             {
-                this.removePlayerBullet(index);
+                var bullet = bullets[i];
+                if (IsCollision(bullet, ship))
+                {
+                    this.canvas.Children.Remove(bullet.Sprite);
+                    bullets.RemoveAt(i);
+                    return true;
+                }
             }
+            return false;
         }
 
-        /// <summary>
-        /// checks if an Enemy bullet hits the player
-        /// </summary>
-        /// <param name="index">the bullet being looked at and checked to see if it has hit anything</param>
-        public void CheckEnemyBulletCollisions(int index)
+        private bool IsCollision(Bullet bullet, GameObject ship)
         {
-            var enemyBullet = this.activeEnemyBullets[index];
-            if (enemyBullet != null && this.PlayerManager.CheckCollision(enemyBullet))
-            {
-                this.removeEnemyBullet(index);
-            }
-        }
+            var bulletLeft = bullet.X;
+            var bulletRight = bullet.X + bullet.Width;
+            var bulletTop = bullet.Y;
+            var bulletBottom = bullet.Y + bullet.Height;
 
+            var shipLeft = ship.X;
+            var shipRight = ship.X + ship.Width;
+            var shipTop = ship.Y;
+            var shipBottom = ship.Y + ship.Height;
+
+            return bulletBottom >= shipTop &&
+                   bulletTop <= shipBottom &&
+                   bulletRight >= shipLeft &&
+                   bulletLeft <= shipRight;
+        }
     }
 }

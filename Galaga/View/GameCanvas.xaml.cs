@@ -25,6 +25,8 @@ namespace Galaga.View
         {
             this.InitializeComponent();
 
+            this.Loaded += OnPageLoaded;
+
             Width = this.canvas.Width;
             Height = this.canvas.Height;
             ApplicationView.PreferredLaunchViewSize = new Size { Width = Width, Height = Height };
@@ -40,6 +42,15 @@ namespace Galaga.View
             this.movementTimer.Interval = TimeSpan.FromMilliseconds(16);
             this.movementTimer.Tick += this.OnMovementTimerTick;
             this.movementTimer.Start();
+        }
+
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
+            var containerWidth = this.ActualWidth;
+            var containerHeight = this.ActualHeight;
+
+            ApplicationView.GetForCurrentView()
+                .TryResizeView(new Size(containerWidth, containerHeight));
         }
 
         private void coreWindowOnKeyDown(CoreWindow sender, KeyEventArgs args)
@@ -70,5 +81,11 @@ namespace Galaga.View
                 this.gameManager.MovePlayerRight();
             }
         }
+
+        private void ShowHighScoreBoard()
+        {
+            Frame.Navigate(typeof(HighScorePage)); // Ensure HighScorePage.xaml is set up with the ViewModel binding
+        }
+
     }
 }
