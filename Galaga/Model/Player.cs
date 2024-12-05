@@ -19,9 +19,9 @@ namespace Galaga.Model
         /// <summary>
         /// Initializes a new instance of the  <see cref="Player"/> class.
         /// </summary>
-        public Player()
+        public Player(BaseSprite playerSprite)
         {
-            Sprite = new PlayerSprite();
+            Sprite = playerSprite;
             SetSpeed(SpeedXDirection, SpeedYDirection);
         }
 

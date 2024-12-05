@@ -38,7 +38,7 @@ namespace Galaga.Model
         /// <param name="ySpeed">The speed of the enemy ship on y axis.</param>
         /// <param name="level">The level of the ship.</param>
         /// <param name="isShooter">The value used to see if enemy can shoot or not.</param>
-        public EnemyShip(BaseSprite sprite, int xSpeed, int ySpeed, int level, bool isShooter)
+        public EnemyShip(BaseSprite sprite, int xSpeed, int ySpeed, int level, bool isShooter, GameType gameType)
         {
             Sprite = sprite;
             this.Level = level;
@@ -46,19 +46,39 @@ namespace Galaga.Model
             this.IsShooter = isShooter;
             SetSpeed(xSpeed, ySpeed);
 
-            // Initialize secondary sprite only for levels 3 and 4
             if (level == 3)
             {
-                this.Sprite2 = new EnemyShipLevel3SecondSprite();
-                this.HasSecondSprite = true;
+                this.level3SecondSprite(gameType);
             }
             else if (level == 4)
             {
-                this.Sprite2 = new EnemyShipLevel4SecondSprite();
-                this.HasSecondSprite = true;
+                this.level4SecondSprite(gameType);
             }
         }
 
+        private void level3SecondSprite(GameType gameType)
+        {
+            BaseSprite shipSprite = gameType switch
+            {
+                GameType.HolidayGame => new HolidayEnemyShipLevel3SecondSprite(),
+                GameType.OriginalGame => new EnemyShipLevel3SecondSprite(),
+                _ => throw new ArgumentException("Unsupported game type")
+            };
+            this.Sprite2 = shipSprite;
+            this.HasSecondSprite = true;
+        }
+
+        private void level4SecondSprite(GameType gameType)
+        {
+            BaseSprite shipSprite = gameType switch
+            {
+                GameType.HolidayGame => new HolidayEnemyShipLevel4SecondSprite(),
+                GameType.OriginalGame => new EnemyShipLevel4SecondSprite(),
+                _ => throw new ArgumentException("Unsupported game type")
+            };
+            this.Sprite2 = shipSprite;
+            this.HasSecondSprite = true;
+        }
 
         /// <summary>
         /// Renders the enemy ship at the specified (x, y) location.

@@ -19,9 +19,9 @@ namespace Galaga.Model
         /// <summary>
         /// Initializes a new instance of the  <see cref="BonusShip"/> class.
         /// </summary>
-        public BonusShip()
+        public BonusShip(BaseSprite sprite)
         {
-            Sprite = new BonusShipCarePackageSprite();
+            Sprite = sprite;
             SetSpeed(SpeedXDirection, SpeedYDirection);
         }
 

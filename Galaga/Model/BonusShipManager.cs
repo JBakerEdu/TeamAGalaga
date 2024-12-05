@@ -61,7 +61,7 @@ namespace Galaga.Model
                 return;
             }
 
-            this.bonusShip = new BonusShip();
+            this.bonusShip = ShipFactory.CreateBonusShip(this.gameManager.gameType);
             this.canvas.Children.Add(this.bonusShip.Sprite);
             this.bonusShip.X = this.canvas.Width;
             this.bonusShip.Y = TopOffset;

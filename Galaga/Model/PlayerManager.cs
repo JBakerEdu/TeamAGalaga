@@ -127,7 +127,7 @@ namespace Galaga.Model
 
         private void createAndPlacePlayer()
         {
-            Player newPlayer = ShipFactory.CreatePlayerShip();
+            Player newPlayer = ShipFactory.CreatePlayerShip(this.gameManager.gameType);
             this.players.Add(newPlayer);
             this.canvas.Children.Add(newPlayer.Sprite);
             this.placePlayerNearBottom(newPlayer);
@@ -341,7 +341,7 @@ namespace Galaga.Model
         {
             if (this.players.Count < MaxPlayerClones)
             {
-                Player clonePlayer = ShipFactory.CreatePlayerShip();
+                Player clonePlayer = ShipFactory.CreatePlayerShip(this.gameManager.gameType);
                 clonePlayer.X = this.players[this.players.Count - 1].X + clonePlayer.Width + ClonesOffset;
                 clonePlayer.Y = this.canvasHeight - clonePlayer.Height - PlayerOffsetFromBottom;
                 this.players.Add(clonePlayer);
