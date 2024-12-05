@@ -12,43 +12,50 @@
     Width="35">
 
     <UserControl.Resources>
-        <SolidColorBrush x:Key="FireballColor" Color="Orange"/>
-        <SolidColorBrush x:Key="FireballGlow" Color="Yellow"/>
+        <SolidColorBrush x:Key="LightBlueBrush" Color="#ADD8E6" />
+        <!-- Light blue -->
+        <SolidColorBrush x:Key="WhiteBrush" Color="#FFFFFF" />
+        <!-- White -->
     </UserControl.Resources>
 
-    <Canvas Width="35" Height="35">
-        <!-- Fireball - using rectangles for pixelated effect -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="10" Canvas.Top="0"/>
-        <!-- Top middle -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="5" Canvas.Top="5"/>
-        <!-- Top left -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="15" Canvas.Top="5"/>
-        <!-- Top right -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="0" Canvas.Top="10"/>
-        <!-- Left middle -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="10" Canvas.Top="10"/>
-        <!-- Middle -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="20" Canvas.Top="10"/>
-        <!-- Right middle -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="5" Canvas.Top="15"/>
-        <!-- Bottom left -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="15" Canvas.Top="15"/>
-        <!-- Bottom middle -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="25" Canvas.Top="15"/>
-        <!-- Bottom right -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="10" Canvas.Top="20"/>
-        <!-- Bottom middle -->
-        <Rectangle Fill="{StaticResource FireballColor}" Width="10" Height="10" Canvas.Left="15" Canvas.Top="25"/>
-        <!-- Bottom -->
+    <Canvas>
+        <!-- First Row: Light Blue Snowflake -->
+        <!-- Central Circle -->
+        <Ellipse Width="5" Height="5" Fill="{StaticResource LightBlueBrush}" Canvas.Top="15" Canvas.Left="15" />
+        <!-- Arms -->
+        <Line X1="17.5" Y1="0" X2="17.5" Y2="10" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" />
+        <Line X1="17.5" Y1="5" X2="12.5" Y2="7.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="-12" Canvas.Top="14" />
+        <Line X1="17.5" Y1="5" X2="22.5" Y2="7.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="12" Canvas.Top="14" />
+        <Line X1="25" Y1="17.5" X2="35" Y2="17.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" />
+        <Line X1="30" Y1="17.5" X2="27.5" Y2="12.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="-14" Canvas.Top="-12" />
+        <Line X1="30" Y1="17.5" X2="27.5" Y2="22.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="-14" Canvas.Top="12" />
+        <Line X1="17.5" Y1="25" X2="17.5" Y2="35" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" />
+        <Line X1="17.5" Y1="30" X2="12.5" Y2="27.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="-12" Canvas.Top="-14" />
+        <Line X1="17.5" Y1="30" X2="22.5" Y2="27.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="12" Canvas.Top="-14" />
+        <Line X1="0" Y1="17.5" X2="10" Y2="17.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" />
+        <Line X1="5" Y1="17.5" X2="7.5" Y2="12.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="14" Canvas.Top="-12" />
+        <Line X1="5" Y1="17.5" X2="7.5" Y2="22.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="14" Canvas.Top="12" />
+        <Line X1="5" Y1="5" X2="10" Y2="10" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" Canvas.Left="4" Canvas.Top="4" />
+        <Line X1="25" Y1="25" X2="30" Y2="30" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" Canvas.Left="-4" Canvas.Top="-4" />
+        <Line X1="30" Y1="5" X2="25" Y2="10" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" Canvas.Left="-4" Canvas.Top="4" />
+        <Line X1="10" Y1="25" X2="5" Y2="30" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" Canvas.Left="4" Canvas.Top="-4" />
 
-        <!-- Optional glow using yellow rectangles -->
-        <Rectangle Fill="{StaticResource FireballGlow}" Width="8" Height="8" Canvas.Left="11" Canvas.Top="1"/>
-        <!-- Glow above middle -->
-        <Rectangle Fill="{StaticResource FireballGlow}" Width="8" Height="8" Canvas.Left="9" Canvas.Top="9"/>
-        <!-- Glow middle -->
-        <Rectangle Fill="{StaticResource FireballGlow}" Width="8" Height="8" Canvas.Left="17" Canvas.Top="9"/>
-        <!-- Glow middle -->
-        <Rectangle Fill="{StaticResource FireballGlow}" Width="8" Height="8" Canvas.Left="13" Canvas.Top="18"/>
-        <!-- Glow below -->
+        <!-- Second Row: White Snowflake -->
+        <!-- Central Circle -->
+        <Ellipse Width="2.5" Height="2.5" Fill="{StaticResource WhiteBrush}" Canvas.Top="16" Canvas.Left="16" RenderTransformOrigin="-0.263,0.003" />
+        <!-- Arms -->
+        <Line X1="17.5" Y1="5" X2="17.5" Y2="12" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="12.5" Y1="12.5" X2="15" Y2="15" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="22.5" Y1="12.5" X2="20" Y2="15" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="17.5" Y1="23" X2="17.5" Y2="30" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="12.5" Y1="22.5" X2="15" Y2="20" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="22.5" Y1="22.5" X2="20" Y2="20" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="5" Y1="17.5" X2="12" Y2="17.5" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="23" Y1="17.5" X2="30" Y2="17.5" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="7" Y1="7" X2="12" Y2="12" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="28" Y1="7" X2="23" Y2="12" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="7" Y1="28" X2="12" Y2="23" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+        <Line X1="28" Y1="28" X2="23" Y2="23" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
+
     </Canvas>
 </local:BaseSprite>

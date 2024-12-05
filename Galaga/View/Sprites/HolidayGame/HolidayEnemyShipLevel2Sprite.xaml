@@ -11,10 +11,14 @@
     Height="60"
     Width="50">
 
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="PotBrush" Color="#000000" />
+    </UserControl.Resources>
+
     <Canvas>
         <local:HolidayEnemyShipLevel1Sprite></local:HolidayEnemyShipLevel1Sprite>
+        <Polygon Points="15,50 35,50 40,44 10,44" Fill="{StaticResource PotBrush}" />
+        <Polygon Points="15,50 35,50 40,44 10,44" Fill="{StaticResource PotBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="6" />
 
-        <Line X1="3" Y1="45" X2="3" Y2="50" Stroke="{StaticResource EngineFireColor}" StrokeThickness="5"/>
-        <Line X1="47" Y1="45" X2="47" Y2="50" Stroke="{StaticResource EngineFireColor}" StrokeThickness="5"/>
     </Canvas>
 </local:HolidayEnemyShipLevel1Sprite>

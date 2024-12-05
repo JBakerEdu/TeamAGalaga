@@ -12,64 +12,116 @@
     Width="50">
 
     <UserControl.Resources>
-        <SolidColorBrush x:Key="ShipBaseColor" Color="#2E8B57"/>
-        <SolidColorBrush x:Key="CockpitColor" Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="WingTipColor" Color="#00C"/>
-        <SolidColorBrush x:Key="MainAccentColor" Color="DarkOrchid"/>
-        <SolidColorBrush x:Key="SecondaryAccentColor" Color="CornflowerBlue"/>
-        <SolidColorBrush x:Key="OvalColor" Color="#A2F5A2"/>
-        <SolidColorBrush x:Key="CrateBaseColor" Color="#8B4513" />
-        <SolidColorBrush x:Key="CrateTopColor" Color="#D2B48C" />
-        <SolidColorBrush x:Key="CrateSecondaryColor" Color="#A52A2A" />
-        <SolidColorBrush x:Key="ScrewColor" Color="DarkGray" />
+        <SolidColorBrush x:Key="FaceColor" Color="LimeGreen" />
+        <SolidColorBrush x:Key="StrokeColor" Color="DarkGreen" />
+        <SolidColorBrush x:Key="HairColor" Color="White" />
+        <SolidColorBrush x:Key="EyeColor" Color="Yellow" />
+        <SolidColorBrush x:Key="PupilColor" Color="Black" />
+        <SolidColorBrush x:Key="MouthColor" Color="Maroon" />
+        <SolidColorBrush x:Key="HatColor" Color="Red" />
+        <SolidColorBrush x:Key="HatTrimColor" Color="White" />
+        <SolidColorBrush x:Key="RedGift" Color="Red"/>
+        <SolidColorBrush x:Key="GreenGift" Color="Green"/>
+        <SolidColorBrush x:Key="BlueGift" Color="Blue"/>
+        <SolidColorBrush x:Key="YellowRibbon" Color="Yellow"/>
     </UserControl.Resources>
 
     <Canvas>
-        <Line X1="6" Y1="53" X2="6" Y2="32" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="3" HorizontalAlignment="Center" Canvas.Top="-11" VerticalAlignment="Top" />
-        <Line X1="6" Y1="26" X2="12" Y2="18" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" HorizontalAlignment="Center" Canvas.Top="-10" VerticalAlignment="Top" />
-        <Line X1="6" Y1="26" X2="6" Y2="32" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" HorizontalAlignment="Center" Canvas.Top="-11" VerticalAlignment="Top" />
+        <!-- Face -->
+        <Ellipse Width="26" Height="32" Fill="{StaticResource FaceColor}" 
+                 Stroke="{StaticResource StrokeColor}" StrokeThickness="1"
+                 Canvas.Left="3" Canvas.Top="7" />
 
-        <Line X1="44" Y1="53" X2="44" Y2="32" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="3" HorizontalAlignment="Center" Canvas.Top="-12" VerticalAlignment="Top" />
-        <Line X1="44" Y1="26" X2="44" Y2="32" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" HorizontalAlignment="Center" Canvas.Top="-12" VerticalAlignment="Top" />
-        <Line X1="44" Y1="26" X2="38" Y2="18" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" HorizontalAlignment="Center" Canvas.Top="-11" VerticalAlignment="Top" />
+        <!-- Eyes -->
+        <Ellipse Width="6" Height="5" Fill="{StaticResource EyeColor}" 
+                 Canvas.Left="9" Canvas.Top="16" />
 
-        <Ellipse Width="38" Height="10" Fill="{StaticResource OvalColor}" Canvas.Left="6" Canvas.Top="10" />
-        <Ellipse Width="6" Height="24" Fill="{StaticResource OvalColor}" Canvas.Left="22" />
+        <!-- Pupils -->
+        <Ellipse Width="2" Height="2" Fill="{StaticResource PupilColor}" 
+                 Canvas.Left="12" Canvas.Top="18" />
 
-        <Line X1="25" Y1="3" X2="25" Y2="18" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="3" />
-        <Line X1="25" Y1="9" X2="25" Y2="18" Stroke="{StaticResource CockpitColor}" StrokeThickness="2" />
+        <!-- Smile -->
+        <Path Fill="{StaticResource MouthColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.7"
+              Data="M18,35 Q25,45 32,35 Q25,42 18,35" Canvas.Top="27.13" HorizontalAlignment="Left" UseLayoutRounding="False" VerticalAlignment="Top" Canvas.Left="5.345" Height="5" Stretch="Fill" Width="21" />
 
-        <Line X1="17" Y1="6" X2="17" Y2="26" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="3" HorizontalAlignment="Left" Canvas.Left="4" VerticalAlignment="Center" />
-        <Line X1="17" Y1="16" X2="17" Y2="22" Stroke="{StaticResource SecondaryAccentColor}" StrokeThickness="3" HorizontalAlignment="Left" Canvas.Left="4" VerticalAlignment="Center" />
+        <!-- Hair Tufts -->
+        <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+              Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="23.796" HorizontalAlignment="Left" UseLayoutRounding="False" VerticalAlignment="Top" Canvas.Left="6.494" Height="4" Stretch="Fill" Width="19" />
 
-        <Line X1="13" Y1="8" X2="13" Y2="38" Stroke="{StaticResource WingTipColor}" StrokeThickness="2" />
-        <Line X1="13" Y1="22" X2="13" Y2="26" Stroke="{StaticResource MainAccentColor}" StrokeThickness="3" />
+        <!-- Optional Santa Hat -->
+        <Path Fill="{StaticResource HatColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="1"
+              Data="M20,5 C10,0 5,10 8,25 L42,25 C45,10 40,0 30,5 Z" Canvas.Top="5.393" UseLayoutRounding="False" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="2.019" Height="9" Stretch="Fill" Width="28" />
+        <Ellipse Width="4" Height="4" Fill="{StaticResource HatTrimColor}" 
+                 Canvas.Left="16" Canvas.Top="3" />
+        <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+            Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="19.826" UseLayoutRounding="False" Canvas.Left="22.396" Height="4" Stretch="Fill" Width="13" RenderTransformOrigin="0.5,0.5" >
+            <Path.RenderTransform>
+                <CompositeTransform Rotation="-97.408"/>
+            </Path.RenderTransform>
+        </Path>
+        <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+            Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="19.561" UseLayoutRounding="False" Canvas.Left="-2.799" Height="4" Stretch="Fill" Width="13" RenderTransformOrigin="0.5,0.5" >
+            <Path.RenderTransform>
+                <CompositeTransform Rotation="92.01"/>
+            </Path.RenderTransform>
+        </Path>
+        <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+            Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="32" UseLayoutRounding="False" Canvas.Left="6" Height="16" Stretch="Fill" Width="12" RenderTransformOrigin="0.5,0.5" >
+            <Path.RenderTransform>
+                <CompositeTransform Rotation="-12.87"/>
+            </Path.RenderTransform>
+        </Path>
+        <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+            Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="33" UseLayoutRounding="False" Canvas.Left="14" Height="15" Stretch="Fill" Width="12" RenderTransformOrigin="0.5,0.5" >
+            <Path.RenderTransform>
+                <CompositeTransform Rotation="18.814"/>
+            </Path.RenderTransform>
+        </Path>
 
-        <Line X1="33" Y1="6" X2="33" Y2="26" Stroke="{StaticResource ShipBaseColor}" StrokeThickness="3" HorizontalAlignment="Left" Canvas.Left="-4" VerticalAlignment="Center" />
-        <Line X1="33" Y1="16" X2="33" Y2="22" Stroke="{StaticResource SecondaryAccentColor}" StrokeThickness="3" HorizontalAlignment="Left" Canvas.Left="-4" VerticalAlignment="Center" />
 
-        <Line X1="37" Y1="8" X2="37" Y2="38" Stroke="{StaticResource WingTipColor}" StrokeThickness="2" />
-        <Line X1="37" Y1="22" X2="37" Y2="26" Stroke="{StaticResource MainAccentColor}" StrokeThickness="3" />
 
-        <Line X1="6" Y1="26" X2="12" Y2="18" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" Canvas.Top="19" Canvas.Left="25" />
-        <Line X1="44" Y1="26" X2="38" Y2="18" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" Canvas.Top="19" Canvas.Left="-25" />
-        <Line X1="44" Y1="26" X2="38" Y2="18" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" Canvas.Top="19" Canvas.Left="-25" />
-        <Line X1="6" Y1="26" X2="12" Y2="18" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" Canvas.Top="23" Canvas.Left="32" />
-        <Line X1="44" Y1="26" X2="38" Y2="18" Stroke="{StaticResource WingTipColor}" StrokeThickness="3" Canvas.Top="23" Canvas.Left="-32" />
 
-        <Line X1="25" Y1="9" X2="25" Y2="18" Stroke="{StaticResource CockpitColor}" StrokeThickness="2" Canvas.Left="-19" Canvas.Top="18" />
-        <Line X1="25" Y1="9" X2="25" Y2="18" Stroke="{StaticResource CockpitColor}" StrokeThickness="2" Canvas.Left="19" Canvas.Top="18" />
+        <Rectangle Fill="{StaticResource RedGift}" Width="10" Height="10" Canvas.Left="31" Canvas.Top="27" />
+        <Line X1="5" Y1="55" X2="15" Y2="55" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="26" VerticalAlignment="Top" Canvas.Top="-24" />
+        <Line X1="10" Y1="50" X2="10" Y2="60" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="28" VerticalAlignment="Top" Canvas.Top="-23" />
 
-        <Rectangle Width="10" Height="10" Fill="{StaticResource CrateBaseColor}" Canvas.Left="20" Canvas.Top="33" Stroke="Black" StrokeThickness="1" />
+        <Rectangle Fill="{StaticResource GreenGift}" Width="11" Height="14" Canvas.Left="37" Canvas.Top="35" />
 
-        <Rectangle Width="10" Height="3" Fill="{StaticResource CrateTopColor}" Canvas.Left="20" Canvas.Top="30" Stroke="Black" StrokeThickness="1" />
+        <Line X1="30" Y1="52" X2="39" Y2="52" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" Canvas.Left="9" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="-9" />
+        <Line X1="34" Y1="48" X2="34" Y2="56" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="11" VerticalAlignment="Top" Canvas.Top="-13" />
 
-        <Line X1="20" Y1="31" X2="30" Y2="31" Stroke="{StaticResource CrateSecondaryColor}" StrokeThickness="1" />
-        <Line X1="20" Y1="36" X2="30" Y2="36" Stroke="{StaticResource CrateSecondaryColor}" StrokeThickness="1" />
+        <Rectangle Fill="{StaticResource BlueGift}" Width="12" Height="12" Canvas.Left="27" Canvas.Top="37" />
+        <Line X1="20" Y1="56" X2="32" Y2="56" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="7" VerticalAlignment="Top" Canvas.Top="-11" />
+        <Line X1="26" Y1="50" X2="26" Y2="62" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="4" VerticalAlignment="Top" Canvas.Top="-13" />
+        <Path Fill="{StaticResource FaceColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+            Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="28.946" UseLayoutRounding="False" Canvas.Left="36.343" Height="14" Stretch="Fill" Width="11" RenderTransformOrigin="0.5,0.5" >
+            <Path.RenderTransform>
+                <CompositeTransform Rotation="31.075"/>
+            </Path.RenderTransform>
+        </Path>
+        <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+            Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="12" UseLayoutRounding="False" Canvas.Left="1.019" Height="4" Stretch="Fill" Width="30" />
+        <Ellipse Width="4" Height="4" Fill="{StaticResource FaceColor}" 
+            Stroke="{StaticResource StrokeColor}" StrokeThickness="1"
+            Canvas.Left="14" Canvas.Top="21" />
+        <Ellipse Width="6" Height="5" Fill="{StaticResource EyeColor}" 
+            Canvas.Left="17" Canvas.Top="16" />
+        <Ellipse Width="2" Height="2" Fill="{StaticResource PupilColor}" 
+            Canvas.Left="18" Canvas.Top="18" />
+        <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+            Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="28.076" UseLayoutRounding="False" Canvas.Left="19.896" Height="4" Stretch="Fill" Width="13" RenderTransformOrigin="0.5,0.5" >
+            <Path.RenderTransform>
+                <CompositeTransform Rotation="-67.223"/>
+            </Path.RenderTransform>
+        </Path>
+        <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
+            Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="29.311" UseLayoutRounding="False" Canvas.Left="-1.299" Height="4" Stretch="Fill" Width="13" RenderTransformOrigin="0.5,0.5" >
+            <Path.RenderTransform>
+                <CompositeTransform Rotation="71.608"/>
+            </Path.RenderTransform>
+        </Path>
 
-        <Ellipse Width="2" Height="2" Fill="{StaticResource ScrewColor}" Canvas.Left="20" Canvas.Top="33" />
-        <Ellipse Width="2" Height="2" Fill="{StaticResource ScrewColor}" Canvas.Left="28" Canvas.Top="33" />
-        <Ellipse Width="2" Height="2" Fill="{StaticResource ScrewColor}" Canvas.Left="20" Canvas.Top="41" />
-        <Ellipse Width="2" Height="2" Fill="{StaticResource ScrewColor}" Canvas.Left="28" Canvas.Top="41" />
+
+
     </Canvas>
 </local:BaseSprite>

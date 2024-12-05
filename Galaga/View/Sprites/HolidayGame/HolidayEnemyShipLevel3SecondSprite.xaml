@@ -13,7 +13,16 @@
 
     <Canvas>
         <local:HolidayEnemyShipLevel3Sprite></local:HolidayEnemyShipLevel3Sprite>
-        <Rectangle Width="6" Height="10" Fill="MediumPurple" Canvas.Left="24" Canvas.Top="10"/>
+        <Rectangle Canvas.Top="36.241" Canvas.Left="16.573" Width="8" Height="2" Fill="{StaticResource Hair}" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
+            <Rectangle.RenderTransform>
+                <CompositeTransform Rotation="4.399"/>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Canvas.Top="36.366" Canvas.Left="26.698" Width="8" Height="2" Fill="{StaticResource Hair}" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
+            <Rectangle.RenderTransform>
+                <CompositeTransform Rotation="-6.262"/>
+            </Rectangle.RenderTransform>
+        </Rectangle>
 
     </Canvas>
 </local:HolidayEnemyShipLevel3Sprite>

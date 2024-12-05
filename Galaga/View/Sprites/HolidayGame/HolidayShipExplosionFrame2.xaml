@@ -21,7 +21,6 @@
     <Canvas>
         <local:HolidayShipExplosionFrame1></local:HolidayShipExplosionFrame1>
 
-        <!-- Presents -->
         <Rectangle Fill="{StaticResource RedGift}" Width="10" Height="10" Canvas.Left="31" Canvas.Top="37" />
         <Line X1="5" Y1="55" X2="15" Y2="55" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="26" VerticalAlignment="Top" Canvas.Top="-14" />
         <Line X1="10" Y1="50" X2="10" Y2="60" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="28" VerticalAlignment="Top" Canvas.Top="-13" />
