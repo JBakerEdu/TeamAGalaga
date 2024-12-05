@@ -2,12 +2,14 @@
 using System.Diagnostics;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using Galaga.View.Sprites;
 
 namespace Galaga.View
 {
     internal static class AudioManager
     {
-        private const string AudioFilesFolder = "View/AudioFiles";
+        private const string OriginalAudioFilesFolder = "View/AudioFiles/OriginalGame";
+        private const string HolidayAudioFilesFolder = "View/AudioFiles/HolidayGame";
 
         /// <summary>
         /// Plays the sound for enemy blowing up.
@@ -73,7 +75,7 @@ namespace Galaga.View
         {
             try
             {
-                var uri = new Uri($"ms-appx:///{AudioFilesFolder}/{fileName}");
+                var uri = new Uri($"ms-appx:///{HolidayAudioFilesFolder}/{fileName}");
 
                 var mediaPlayer = new MediaPlayer();
                 mediaPlayer.Source = MediaSource.CreateFromUri(uri);

@@ -193,44 +193,44 @@
     <Compile Include="View\Sprites\HolidayGame\HolidayShipExplosionFrame3.xaml.cs">
       <DependentUpon>HolidayShipExplosionFrame3.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\BulletSprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\BulletSprite.xaml.cs">
       <DependentUpon>BulletSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\BonusShipCarePackageSprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\BonusShipCarePackageSprite.xaml.cs">
       <DependentUpon>BonusShipCarePackageSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\ShipExplosionFrame3.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\ShipExplosionFrame3.xaml.cs">
       <DependentUpon>ShipExplosionFrame3.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\ShipExplosionFrame2.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\ShipExplosionFrame2.xaml.cs">
       <DependentUpon>ShipExplosionFrame2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\ShipExplosionFrame1.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\ShipExplosionFrame1.xaml.cs">
       <DependentUpon>ShipExplosionFrame1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel3SecondSprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\EnemyShipLevel3SecondSprite.xaml.cs">
       <DependentUpon>EnemyShipLevel3SecondSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel4SecondSprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\EnemyShipLevel4SecondSprite.xaml.cs">
       <DependentUpon>EnemyShipLevel4SecondSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel4Sprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\EnemyShipLevel4Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel4Sprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel3Sprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\EnemyShipLevel3Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel3Sprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel2Sprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\EnemyShipLevel2Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel2Sprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\OrgianlGame\EnemyShipLevel1Sprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\EnemyShipLevel1Sprite.xaml.cs">
       <DependentUpon>EnemyShipLevel1Sprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sprites\BaseSprite.xaml.cs">
       <DependentUpon>BaseSprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sprites\ISpriteRenderer.cs" />
-    <Compile Include="View\Sprites\OrgianlGame\PlayerSprite.xaml.cs">
+    <Compile Include="View\Sprites\OriginalGame\PlayerSprite.xaml.cs">
       <DependentUpon>PlayerSprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\StartScreenPage.xaml.cs">
@@ -252,13 +252,20 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Content Include="View\AudioFiles\bonusShipActive.wav" />
-    <Content Include="View\AudioFiles\enemyBlowUp.wav" />
-    <Content Include="View\AudioFiles\enemyShoot.wav" />
-    <Content Include="View\AudioFiles\gameOver.wav" />
-    <Content Include="View\AudioFiles\playerBlowUp.wav" />
-    <Content Include="View\AudioFiles\playerPowerUp.wav" />
-    <Content Include="View\AudioFiles\playerShoot.wav" />
+    <Content Include="View\AudioFiles\HolidayGame\bonusShipActive.wav" />
+    <Content Include="View\AudioFiles\HolidayGame\enemyBlowUp.wav" />
+    <Content Include="View\AudioFiles\HolidayGame\enemyShoot.wav" />
+    <Content Include="View\AudioFiles\HolidayGame\gameOver.wav" />
+    <Content Include="View\AudioFiles\HolidayGame\playerBlowUp.wav" />
+    <Content Include="View\AudioFiles\HolidayGame\playerPowerUp.wav" />
+    <Content Include="View\AudioFiles\HolidayGame\playerShoot.wav" />
+    <Content Include="View\AudioFiles\OriginalGame\bonusShipActive.wav" />
+    <Content Include="View\AudioFiles\OriginalGame\enemyBlowUp.wav" />
+    <Content Include="View\AudioFiles\OriginalGame\enemyShoot.wav" />
+    <Content Include="View\AudioFiles\OriginalGame\gameOver.wav" />
+    <Content Include="View\AudioFiles\OriginalGame\playerBlowUp.wav" />
+    <Content Include="View\AudioFiles\OriginalGame\playerPowerUp.wav" />
+    <Content Include="View\AudioFiles\OriginalGame\playerShoot.wav" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -321,47 +328,47 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\BulletSprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\BulletSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\BonusShipCarePackageSprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\BonusShipCarePackageSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\ShipExplosionFrame3.xaml">
+    <Page Include="View\Sprites\OriginalGame\ShipExplosionFrame3.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\ShipExplosionFrame2.xaml">
+    <Page Include="View\Sprites\OriginalGame\ShipExplosionFrame2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\ShipExplosionFrame1.xaml">
+    <Page Include="View\Sprites\OriginalGame\ShipExplosionFrame1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel3SecondSprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\EnemyShipLevel3SecondSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel4SecondSprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\EnemyShipLevel4SecondSprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel4Sprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\EnemyShipLevel4Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel3Sprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\EnemyShipLevel3Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel2Sprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\EnemyShipLevel2Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\EnemyShipLevel1Sprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\EnemyShipLevel1Sprite.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -369,7 +376,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Sprites\OrgianlGame\PlayerSprite.xaml">
+    <Page Include="View\Sprites\OriginalGame\PlayerSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
