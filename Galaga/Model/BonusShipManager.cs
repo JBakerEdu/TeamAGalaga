@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Galaga.View;
@@ -114,7 +115,7 @@ namespace Galaga.Model
             var bulletX = this.bonusShip.X + this.bonusShip.Width / 2;
             var bulletY = this.bonusShip.Y + this.bonusShip.Height;
 
-            this.bulletManager.FireEnemyBullet(bulletX, bulletY, player.X + player.Width / 2, player.Y + player.Height / 2, true);
+            this.bulletManager.FireEnemyBullet(bulletX, bulletY, this.gameManager.gameType, player.X + player.Width / 2, player.Y + player.Height / 2, true);
         }
 
 
@@ -135,14 +136,9 @@ namespace Galaga.Model
         {
             while (this.bonusShipActive)
             {
-                PlayActiveBonusShip();
+                AudioManager.PlayActiveBonusShip(this.gameManager.gameType);
                 await Task.Delay(SoundEffectMilliseconds);
             }
-        }
-
-        private static void PlayActiveBonusShip()
-        {
-            AudioManager.PlayActiveBonusShip();
         }
 
         private void RemoveBonusShip()
@@ -180,7 +176,7 @@ namespace Galaga.Model
         private void HandleBonusShipHit()
         {
             RemoveBonusShip();
-            AudioManager.PlayEnemyBlowUp();
+            AudioManager.PlayEnemyBlowUp(this.gameManager.gameType);
             if (this.gameManager.CurrentGameLevel() > 1)
             {
                 this.gameManager.ClonePlayerShip();

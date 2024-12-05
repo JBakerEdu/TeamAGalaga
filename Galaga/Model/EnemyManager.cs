@@ -36,7 +36,6 @@ namespace Galaga.Model
         private const int maxAttackInterval = 15000;
         private readonly IList<EnemyShip> attackingShips = new List<EnemyShip>();
 
-
         private DispatcherTimer enemyMovementTimer;
         private readonly BulletManager bulletManager;
         private readonly UiTextManager uiTextManager;
@@ -134,7 +133,7 @@ namespace Galaga.Model
 
                 if (random.Next(0, 1000) < 3)
                 {
-                    bulletManager.FireEnemyBullet(attackingShip.X + attackingShip.Width / 2, attackingShip.Y + attackingShip.Height, playerShip.X, playerShip.Y, true);
+                    bulletManager.FireEnemyBullet(attackingShip.X + attackingShip.Width / 2, attackingShip.Y + attackingShip.Height, this.gameManager.gameType, playerShip.X, playerShip.Y, true);
                 }
 
                 if (Math.Abs(attackingShip.X - targetX) < 5 && Math.Abs(attackingShip.Y - targetY) < 5)
@@ -327,7 +326,7 @@ namespace Galaga.Model
                 double renderX = enemy.X + enemy.Width / 2;
                 double renderY = enemy.Y + enemy.Height;
                 bool aimedAtPlayer = enemy.Level == 4;
-                this.bulletManager.FireEnemyBullet(renderX, renderY, player.X + player.Width / 2, player.Y + player.Height / 2, aimedAtPlayer);
+                this.bulletManager.FireEnemyBullet(renderX, renderY, this.gameManager.gameType, player.X + player.Width / 2, player.Y + player.Height / 2, aimedAtPlayer);
             }
         }
 
@@ -361,7 +360,7 @@ namespace Galaga.Model
                 if (enemy != null && this.bulletManager.CheckSpriteCollision(enemy, false))
                 {
                     this.DestroyEnemy(enemy);
-                    AudioManager.PlayEnemyBlowUp();
+                    AudioManager.PlayEnemyBlowUp(this.gameManager.gameType);
                     this.uiTextManager.UpdateScore(enemy);
                 }
             }

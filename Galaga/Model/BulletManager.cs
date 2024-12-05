@@ -105,7 +105,7 @@ namespace Galaga.Model
         /// <summary>
         /// this is how the player fires their fireball, the space bar calls here
         /// </summary>
-        public void PlayerFiresBullet(double renderX, double renderY)
+        public void PlayerFiresBullet(double renderX, double renderY, GameType gameType)
         {
             if (this.activePlayerBullets.Count < this.maxBulletsAllowed * this.PlayersFiring)
             {
@@ -114,7 +114,7 @@ namespace Galaga.Model
                 renderY = renderY - bullet.Sprite.Height;
                 bullet.RenderAt(renderX, renderY);
                 this.canvas.Children.Add(bullet.Sprite);
-                AudioManager.PlayPlayerShoot();
+                AudioManager.PlayPlayerShoot(gameType);
                 this.activePlayerBullets.Add(bullet);
             }
         }
@@ -124,7 +124,7 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="renderX">where to render the x of the sprite</param>
         /// <param name="renderY">where to render the y of the sprite</param>
-        public void FireEnemyBullet(double renderX, double renderY, double playerX = 0, double playerY = 0, bool aimedAtPlayer = false)
+        public void FireEnemyBullet(double renderX, double renderY, GameType gameType, double playerX = 0, double playerY = 0, bool aimedAtPlayer = false)
         {
             double velocityX = 0;
             double velocityY = 5;
@@ -143,7 +143,7 @@ namespace Galaga.Model
             renderX = renderX - bullet.Width / 2;
             bullet.RenderAt(renderX, renderY);
             this.canvas.Children.Add(bullet.Sprite);
-            AudioManager.PlayEnemyShoot();
+            AudioManager.PlayEnemyShoot(gameType);
             this.activeEnemyBullets.Add(bullet);
         }
 

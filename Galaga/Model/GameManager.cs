@@ -1,5 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
+using Galaga.View.Sprites;
 
 namespace Galaga.Model
 {
@@ -13,6 +14,7 @@ namespace Galaga.Model
         private readonly BonusShipManager bonusShipManager;
         private readonly LevelManager levelManager;
         private readonly int playerLives = 3;
+        public GameType gameType { get; private set; }
         #endregion
 
         #region Constructors
@@ -27,10 +29,10 @@ namespace Galaga.Model
             canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
             BulletManager bulletManager = new BulletManager(canvas);
             UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives, this);
-            this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, uiTextManager);
+            this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, this, uiTextManager);
             EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, this.playerManager, this);
             this.bonusShipManager = new BonusShipManager(canvas, bulletManager, this);
-
+            this.gameType = GameType.HolidayGame;
             this.levelManager = new LevelManager(enemyManager, uiTextManager);
             this.levelManager.StartGame();
         }
