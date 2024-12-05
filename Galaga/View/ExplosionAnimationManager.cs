@@ -9,14 +9,27 @@ namespace Galaga.View.Sprites
     {
         private static readonly TimeSpan FrameDuration = TimeSpan.FromMilliseconds(100);
 
-        public static async Task Play(Canvas canvas, double x, double y)
+        public static async Task Play(Canvas canvas, double x, double y, GameType gameType)
         {
-            var frames = new UserControl[]
+            var frames = new UserControl[]{};
+            if (gameType == GameType.HolidayGame)
             {
-                new ShipExplosionFrame1(),
-                new ShipExplosionFrame2(),
-                new ShipExplosionFrame3(),
-            };
+                frames = new UserControl[]
+                {
+                    new HolidayShipExplosionFrame1(),
+                    new HolidayShipExplosionFrame2(),
+                    new HolidayShipExplosionFrame3(),
+                };
+            }
+            else
+            {
+                frames = new UserControl[]
+                {
+                    new ShipExplosionFrame1(),
+                    new ShipExplosionFrame2(),
+                    new ShipExplosionFrame3(),
+                };
+            }
 
             foreach (var frame in frames)
             {

@@ -159,7 +159,7 @@ namespace Galaga.Model
                 this.canvas.Children.Remove(mostRecentPlayer.Sprite);
                 this.players.Remove(mostRecentPlayer);
                 AudioManager.PlayPlayerBlowUp(this.gameManager.gameType);
-                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.gameType);
             }
 
             if (this.playerLives >= 0)
@@ -173,7 +173,7 @@ namespace Galaga.Model
                 var explosionY = this.players[playerIndex].Y;
                 this.canvas.Children.Remove(this.players[playerIndex].Sprite);
                 this.uiTextManager.EndGame(false);
-                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.gameType);
             }
         }
 
