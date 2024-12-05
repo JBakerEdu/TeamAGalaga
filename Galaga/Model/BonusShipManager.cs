@@ -18,15 +18,14 @@ namespace Galaga.Model
         private readonly Random random;
         private bool bonusShipActive;
         private const double BonusShipSpeed = 2.0;
-        private const int BonusSpawnChance = 100;
+        private const int BonusSpawnChance = 5;
         private const int BonusFireChance = 1;
         private const int TimerIntervalMilliseconds = 1000;
         private const int SoundEffectMilliseconds = 500;
         private const int FireCooldownMilliseconds = 500;
-        private const int MinimumSpawnDelayMilliseconds = 25000; // 15 seconds
-
+        private const int MinimumSpawnDelayMilliseconds = 25000;
         private bool canFire = true;
-        private DateTime lastSpawnTime; // Tracks the last spawn time
+        private DateTime lastSpawnTime;
 
         /// <summary>
         /// Turns off the spawn of the bonus ship giving control to turn off spawn chance. 
@@ -36,6 +35,12 @@ namespace Galaga.Model
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// Manages the Bonus Ships
+        /// </summary>
+        /// <param name="canvas"> the canvas to add to</param>
+        /// <param name="bulletManager">the bullet manager a bonus ship will use</param>
+        /// <param name="gameManager">the game manager the bonusShipManager will report back to</param>
         public BonusShipManager(Canvas canvas, BulletManager bulletManager, GameManager gameManager)
         {
             this.gameManager = gameManager;
@@ -43,7 +48,7 @@ namespace Galaga.Model
             this.bulletManager = bulletManager;
             this.random = new Random();
             this.bonusShipActive = false;
-            this.lastSpawnTime = DateTime.MinValue; // Initialize to a very old time
+            this.lastSpawnTime = DateTime.MinValue;
             this.StartBonusShipTimer();
             this.BonusShipSpawn = true;
         }

@@ -16,7 +16,7 @@ namespace Galaga.View
         private GameManager gameManager;
         private readonly HashSet<VirtualKey> pressedKeys = new HashSet<VirtualKey>();
         private DispatcherTimer movementTimer;
-        private bool isHolidayMode; // Variable to store the holiday mode flag
+        private bool isHolidayMode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameCanvas"/> class.
@@ -41,16 +41,11 @@ namespace Galaga.View
             this.movementTimer.Start();
         }
 
-        // Method to handle the navigation parameter
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-            // Get the parameter passed from the StartScreenPage
-            isHolidayMode = (bool)e.Parameter;
-
-            // Initialize GameManager with the holiday mode flag
-            this.gameManager = new GameManager(this.canvas, isHolidayMode);
+            this.isHolidayMode = (bool)e.Parameter;
+            this.gameManager = new GameManager(this.canvas, this.isHolidayMode);
         }
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
