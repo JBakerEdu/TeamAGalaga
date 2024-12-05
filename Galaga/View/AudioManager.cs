@@ -74,7 +74,6 @@ namespace Galaga.View
         {
             try
             {
-                // Decide folder path based on game type using a switch statement
                 string folderPath = gameType switch
                 {
                     GameType.HolidayGame => HolidayAudioFilesFolder,
@@ -82,7 +81,6 @@ namespace Galaga.View
                     _ => throw new ArgumentException("Unsupported game type")
                 };
 
-                // Build the URI for the sound file
                 var uri = new Uri($"ms-appx:///{folderPath}/{fileName}");
 
                 var mediaPlayer = new MediaPlayer

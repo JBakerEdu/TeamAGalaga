@@ -115,7 +115,7 @@ namespace Galaga.Model
             var bulletX = this.bonusShip.X + this.bonusShip.Width / 2;
             var bulletY = this.bonusShip.Y + this.bonusShip.Height;
 
-            this.bulletManager.FireEnemyBullet(bulletX, bulletY, this.gameManager.gameType, player.X + player.Width / 2, player.Y + player.Height / 2, true);
+            this.bulletManager.FireEnemyBullet(bulletX, bulletY, player.X + player.Width / 2, player.Y + player.Height / 2, true);
         }
 
 

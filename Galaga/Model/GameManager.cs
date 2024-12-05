@@ -27,7 +27,7 @@ namespace Galaga.Model
         public GameManager(Canvas canvas)
         {
             canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
-            BulletManager bulletManager = new BulletManager(canvas);
+            BulletManager bulletManager = new BulletManager(canvas, this);
             UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives, this);
             this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, this, uiTextManager);
             EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, this.playerManager, this);

@@ -222,7 +222,7 @@ namespace Galaga.Model
                     {
                         double renderX = player.X + player.Width / 2;
                         double renderY = this.canvasHeight - PlayerOffsetFromBottom;
-                        this.bulletManager.PlayerFiresBullet(renderX, renderY, this.gameManager.gameType);
+                        this.bulletManager.PlayerFiresBullet(renderX, renderY);
                     }
                     this.lastFireTime = currentTime;
                 }

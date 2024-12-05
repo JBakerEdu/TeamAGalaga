@@ -134,6 +134,7 @@
     <Compile Include="Model\BonusShip.cs" />
     <Compile Include="Model\BonusShipManager.cs" />
     <Compile Include="Model\Bullet.cs" />
+    <Compile Include="Model\BulletFactory.cs" />
     <Compile Include="Model\BulletManager.cs" />
     <Compile Include="Model\EnemyManager.cs" />
     <Compile Include="Model\EnemyShip.cs" />
