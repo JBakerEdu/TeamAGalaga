@@ -13,7 +13,8 @@ namespace Galaga.View
 
         private void StartGame_Click(object sender, RoutedEventArgs e)
         {
-            (Window.Current.Content as Frame)?.Navigate(typeof(GameCanvas));
+            bool isHolidayMode = HolidayModeCheckBox.IsChecked ?? false;
+            (Window.Current.Content as Frame)?.Navigate(typeof(GameCanvas), isHolidayMode);
         }
 
         private void ViewHighScores_Click(object sender, RoutedEventArgs e)

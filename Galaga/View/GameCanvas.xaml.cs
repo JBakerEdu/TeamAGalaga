@@ -4,19 +4,19 @@ using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using System.Collections.Generic;
 using System;
+using Windows.UI.Xaml.Navigation;
 
 namespace Galaga.View
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class GameCanvas
+    public sealed partial class GameCanvas : Page
     {
-        private readonly GameManager gameManager;
+        private GameManager gameManager;
         private readonly HashSet<VirtualKey> pressedKeys = new HashSet<VirtualKey>();
         private DispatcherTimer movementTimer;
+        private bool isHolidayMode; // Variable to store the holiday mode flag
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameCanvas"/> class.
@@ -24,7 +24,6 @@ namespace Galaga.View
         public GameCanvas()
         {
             this.InitializeComponent();
-
             this.Loaded += OnPageLoaded;
 
             Width = this.canvas.Width;
@@ -36,12 +35,22 @@ namespace Galaga.View
             Window.Current.CoreWindow.KeyDown += this.coreWindowOnKeyDown;
             Window.Current.CoreWindow.KeyUp += this.coreWindowOnKeyUp;
 
-            this.gameManager = new GameManager(this.canvas);
-
             this.movementTimer = new DispatcherTimer();
             this.movementTimer.Interval = TimeSpan.FromMilliseconds(16);
             this.movementTimer.Tick += this.OnMovementTimerTick;
             this.movementTimer.Start();
+        }
+
+        // Method to handle the navigation parameter
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            // Get the parameter passed from the StartScreenPage
+            isHolidayMode = (bool)e.Parameter;
+
+            // Initialize GameManager with the holiday mode flag
+            this.gameManager = new GameManager(this.canvas, isHolidayMode);
         }
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
@@ -86,6 +95,5 @@ namespace Galaga.View
         {
             Frame.Navigate(typeof(HighScorePage)); // Ensure HighScorePage.xaml is set up with the ViewModel binding
         }
-
     }
 }
