@@ -21,6 +21,9 @@ namespace Galaga.Model
         private readonly IList<Bullet> activePlayerBullets;
         private readonly IList<Bullet> activeEnemyBullets;
         private DispatcherTimer bulletMovementTimer;
+        private GameManager gameManager;
+        private double velocityX = 0;
+        private double velocityY = 5;
 
         #endregion
 
@@ -31,9 +34,10 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="canvas">the canvas passes in</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public BulletManager(Canvas canvas)
+        public BulletManager(Canvas canvas, GameManager gameManager)
         {
             this.canvas = canvas;
+            this.gameManager = gameManager;
             this.maxBulletsAllowed = 3;
             this.canvasHeight = canvas.Height;
             this.activePlayerBullets = new List<Bullet>();
@@ -109,12 +113,12 @@ namespace Galaga.Model
         {
             if (this.activePlayerBullets.Count < this.maxBulletsAllowed * this.PlayersFiring)
             {
-                var bullet = new Bullet(new BulletSprite(), 0, -5);
+                var bullet = BulletFactory.CreateBullet(0, -5, this.gameManager.gameType);
                 renderX = renderX - bullet.Sprite.Width / 2;
                 renderY = renderY - bullet.Sprite.Height;
                 bullet.RenderAt(renderX, renderY);
                 this.canvas.Children.Add(bullet.Sprite);
-                AudioManager.PlayPlayerShoot();
+                AudioManager.PlayPlayerShoot(this.gameManager.gameType);
                 this.activePlayerBullets.Add(bullet);
             }
         }
@@ -139,11 +143,11 @@ namespace Galaga.Model
                 velocityY = (deltaY / magnitude) * 5;
             }
 
-            var bullet = new Bullet(new BulletSprite(), velocityX, velocityY);
+            var bullet = BulletFactory.CreateBullet(velocityX, velocityY, this.gameManager.gameType);
             renderX = renderX - bullet.Width / 2;
             bullet.RenderAt(renderX, renderY);
             this.canvas.Children.Add(bullet.Sprite);
-            AudioManager.PlayEnemyShoot();
+            AudioManager.PlayEnemyShoot(this.gameManager.gameType);
             this.activeEnemyBullets.Add(bullet);
         }
 

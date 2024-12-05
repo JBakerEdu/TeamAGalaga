@@ -206,7 +206,7 @@ public class UiTextManager
             var textSize = this.gameOverTextBlock.DesiredSize;
             Canvas.SetLeft(this.gameOverTextBlock, (this.canvas.Width - textSize.Width) / 2);
             Canvas.SetTop(this.gameOverTextBlock, (this.canvas.Height - textSize.Height) / 2);
-            AudioManager.PlayGameOver();
+            AudioManager.PlayGameOver(this.gameManager.gameType);
             await Task.Delay(waitTime);
             (Window.Current.Content as Frame)?.Navigate(typeof(HighScorePage), this.score);
         }

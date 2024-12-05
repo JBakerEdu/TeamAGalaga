@@ -1,4 +1,5 @@
 ﻿using Galaga.View.Sprites;
+using System;
 
 namespace Galaga.Model
 {
@@ -11,7 +12,6 @@ namespace Galaga.Model
 
         private const int DefaultEnemySpeedX = 10;
         private const int DefaultEnemySpeedY = 0;
-
         private const bool DefaultEnemyShooter = true;
 
         #endregion
@@ -21,33 +21,58 @@ namespace Galaga.Model
         /// <summary>
         /// Creates a level 1 enemy ship with default settings.
         /// </summary>
-        public static EnemyShip CreateEnemyShipLevel1()
+        public static EnemyShip CreateEnemyShipLevel1(GameType gameType)
         {
-            return new EnemyShip(new EnemyShipLevel1Sprite(), DefaultEnemySpeedX, DefaultEnemySpeedY, 1, !DefaultEnemyShooter);
+            BaseSprite shipSprite = gameType switch
+            {
+                GameType.HolidayGame => new HolidayEnemyShipLevel1Sprite(),
+                GameType.OriginalGame => new EnemyShipLevel1Sprite(),
+                _ => throw new ArgumentException("Unsupported game type")
+            };
+            return new EnemyShip(shipSprite, DefaultEnemySpeedX, DefaultEnemySpeedY, 1, !DefaultEnemyShooter, gameType);
         }
 
         /// <summary>
         /// Creates a level 2 enemy ship with default settings.
         /// </summary>
-        public static EnemyShip CreateEnemyShipLevel2()
+        public static EnemyShip CreateEnemyShipLevel2(GameType gameType)
         {
-            return new EnemyShip(new EnemyShipLevel2Sprite(), DefaultEnemySpeedX, DefaultEnemySpeedY, 2, !DefaultEnemyShooter);
+
+            BaseSprite shipSprite = gameType switch
+            {
+                GameType.HolidayGame => new HolidayEnemyShipLevel2Sprite(),
+                GameType.OriginalGame => new EnemyShipLevel2Sprite(),
+                _ => throw new ArgumentException("Unsupported game type")
+            };
+            return new EnemyShip(shipSprite, DefaultEnemySpeedX, DefaultEnemySpeedY, 2, !DefaultEnemyShooter, gameType);
         }
 
         /// <summary>
         /// Creates a level 3 enemy ship with default settings.
         /// </summary>
-        public static EnemyShip CreateEnemyShipLevel3()
+        public static EnemyShip CreateEnemyShipLevel3(GameType gameType)
         {
-            return new EnemyShip(new EnemyShipLevel3Sprite(), DefaultEnemySpeedX, DefaultEnemySpeedY, 3, DefaultEnemyShooter);
+            BaseSprite shipSprite = gameType switch
+            {
+                GameType.HolidayGame => new HolidayEnemyShipLevel3Sprite(),
+                GameType.OriginalGame => new EnemyShipLevel3Sprite(),
+                _ => throw new ArgumentException("Unsupported game type")
+            };
+            return new EnemyShip(shipSprite, DefaultEnemySpeedX, DefaultEnemySpeedY, 3, DefaultEnemyShooter, gameType);
         }
 
         /// <summary>
         /// Creates a level 4 enemy ship with default settings.
         /// </summary>
-        public static EnemyShip CreateEnemyShipLevel4()
+        public static EnemyShip CreateEnemyShipLevel4(GameType gameType)
         {
-            return new EnemyShip(new EnemyShipLevel4Sprite(), DefaultEnemySpeedX, DefaultEnemySpeedY, 4, DefaultEnemyShooter);
+            BaseSprite shipSprite = gameType switch
+            {
+                GameType.HolidayGame => new HolidayEnemyShipLevel4Sprite(),
+                GameType.OriginalGame => new EnemyShipLevel4Sprite(),
+                _ => throw new ArgumentException("Unsupported game type")
+            };
+            return new EnemyShip(shipSprite, DefaultEnemySpeedX, DefaultEnemySpeedY, 4, DefaultEnemyShooter, gameType);
         }
 
         #endregion
@@ -56,9 +81,15 @@ namespace Galaga.Model
         /// <summary>
         /// Creates a new bonus ship with default settings.
         /// </summary>
-        public static BonusShip CreateBonusShip()
+        public static BonusShip CreateBonusShip(GameType gameType)
         {
-            return new BonusShip();
+            BaseSprite shipSprite = gameType switch
+            {
+                GameType.HolidayGame => new HolidayBonusShipCarePackageSprite(),
+                GameType.OriginalGame => new BonusShipCarePackageSprite(),
+                _ => throw new ArgumentException("Unsupported game type")
+            };
+            return new BonusShip(shipSprite);
         }
         #endregion
 
@@ -67,10 +98,15 @@ namespace Galaga.Model
         /// <summary>
         /// Creates the player ship.
         /// </summary>
-        public static Player CreatePlayerShip()
+        public static Player CreatePlayerShip(GameType gameType)
         {
-            var player = new Player();
-            return player;
+            var shipSprite = gameType switch
+            {
+                GameType.HolidayGame => new Player(new PlayerSprite()),
+                GameType.OriginalGame => new Player(new PlayerSprite()),
+                _ => throw new ArgumentException("Unsupported game type")
+            };
+            return shipSprite;
         }
 
         #endregion

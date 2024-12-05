@@ -1,83 +1,94 @@
 ﻿using System;
-using System.Diagnostics;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using Galaga.View.Sprites;
 
 namespace Galaga.View
 {
     internal static class AudioManager
     {
-        private const string AudioFilesFolder = "View/AudioFiles";
+        private const string OriginalAudioFilesFolder = "View/AudioFiles/OriginalGame";
+        private const string HolidayAudioFilesFolder = "View/AudioFiles/HolidayGame";
 
         /// <summary>
         /// Plays the sound for enemy blowing up.
         /// </summary>
-        public static void PlayEnemyBlowUp()
+        public static void PlayEnemyBlowUp(GameType gameType)
         {
-            playSound("enemyBlowUp.wav");
+            playSound("enemyBlowUp.wav", gameType);
         }
 
         /// <summary>
         /// Plays the sound for enemy shooting.
         /// </summary>
-        public static void PlayEnemyShoot()
+        public static void PlayEnemyShoot(GameType gameType)
         {
-            playSound("enemyShoot.wav");
+            playSound("enemyShoot.wav", gameType);
         }
 
         /// <summary>
         /// Plays the sound for the ending of a game.
         /// </summary>
-        public static void PlayGameOver()
+        public static void PlayGameOver(GameType gameType)
         {
-            playSound("gameOver.wav");
+            playSound("gameOver.wav", gameType);
         }
 
         /// <summary>
         /// Plays the sound for player blowing up.
         /// </summary>
-        public static void PlayPlayerBlowUp()
+        public static void PlayPlayerBlowUp(GameType gameType)
         {
-            playSound("playerBlowUp.wav");
+            playSound("playerBlowUp.wav", gameType);
         }
 
         /// <summary>
         /// Plays the sound for player shooting.
         /// </summary>
-        public static void PlayPlayerShoot()
+        public static void PlayPlayerShoot(GameType gameType)
         {
-            playSound("playerShoot.wav");
+            playSound("playerShoot.wav", gameType);
         }
 
         /// <summary>
-        /// Plays the sound for player has the power up active
+        /// Plays the sound for player has the power up active.
         /// </summary>
-        public static void PlayActivePowerUp()
+        public static void PlayActivePowerUp(GameType gameType)
         {
-            playSound("playerPowerUp.wav");
+            playSound("playerPowerUp.wav", gameType);
         }
 
         /// <summary>
-        /// Plays the sound for when a bonus ship appears and in on canvas
+        /// Plays the sound for when a bonus ship appears and is on canvas.
         /// </summary>
-        public static void PlayActiveBonusShip()
+        public static void PlayActiveBonusShip(GameType gameType)
         {
-            playSound("bonusShipActive.wav");
+            playSound("bonusShipActive.wav", gameType);
         }
 
         /// <summary>
         /// General method to play a sound file.
         /// </summary>
         /// <param name="fileName">The name of the .wav file to play.</param>
-        private static async void playSound(string fileName)
+        private static async void playSound(string fileName, GameType gameType)
         {
             try
             {
-                var uri = new Uri($"ms-appx:///{AudioFilesFolder}/{fileName}");
+                string folderPath = gameType switch
+                {
+                    GameType.HolidayGame => HolidayAudioFilesFolder,
+                    GameType.OriginalGame => OriginalAudioFilesFolder,
+                    _ => throw new ArgumentException("Unsupported game type")
+                };
 
-                var mediaPlayer = new MediaPlayer();
-                mediaPlayer.Source = MediaSource.CreateFromUri(uri);
-                mediaPlayer.Volume = 1.0;
+                var uri = new Uri($"ms-appx:///{folderPath}/{fileName}");
+
+                var mediaPlayer = new MediaPlayer
+                {
+                    Source = MediaSource.CreateFromUri(uri),
+                    Volume = 1.0
+                };
+
                 mediaPlayer.Play();
             }
             catch (Exception ex)

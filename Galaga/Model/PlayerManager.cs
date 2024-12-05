@@ -23,6 +23,7 @@ namespace Galaga.Model
         private readonly double canvasWidth;
         public List<Player> players { get; private set; }
         private readonly UiTextManager uiTextManager;
+        private readonly GameManager gameManager;
         private readonly BulletManager bulletManager;
         private DateTime lastFireTime;
         private readonly TimeSpan fireCooldown = TimeSpan.FromMilliseconds(200);
@@ -103,11 +104,12 @@ namespace Galaga.Model
         /// <param name="canvas"> the canvas that the players will be added onto</param>
         /// <param name="bulletManager"></param>
         /// <param name="uiTextManager"></param>
-        public PlayerManager(int lives, Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager)
+        public PlayerManager(int lives, Canvas canvas, BulletManager bulletManager, GameManager gameManager, UiTextManager uiTextManager)
         {
             this.canvas = canvas;
             this.canvasHeight = canvas.Height;
             this.canvasWidth = canvas.Width;
+            this.gameManager = gameManager;
             this.uiTextManager = uiTextManager;
             this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
             this.bulletManager = bulletManager;
@@ -125,7 +127,7 @@ namespace Galaga.Model
 
         private void createAndPlacePlayer()
         {
-            Player newPlayer = ShipFactory.CreatePlayerShip();
+            Player newPlayer = ShipFactory.CreatePlayerShip(this.gameManager.gameType);
             this.players.Add(newPlayer);
             this.canvas.Children.Add(newPlayer.Sprite);
             this.placePlayerNearBottom(newPlayer);
@@ -156,13 +158,13 @@ namespace Galaga.Model
                 var explosionY = mostRecentPlayer.Y;
                 this.canvas.Children.Remove(mostRecentPlayer.Sprite);
                 this.players.Remove(mostRecentPlayer);
-                AudioManager.PlayPlayerBlowUp();
-                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
+                AudioManager.PlayPlayerBlowUp(this.gameManager.gameType);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.gameType);
             }
 
             if (this.playerLives >= 0)
             {
-                AudioManager.PlayPlayerBlowUp();
+                AudioManager.PlayPlayerBlowUp(this.gameManager.gameType);
             }
 
             if (this.playerLives == 0)
@@ -171,7 +173,7 @@ namespace Galaga.Model
                 var explosionY = this.players[playerIndex].Y;
                 this.canvas.Children.Remove(this.players[playerIndex].Sprite);
                 this.uiTextManager.EndGame(false);
-                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.gameType);
             }
         }
 
@@ -233,7 +235,7 @@ namespace Galaga.Model
 
         public void ApplyPowerUp(PowerUps powerUp)
         {
-            AudioManager.PlayActivePowerUp();
+            AudioManager.PlayActivePowerUp(this.gameManager.gameType);
             this.uiTextManager.SetPowerUpText(powerUp.ToString());
             switch (powerUp)
             {
@@ -339,7 +341,7 @@ namespace Galaga.Model
         {
             if (this.players.Count < MaxPlayerClones)
             {
-                Player clonePlayer = ShipFactory.CreatePlayerShip();
+                Player clonePlayer = ShipFactory.CreatePlayerShip(this.gameManager.gameType);
                 clonePlayer.X = this.players[this.players.Count - 1].X + clonePlayer.Width + ClonesOffset;
                 clonePlayer.Y = this.canvasHeight - clonePlayer.Height - PlayerOffsetFromBottom;
                 this.players.Add(clonePlayer);

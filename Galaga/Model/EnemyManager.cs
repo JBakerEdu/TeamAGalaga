@@ -36,7 +36,6 @@ namespace Galaga.Model
         private const int maxAttackInterval = 15000;
         private readonly IList<EnemyShip> attackingShips = new List<EnemyShip>();
 
-
         private DispatcherTimer enemyMovementTimer;
         private readonly BulletManager bulletManager;
         private readonly UiTextManager uiTextManager;
@@ -236,19 +235,19 @@ namespace Galaga.Model
             switch (enemyLevel)
             {
                 case 1:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel1();
+                    enemyShip = ShipFactory.CreateEnemyShipLevel1(this.gameManager.gameType);
                     break;
                 case 2:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel2();
+                    enemyShip = ShipFactory.CreateEnemyShipLevel2(this.gameManager.gameType);
                     break;
                 case 3:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel3();
+                    enemyShip = ShipFactory.CreateEnemyShipLevel3(this.gameManager.gameType);
                     break;
                 case 4:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel4();
+                    enemyShip = ShipFactory.CreateEnemyShipLevel4(this.gameManager.gameType);
                     break;
                 default:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel1();
+                    enemyShip = ShipFactory.CreateEnemyShipLevel1(this.gameManager.gameType);
                     break;
             }
             return enemyShip;
@@ -342,7 +341,7 @@ namespace Galaga.Model
                 var explosionY = enemy.Y;
 
                 this.canvas.Children.Remove(enemy.Sprite);
-                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.gameType);
                 if (enemy.HasSecondSprite)
                 {
                     this.canvas.Children.Remove(enemy.Sprite2);
@@ -361,7 +360,7 @@ namespace Galaga.Model
                 if (enemy != null && this.bulletManager.CheckSpriteCollision(enemy, false))
                 {
                     this.DestroyEnemy(enemy);
-                    AudioManager.PlayEnemyBlowUp();
+                    AudioManager.PlayEnemyBlowUp(this.gameManager.gameType);
                     this.uiTextManager.UpdateScore(enemy);
                 }
             }
