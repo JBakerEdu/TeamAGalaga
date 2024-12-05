@@ -1,18 +1,17 @@
 ﻿using System.Diagnostics;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace Galaga.View
 {
-    public sealed partial class HighScorePage : Page
+    public sealed partial class HighScorePage
     {
         public HighScorePage()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             var navigationService = new NavigationService();
             var viewModel = new HighScoreViewModel(navigationService);
-            this.DataContext = viewModel;
+            DataContext = viewModel;
 
             Debug.WriteLine(DataContext?.GetType().FullName);
         }

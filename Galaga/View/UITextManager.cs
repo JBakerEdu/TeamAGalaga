@@ -43,14 +43,7 @@ public class UiTextManager
 
         EnemyManager.OnGameEnd += isWin =>
         {
-            if (isWin)
-            {
-                this.EndGame(isWin);
-            }
-            else
-            {
-                this.EndGame(isWin);
-            }
+            this.EndGame(isWin);
         };
 
     }
@@ -61,7 +54,7 @@ public class UiTextManager
     /// <param name="powerUpName">The name of the active power-up.</param>
     public void SetPowerUpText(string powerUpName)
     {
-        string powerUpText = $"Active Power-Up: {powerUpName}";
+        var powerUpText = $"Active Power-Up: {powerUpName}";
 
         if (this.powerUpTextBlock != null)
         {
@@ -191,7 +184,7 @@ public class UiTextManager
     {
         if (!this.GameOver)
         {
-            string gameOverText = win ? "You Win!!!" : "You Lose!!!";
+            var gameOverText = win ? "You Win!!!" : "You Lose!!!";
             this.GameOver = true;
             this.gameManager.BonusShipSpawn(false);
             this.gameOverTextBlock = new TextBlock

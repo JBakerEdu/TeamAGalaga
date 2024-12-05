@@ -4,14 +4,13 @@ using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using System.Collections.Generic;
 using System;
 using Windows.UI.Xaml.Navigation;
 
 namespace Galaga.View
 {
-    public sealed partial class GameCanvas : Page
+    public sealed partial class GameCanvas
     {
         private GameManager gameManager;
         private readonly HashSet<VirtualKey> pressedKeys = new HashSet<VirtualKey>();
@@ -24,7 +23,7 @@ namespace Galaga.View
         public GameCanvas()
         {
             this.InitializeComponent();
-            this.Loaded += OnPageLoaded;
+            Loaded += this.OnPageLoaded;
 
             Width = this.canvas.Width;
             Height = this.canvas.Height;
@@ -44,14 +43,18 @@ namespace Galaga.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.isHolidayMode = (bool)e.Parameter;
+            if (e.Parameter != null)
+            {
+                this.isHolidayMode = (bool)e.Parameter;
+            }
+
             this.gameManager = new GameManager(this.canvas, this.isHolidayMode);
         }
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
-            var containerWidth = this.ActualWidth;
-            var containerHeight = this.ActualHeight;
+            var containerWidth = ActualWidth;
+            var containerHeight = ActualHeight;
 
             ApplicationView.GetForCurrentView()
                 .TryResizeView(new Size(containerWidth, containerHeight));

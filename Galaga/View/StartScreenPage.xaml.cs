@@ -1,10 +1,9 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace Galaga.View
 {
-    public sealed partial class StartScreenPage : Page
+    public sealed partial class StartScreenPage
     {
         public StartScreenPage()
         {
@@ -13,7 +12,7 @@ namespace Galaga.View
 
         private void StartGame_Click(object sender, RoutedEventArgs e)
         {
-            bool isHolidayMode = HolidayModeCheckBox.IsChecked ?? false;
+            var isHolidayMode = this.HolidayModeCheckBox.IsChecked ?? false;
             (Window.Current.Content as Frame)?.Navigate(typeof(GameCanvas), isHolidayMode);
         }
 

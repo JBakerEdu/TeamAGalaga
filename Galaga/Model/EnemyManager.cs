@@ -69,12 +69,12 @@ namespace Galaga.Model
         /// <summary>
         /// Updates the data for new levels to change difficulty
         /// </summary>
-        /// <param name="shipsPerRow">the list of int values telling how many ships would be in each row</param>
+        /// <param name="shipsPerLine">the list of int values telling how many ships would be in each row</param>
         /// <param name="fireIntervalMin">the lowest the fire interval can be</param>
         /// <param name="fireIntervalMax">the highest the fire interval can be</param>
-        public void UpdateLevelSettings(int[] shipsPerRow, int fireIntervalMin, int fireIntervalMax)
+        public void UpdateLevelSettings(int[] shipsPerLine, int fireIntervalMin, int fireIntervalMax)
         {
-            this.shipsPerRow = shipsPerRow;
+            this.shipsPerRow = shipsPerLine;
             this.FireIntervalMin = fireIntervalMin;
             this.FireIntervalMax = fireIntervalMax;
         }
@@ -91,40 +91,44 @@ namespace Galaga.Model
 
         private void InitializeAttackTimer()
         {
-            attackTimer = new DispatcherTimer
+            this.attackTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(random.Next(minAttackInterval, maxAttackInterval))
+                Interval = TimeSpan.FromMilliseconds(this.random.Next(minAttackInterval, maxAttackInterval))
             };
-            attackTimer.Tick += OnAttackTimerTick;
-            attackTimer.Start();
+            this.attackTimer.Tick += this.OnAttackTimerTick;
+            this.attackTimer.Start();
         }
 
         private void OnAttackTimerTick(object sender, object e)
         {
-            var level4Ships = ships.Where(ship => ship.Level == 4 && !attackingShips.Contains(ship)).ToList();
+            var level4Ships = this.ships.Where(ship => ship.Level == 4 && !this.attackingShips.Contains(ship)).ToList();
 
             if (level4Ships.Count > 0)
             {
-                var attackingShip = level4Ships[random.Next(level4Ships.Count)];
-                attackingShips.Add(attackingShip);
-                StartAttackPattern(attackingShip, this.playerManager.players[0]);
+                var attackingShip = level4Ships[this.random.Next(level4Ships.Count)];
+                this.attackingShips.Add(attackingShip);
+                this.StartAttackPattern(attackingShip, this.playerManager.players[0]);
             }
 
-            attackTimer.Interval = TimeSpan.FromMilliseconds(random.Next(minAttackInterval, maxAttackInterval));
+            this.attackTimer.Interval = TimeSpan.FromMilliseconds(this.random.Next(minAttackInterval, maxAttackInterval));
         }
 
         private void StartAttackPattern(EnemyShip attackingShip, Player player)
         {
-            if (uiTextManager.GameOver || attackingShip == null) return;
-
+            if (this.uiTextManager.GameOver || attackingShip == null)
+            {
+                return;
+            }
             var playerShip = player;
-            if (playerShip == null) return;
-
+            if (playerShip == null)
+            {
+                return;
+            }
             var attackTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
-            double targetX = playerShip.X;
-            double targetY = playerShip.Y;
-            double speedX = (targetX - attackingShip.X) / 500.0 * attackSpeed;
-            double speedY = (targetY - attackingShip.Y) / 500.0 * attackSpeed;
+            var targetX = playerShip.X;
+            var targetY = playerShip.Y;
+            var speedX = (targetX - attackingShip.X) / 500.0 * this.attackSpeed;
+            var speedY = (targetY - attackingShip.Y) / 500.0 * this.attackSpeed;
 
             attackTimer.Tick += (s, e) =>
             {
@@ -134,9 +138,9 @@ namespace Galaga.Model
                 Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
                 Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
 
-                if (random.Next(0, 1000) < 3 && this.ships.Contains(attackingShip))
+                if (this.random.Next(0, 1000) < 3 && this.ships.Contains(attackingShip))
                 {
-                    bulletManager.FireEnemyBullet(attackingShip.X + attackingShip.Width / 2, attackingShip.Y + attackingShip.Height, playerShip.X, playerShip.Y, true);
+                    this.bulletManager.FireEnemyBullet(attackingShip.X + attackingShip.Width / 2, attackingShip.Y + attackingShip.Height, playerShip.X, playerShip.Y, true);
                 }
 
                 if (Math.Abs(attackingShip.X - targetX) < 5 && Math.Abs(attackingShip.Y - targetY) < 5)
@@ -153,9 +157,11 @@ namespace Galaga.Model
 
         private void ResetEnemyPosition(EnemyShip attackingShip)
         {
-            if (attackingShip == null) return;
-
-            int originalIndex = this.ships.IndexOf(attackingShip);
+            if (attackingShip == null)
+            {
+                return;
+            }
+            var originalIndex = this.ships.IndexOf(attackingShip);
 
             if (originalIndex >= 0 && originalIndex < this.originalShipPositions.Count)
             {
@@ -167,7 +173,6 @@ namespace Galaga.Model
             }
             else
             {
-                // If the index is invalid, reset to default position
                 attackingShip.X = 0;
                 attackingShip.Y = this.rowHeights[0];
             }
@@ -186,13 +191,13 @@ namespace Galaga.Model
         private void UpdateFiring()
         {
             this.tickCounter++;
-            if (this.ships.Count > 0 && this.tickCounter >= FireIntervalMin)
+            if (this.ships.Count > 0 && this.tickCounter >= this.FireIntervalMin)
             {
-                var randomFireTick = this.random.Next(FireIntervalMin, FireIntervalMax + 1);
+                var randomFireTick = this.random.Next(this.FireIntervalMin, this.FireIntervalMax + 1);
 
                 if (this.tickCounter % randomFireTick == 0)
                 {
-                    int randomIndex = this.random.Next(this.ships.Count);
+                    var randomIndex = this.random.Next(this.ships.Count);
                     var enemy = this.ships[randomIndex];
                     this.FireEnemyBullet(enemy, this.playerManager.players[0]);
                 }
@@ -222,7 +227,7 @@ namespace Galaga.Model
         {
             var enemyLevel = row + 1;
 
-            EnemyShip enemyShip = this.CreateNewShip(enemyLevel);
+            var enemyShip = this.CreateNewShip(enemyLevel);
 
             var shipX = shipSpacing + shipIndex * shipSpacing - enemyShip.Width / 2;
             enemyShip.RenderAt(shipX, rowY);
@@ -340,9 +345,9 @@ namespace Galaga.Model
         {
             if (enemy != null && enemy.IsShooter && !this.uiTextManager.GameOver)
             {
-                double renderX = enemy.X + enemy.Width / 2;
-                double renderY = enemy.Y + enemy.Height;
-                bool aimedAtPlayer = enemy.Level == 4;
+                var renderX = enemy.X + enemy.Width / 2;
+                var renderY = enemy.Y + enemy.Height;
+                var aimedAtPlayer = enemy.Level == 4;
                 this.bulletManager.FireEnemyBullet(renderX, renderY, player.X + player.Width / 2, player.Y + player.Height / 2, aimedAtPlayer);
             }
         }
@@ -350,7 +355,7 @@ namespace Galaga.Model
 
         private void DestroyEnemy(EnemyShip enemy)
         {
-            int index = this.ships.IndexOf(enemy);
+            var index = this.ships.IndexOf(enemy);
             if (index >= 0)
             {
                 var explosionX = enemy.X;

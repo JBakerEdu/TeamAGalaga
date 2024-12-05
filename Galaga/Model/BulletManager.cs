@@ -3,7 +3,6 @@ using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Galaga.View;
-using Galaga.View.Sprites;
 
 namespace Galaga.Model
 {
@@ -135,12 +134,12 @@ namespace Galaga.Model
 
             if (aimedAtPlayer)
             {
-                double deltaX = playerX - renderX;
-                double deltaY = playerY - renderY;
+                var deltaX = playerX - renderX;
+                var deltaY = playerY - renderY;
 
-                double magnitude = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-                velocityX = (deltaX / magnitude) * 5;
-                velocityY = (deltaY / magnitude) * 5;
+                var magnitude = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+                velocityX = deltaX / magnitude * 5;
+                velocityY = deltaY / magnitude * 5;
             }
 
             var bullet = BulletFactory.CreateBullet(velocityX, velocityY, this.gameManager.gameType);
@@ -155,10 +154,10 @@ namespace Galaga.Model
         public bool CheckSpriteCollision(GameObject ship, bool isPlayer)
         {
             var bullets = isPlayer ? this.activeEnemyBullets : this.activePlayerBullets;
-            for (int i = bullets.Count - 1; i >= 0; i--)
+            for (var i = bullets.Count - 1; i >= 0; i--)
             {
                 var bullet = bullets[i];
-                if (IsCollision(bullet, ship))
+                if (this.IsCollision(bullet, ship))
                 {
                     this.canvas.Children.Remove(bullet.Sprite);
                     bullets.RemoveAt(i);

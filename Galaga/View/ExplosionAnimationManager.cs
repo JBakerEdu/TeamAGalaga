@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
@@ -11,14 +10,14 @@ namespace Galaga.View.Sprites
 
         public static async Task Play(Canvas canvas, double x, double y, GameType gameType)
         {
-            var frames = new UserControl[]{};
+            UserControl[] frames;
             if (gameType == GameType.HolidayGame)
             {
                 frames = new UserControl[]
                 {
                     new HolidayShipExplosionFrame1(),
                     new HolidayShipExplosionFrame2(),
-                    new HolidayShipExplosionFrame3(),
+                    new HolidayShipExplosionFrame3()
                 };
             }
             else
@@ -27,7 +26,7 @@ namespace Galaga.View.Sprites
                 {
                     new ShipExplosionFrame1(),
                     new ShipExplosionFrame2(),
-                    new ShipExplosionFrame3(),
+                    new ShipExplosionFrame3()
                 };
             }
 

@@ -9,16 +9,16 @@ public class RelayCommand : ICommand
 
     public RelayCommand(Action execute, Func<bool> canExecute = null)
     {
-        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-        _canExecute = canExecute;
+        this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        this._canExecute = canExecute;
     }
 
-    public bool CanExecute(object parameter) => _canExecute?.Invoke() ?? true;
+    public bool CanExecute(object parameter) => this._canExecute?.Invoke() ?? true;
 
-    public void Execute(object parameter) => _execute();
+    public void Execute(object parameter) => this._execute();
 
     public void RaiseCanExecuteChanged()
     {
-        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 public interface INavigationService
 {
@@ -15,17 +14,17 @@ public class NavigationService : INavigationService
 
     public void Navigate(Type pageType, object parameter = null)
     {
-        Frame.Navigate(pageType, parameter);
+        this.Frame.Navigate(pageType, parameter);
     }
 
     public Type GetPreviousPageType()
     {
-        if (Frame.BackStackDepth > 0)
+        if (this.Frame.BackStackDepth > 0)
         {
-            return Frame.BackStack[Frame.BackStack.Count - 1].SourcePageType;
+            return this.Frame.BackStack[this.Frame.BackStack.Count - 1].SourcePageType;
         }
         return null;
     }
 
-    public int BackStackDepth => Frame.BackStackDepth;
+    public int BackStackDepth => this.Frame.BackStackDepth;
 }

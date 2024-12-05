@@ -13,6 +13,7 @@ namespace Galaga.Model
         #region Data Members
 
         private const int TopOffset = 40;
+        private const int MaxIterations = 20;
         private readonly Canvas canvas;
         private readonly BulletManager bulletManager;
         private readonly GameManager gameManager;
@@ -127,7 +128,7 @@ namespace Galaga.Model
 
         private async void StartBonusShipTimer()
         {
-            while (true)
+            for (int i = 0; i < MaxIterations; i++) // Replace MaxIterations with the desired number
             {
                 await Task.Delay(TimerIntervalMilliseconds);
 
@@ -191,7 +192,7 @@ namespace Galaga.Model
             {
                 this.gameManager.AddLifeToPlayer();
             }
-            PowerUps randomPowerUp = (PowerUps)this.random.Next(Enum.GetValues(typeof(PowerUps)).Length);
+            var randomPowerUp = (PowerUps)this.random.Next(Enum.GetValues(typeof(PowerUps)).Length);
             this.gameManager.playerPowerUp(randomPowerUp);
         }
 

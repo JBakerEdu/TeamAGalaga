@@ -15,14 +15,14 @@ public class HighScoreManager
 
     public HighScoreManager()
     {
-        HighScores = LoadHighScores();
+        this.HighScores = this.LoadHighScores();
     }
 
     private ObservableCollection<HighScoreEntry> LoadHighScores()
     {
         try
         {
-            string filePath = Path.Combine(_storageFolder.Path, FileName);
+            var filePath = Path.Combine(this._storageFolder.Path, FileName);
             Debug.Write(filePath);
             if (File.Exists(filePath))
             {
@@ -44,12 +44,12 @@ public class HighScoreManager
     {
         try
         {
-            string filePath = Path.Combine(_storageFolder.Path, FileName);
+            var filePath = Path.Combine(this._storageFolder.Path, FileName);
             Debug.Write(filePath);
             using (var stream = File.Create(filePath))
             {
                 var serializer = new XmlSerializer(typeof(ObservableCollection<HighScoreEntry>));
-                serializer.Serialize(stream, HighScores);
+                serializer.Serialize(stream, this.HighScores);
             }
         }
         catch
@@ -60,19 +60,19 @@ public class HighScoreManager
 
     public void AddScore(string playerName, int score)
     {
-        HighScores.Add(new HighScoreEntry { PlayerName = playerName, Score = score });
-        HighScores = new ObservableCollection<HighScoreEntry>(HighScores
+        this.HighScores.Add(new HighScoreEntry { PlayerName = playerName, Score = score });
+        this.HighScores = new ObservableCollection<HighScoreEntry>(this.HighScores
             .OrderByDescending(h => h.Score)
             .ThenBy(h => h.PlayerName)
             .ThenByDescending(h => h.Level)
             .Take(10));
-        SaveHighScores();
+        this.SaveHighScores();
     }
 
     public void ResetHighScores()
     {
-        HighScores.Clear();
-        SaveHighScores();
+        this.HighScores.Clear();
+        this.SaveHighScores();
     }
 
 }

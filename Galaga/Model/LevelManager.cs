@@ -48,8 +48,8 @@ namespace Galaga.Model
             }
 
             int[] shipsPerRow = { FirstRowShips + this.currentLevel, SecondRowShips + this.currentLevel, ThirdRowShips + this.currentLevel, FourthRowShips + this.currentLevel };
-            int fireIntervalMin = Math.Max(FireRateMin - this.currentLevel, MinPossibleFireRateMin);
-            int fireIntervalMax = Math.Max(FireRateMax - this.currentLevel * 2, MinPossibleFireRateMax);
+            var fireIntervalMin = Math.Max(FireRateMin - this.currentLevel, MinPossibleFireRateMin);
+            var fireIntervalMax = Math.Max(FireRateMax - this.currentLevel * 2, MinPossibleFireRateMax);
 
             this.enemyManager.UpdateLevelSettings(shipsPerRow, fireIntervalMin, fireIntervalMax);
             this.uiTextManager.UpdateLevel(this.currentLevel);

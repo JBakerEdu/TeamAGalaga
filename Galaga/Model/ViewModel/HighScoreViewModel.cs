@@ -6,10 +6,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 public class HighScoreViewModel : INotifyPropertyChanged
 {
@@ -20,11 +18,12 @@ public class HighScoreViewModel : INotifyPropertyChanged
     private bool _canNavigateBack;
     public bool CanNavigateBack
     {
-        get => _canNavigateBack;
+        get => this._canNavigateBack;
         set
         {
-            _canNavigateBack = true;
-            NavigateBackCommand.RaiseCanExecuteChanged();
+            this._canNavigateBack = value;
+            this._canNavigateBack = true;
+            this.NavigateBackCommand.RaiseCanExecuteChanged();
         }
     }
 
@@ -34,23 +33,23 @@ public class HighScoreViewModel : INotifyPropertyChanged
 
     public ObservableCollection<HighScoreEntry> HighScores
     {
-        get => highScores;
+        get => this.highScores;
         set
         {
-            highScores = value;
-            OnPropertyChanged();
+            this.highScores = value;
+            this.OnPropertyChanged();
         }
     }
 
     private string _sortOrder = "Score";
     public string SortOrder
     {
-        get => _sortOrder;
+        get => this._sortOrder;
         set
         {
-            _sortOrder = value;
-            SortHighScores();
-            OnPropertyChanged();
+            this._sortOrder = value;
+            this.SortHighScores();
+            this.OnPropertyChanged();
         }
     }
 
@@ -58,13 +57,13 @@ public class HighScoreViewModel : INotifyPropertyChanged
 
     protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     public HighScoreViewModel(NavigationService service)
     {
         this.NavigateBackCommand = new RelayCommand(
-            execute: () => NavigateBack(),
+            execute: () => this.NavigateBack(),
             canExecute: () => this.CanNavigateBack);
 
         this.CanNavigateBack = true;
@@ -77,57 +76,57 @@ public class HighScoreViewModel : INotifyPropertyChanged
 
     public void Initialize(object parameter)
     {
-        var previousPage = _navigationService.GetPreviousPageType();
+        var previousPage = this._navigationService.GetPreviousPageType();
 
         if (previousPage == typeof(StartScreenPage))
         {
-            HandleNavigationFromStartScreen();
+            this.HandleNavigationFromStartScreen();
         }
         else if (previousPage == typeof(GameCanvas))
         {
-            HandleNavigationFromGameCanvas(parameter);
+            this.HandleNavigationFromGameCanvas(parameter);
         }
-        else if (_navigationService.BackStackDepth == 0)
+        else if (this._navigationService.BackStackDepth == 0)
         {
-            HandleFirstNavigation();
+            this.HandleFirstNavigation();
         }
         else
         {
-            HandleUnknownNavigationSource();
+            this.HandleUnknownNavigationSource();
         }
     }
 
     private void HandleNavigationFromStartScreen()
     {
-        LoadDefaultHighScores();
+        this.LoadDefaultHighScores();
     }
 
     private void HandleNavigationFromGameCanvas(object parameter)
     {
         if (parameter is int score && score >= 0)
         {
-            if (CheckIfTop10(score))
+            if (this.CheckIfTop10(score))
             {
-                PromptForNameAndAddScore(score);
+                this.PromptForNameAndAddScore(score);
             }
         }
         else
         {
             Debug.WriteLine("Invalid parameter from GameCanvas. Defaulting to default scores.");
-            LoadDefaultHighScores();
+            this.LoadDefaultHighScores();
         }
     }
 
     private void HandleUnknownNavigationSource()
     {
         Debug.WriteLine("Unknown navigation source");
-        LoadDefaultHighScores();
+        this.LoadDefaultHighScores();
     }
 
     private void HandleFirstNavigation()
     {
         Debug.WriteLine("First navigation: Loading default scores.");
-        LoadDefaultHighScores();
+        this.LoadDefaultHighScores();
     }
 
     private void LoadDefaultHighScores()
@@ -143,11 +142,11 @@ public class HighScoreViewModel : INotifyPropertyChanged
 
     private void SortHighScores()
     {
-        var sortedScores = SortOrder switch
+        var sortedScores = this.SortOrder switch
         {
-            "Name" => HighScores.OrderBy(h => h.PlayerName).ThenByDescending(h => h.Score).ThenByDescending(h => h.Level),
-            "Level" => HighScores.OrderByDescending(h => h.Level).ThenByDescending(h => h.Score).ThenBy(h => h.PlayerName),
-            _ => HighScores.OrderByDescending(h => h.Score).ThenBy(h => h.PlayerName).ThenByDescending(h => h.Level),
+            "Name" => this.HighScores.OrderBy(h => h.PlayerName).ThenByDescending(h => h.Score).ThenByDescending(h => h.Level),
+            "Level" => this.HighScores.OrderByDescending(h => h.Level).ThenByDescending(h => h.Score).ThenBy(h => h.PlayerName),
+            _ => this.HighScores.OrderByDescending(h => h.Score).ThenBy(h => h.PlayerName).ThenByDescending(h => h.Level)
         };
 
         this.HighScores = new ObservableCollection<HighScoreEntry>(sortedScores);
@@ -174,8 +173,8 @@ public class HighScoreViewModel : INotifyPropertyChanged
 
         if (await nameInputDialog.ShowAsync() == ContentDialogResult.Primary)
         {
-            string playerName = ((TextBox)nameInputDialog.Content).Text;
-            manager.AddScore(playerName, score);
+            var playerName = ((TextBox)nameInputDialog.Content).Text;
+            this.manager.AddScore(playerName, score);
 
             this.HighScores = new ObservableCollection<HighScoreEntry>(this.manager.HighScores);
         }

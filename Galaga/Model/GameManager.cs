@@ -28,10 +28,10 @@ namespace Galaga.Model
         {
             canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
             this.gameType = isHolidayMode ? GameType.HolidayGame : GameType.OriginalGame;
-            BulletManager bulletManager = new BulletManager(canvas, this);
-            UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives, this);
+            var bulletManager = new BulletManager(canvas, this);
+            var uiTextManager = new UiTextManager(canvas, this.playerLives, this);
             this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, this, uiTextManager);
-            EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, this.playerManager, this);
+            var enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, this.playerManager, this);
             this.bonusShipManager = new BonusShipManager(canvas, bulletManager, this);
             this.levelManager = new LevelManager(enemyManager, uiTextManager);
             this.levelManager.StartGame();

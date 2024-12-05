@@ -26,13 +26,5 @@ namespace Galaga.View.Sprites
             Canvas.SetLeft(this, x);
             Canvas.SetTop(this, y);
         }
-
-        private void HolidayShipExplosionFrame2_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-
-        }
     }
-
-
-    
 }

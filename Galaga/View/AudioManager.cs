@@ -74,7 +74,7 @@ namespace Galaga.View
         {
             try
             {
-                string folderPath = gameType switch
+                var folderPath = gameType switch
                 {
                     GameType.HolidayGame => HolidayAudioFilesFolder,
                     GameType.OriginalGame => OriginalAudioFilesFolder,
