@@ -16,6 +16,7 @@
     </UserControl.Resources>
 
     <Canvas>
+        <local:EnemyShipLevel4Sprite></local:EnemyShipLevel4Sprite>
         <Line X1="5" Y1="45" X2="5" Y2="50" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
         <Line X1="50" Y1="45" X2="50" Y2="50" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
         <Line X1="50" Y1="55" X2="50" Y2="60" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Left" Canvas.Left="-15" VerticalAlignment="Top" Canvas.Top="-3"/>

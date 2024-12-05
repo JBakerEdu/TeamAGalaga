@@ -295,9 +295,11 @@ namespace Galaga.Model
                     if (enemy.Sprite2.Visibility != Visibility.Visible)
                     {
                         enemy.Sprite2.Visibility = Visibility.Visible;
+                        enemy.Sprite.Visibility = Visibility.Collapsed;
                     }
                     else
                     {
+                        enemy.Sprite.Visibility = Visibility.Visible;
                         enemy.Sprite2.Visibility = Visibility.Collapsed;
                     }
                 }

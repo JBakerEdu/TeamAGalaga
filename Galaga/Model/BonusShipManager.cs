@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Galaga.View;
 
 namespace Galaga.Model
 {
+    /// <summary>
+    /// Manages the Bonus Ships
+    /// </summary>
     public class BonusShipManager
     {
         #region Data Members
@@ -36,7 +38,7 @@ namespace Galaga.Model
 
         #region Constructor
         /// <summary>
-        /// Manages the Bonus Ships
+        /// Constructs a bonus ship manager to be manipulated
         /// </summary>
         /// <param name="canvas"> the canvas to add to</param>
         /// <param name="bulletManager">the bullet manager a bonus ship will use</param>
@@ -58,7 +60,6 @@ namespace Galaga.Model
 
         public void TrySpawnBonusShip()
         {
-            // Check if enough time has passed since the last spawn
             if (this.bonusShipActive ||
                 this.random.Next(0, 100) >= BonusSpawnChance ||
                 (DateTime.Now - this.lastSpawnTime).TotalMilliseconds < MinimumSpawnDelayMilliseconds)
@@ -72,7 +73,7 @@ namespace Galaga.Model
             this.bonusShip.Y = TopOffset;
             this.UpdateBonusShipPosition();
             this.bonusShipActive = true;
-            this.lastSpawnTime = DateTime.Now; // Update the last spawn time
+            this.lastSpawnTime = DateTime.Now;
             this.MoveBonusShip();
             this.StartBonusShipActivityLoop();
         }
@@ -84,13 +85,13 @@ namespace Galaga.Model
                 await Task.Delay(30);
                 this.bonusShip.X -= BonusShipSpeed;
                 this.UpdateBonusShipPosition();
-                if (CheckCollision())
+                if (this.CheckCollision())
                 {
-                    HandleBonusShipHit();
+                    this.HandleBonusShipHit();
                     return;
                 }
 
-                if (canFire && this.random.Next(0, 100) < BonusFireChance)
+                if (this.canFire && this.random.Next(0, 100) < BonusFireChance)
                 {
                     this.FireBullet(this.gameManager.playerManager.players[0]);
                     this.StartFireCooldown();
@@ -180,7 +181,7 @@ namespace Galaga.Model
         /// </summary>
         private void HandleBonusShipHit()
         {
-            RemoveBonusShip();
+            this.RemoveBonusShip();
             AudioManager.PlayEnemyBlowUp(this.gameManager.gameType);
             if (this.gameManager.CurrentGameLevel() > 1)
             {
