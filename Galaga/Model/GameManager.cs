@@ -24,15 +24,15 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="canvas">the canvas passes in</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public GameManager(Canvas canvas)
+        public GameManager(Canvas canvas, bool isHolidayMode)
         {
             canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
+            this.gameType = isHolidayMode ? GameType.HolidayGame : GameType.OriginalGame;
             BulletManager bulletManager = new BulletManager(canvas, this);
             UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives, this);
             this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, this, uiTextManager);
             EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, this.playerManager, this);
             this.bonusShipManager = new BonusShipManager(canvas, bulletManager, this);
-            this.gameType = GameType.HolidayGame;
             this.levelManager = new LevelManager(enemyManager, uiTextManager);
             this.levelManager.StartGame();
         }
