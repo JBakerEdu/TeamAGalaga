@@ -1,4 +1,4 @@
-﻿namespace Galaga.View.Sprites
+﻿namespace Galaga.Model
 {
     public enum GameType
     {

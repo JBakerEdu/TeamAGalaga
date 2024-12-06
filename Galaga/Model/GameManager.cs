@@ -1,6 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
-using Galaga.View.Sprites;
+using Galaga.View;
 
 namespace Galaga.Model
 {
@@ -58,7 +58,7 @@ namespace Galaga.Model
         /// <summary>
         /// calls to clone the players ship
         /// </summary>
-        public void ClonePlayerShip() => this.playerManager.CreateClonePlayer();
+        public void ClonePlayerShip() => this.playerManager.createClonePlayer();
         /// <summary>
         /// calls the Bonus ship spawn to ensure that the bonus ship does not spawn at the wrong time
         /// </summary>
@@ -71,7 +71,7 @@ namespace Galaga.Model
         /// Gives a power up to the player to handle using the power up
         /// </summary>
         /// <param name="powerUp"> the type of power up to give the player</param>
-        public void playerPowerUp(PowerUps powerUp)
+        public void PlayerPowerUp(PowerUps powerUp)
         {
             this.playerManager.ApplyPowerUp(powerUp);
         }

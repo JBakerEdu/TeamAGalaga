@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using Windows.UI.Xaml.Navigation;
+using Galaga.Model;
+using Galaga.Model.ViewModel;
 
 namespace Galaga.View
 {

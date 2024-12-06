@@ -2,7 +2,6 @@
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Galaga.View;
-using Galaga.View.Sprites;
 using System.Collections.Generic;
 
 namespace Galaga.Model
@@ -46,7 +45,7 @@ namespace Galaga.Model
                 if (this.players[i].X > 0)
                 {
                     var targetX = this.players[i].X - this.players[i].SpeedX;
-                    if (this.CanMoveToPosition(i, targetX, this.players[i].Width))
+                    if (this.canMoveToPosition(i, targetX, this.players[i].Width))
                     {
                         this.players[i].MoveLeft();
                     }
@@ -64,7 +63,7 @@ namespace Galaga.Model
                 if (this.players[i].X + this.players[i].Width < this.canvasWidth)
                 {
                     var targetX = this.players[i].X + this.players[i].SpeedX;
-                    if (this.CanMoveToPosition(i, targetX, this.players[i].Width))
+                    if (this.canMoveToPosition(i, targetX, this.players[i].Width))
                     {
                         this.players[i].MoveRight(this.canvasWidth);
                     }
@@ -72,7 +71,7 @@ namespace Galaga.Model
             }
         }
 
-        private bool CanMoveToPosition(int currentPlayerIndex, double targetX, double targetWidth)
+        private bool canMoveToPosition(int currentPlayerIndex, double targetX, double targetWidth)
         {
             for (var i = 0; i < this.players.Count; i++)
             {
@@ -117,7 +116,7 @@ namespace Galaga.Model
             this.players = new List<Player>();
             this.createAndPlacePlayer();
             this.initializeCollisionCheckTimer();
-            this.InitializePowerUpTimer();
+            this.initializePowerUpTimer();
         }
 
         #endregion
@@ -182,11 +181,11 @@ namespace Galaga.Model
             {
                 Interval = TimeSpan.FromMilliseconds(CollisionCheckIntervalMs)
             };
-            this.collisionCheckTimer.Tick += (sender, args) => this.CheckCollision();
+            this.collisionCheckTimer.Tick += (sender, args) => this.checkCollision();
             this.collisionCheckTimer.Start();
         }
 
-        private void CheckCollision()
+        private void checkCollision()
         {
             for (var i = 0; i < this.players.Count; i++)
             {
@@ -239,51 +238,42 @@ namespace Galaga.Model
             switch (powerUp)
             {
                 case PowerUps.ExtraLife:
-                    this.AddLife();
+                    this.addLife();
                     break;
                 case PowerUps.SpeedBoost:
-                    this.ApplySpeedBoost();
+                    this.applySpeedBoost();
                     break;
                 case PowerUps.Shield:
-                    this.ActivateShield();
+                    this.activateShield();
                     break;
                 case PowerUps.TripleBulletCap:
-                    this.EnableTripleBullet();
+                    this.enableTripleBullet();
                     break;
             }
         }
 
-        private void AddLife()
-        {
-            for (var i = 0; i < this.players.Count; i++)
-            {
-                this.playerLives++;
-                this.uiTextManager.UpdatePlayerLives(this.playerLives);
-            }
-        }
-
-        private void ApplySpeedBoost()
+        private void applySpeedBoost()
         {
             foreach (var player in this.players)
             {
                 player.SpeedX *= SpeedBoostMultiplier;
             }
-            this.SetPowerUpEndTime(() => this.ResetSpeedBoost());
+            this.setPowerUpEndTime(() => this.resetSpeedBoost());
         }
 
-        private void ActivateShield()
+        private void activateShield()
         {
             this.shieldActive = true;
-            this.SetPowerUpEndTime(() => this.ResetShield());
+            this.setPowerUpEndTime(() => this.resetShield());
         }
 
-        private void EnableTripleBullet()
+        private void enableTripleBullet()
         {
             this.bulletManager.maxBulletsAllowed *= BulletCountMultiplier;
-            this.SetPowerUpEndTime(() => this.ResetTripleBullet());
+            this.setPowerUpEndTime(() => this.resetTripleBullet());
         }
 
-        private void SetPowerUpEndTime(Action restartMethod)
+        private void setPowerUpEndTime(Action restartMethod)
         {
             this.powerUpEndTime = DateTime.Now.AddSeconds(12);
             this.resetMethod = restartMethod;
@@ -291,17 +281,17 @@ namespace Galaga.Model
 
         private Action resetMethod;
 
-        private void InitializePowerUpTimer()
+        private void initializePowerUpTimer()
         {
             this.powerUpTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
-            this.powerUpTimer.Tick += (sender, args) => this.UpdatePowerUps();
+            this.powerUpTimer.Tick += (sender, args) => this.updatePowerUps();
             this.powerUpTimer.Start();
         }
 
-        private void UpdatePowerUps()
+        private void updatePowerUps()
         {
             if (DateTime.Now >= this.powerUpEndTime && this.resetMethod != null)
             {
@@ -310,33 +300,33 @@ namespace Galaga.Model
             }
         }
 
-        private void ResetSpeedBoost()
+        private void resetSpeedBoost()
         {
             foreach (var player in this.players)
             {
                 player.SpeedX /= SpeedBoostMultiplier;
             }
-            this.resetUIPowerUpText();
+            this.resetUiPowerUpText();
         }
 
-        private void ResetShield()
+        private void resetShield()
         {
             this.shieldActive = false;
-            this.resetUIPowerUpText();
+            this.resetUiPowerUpText();
         }
 
-        private void ResetTripleBullet()
+        private void resetTripleBullet()
         {
             this.bulletManager.maxBulletsAllowed /= BulletCountMultiplier;
-            this.resetUIPowerUpText();
+            this.resetUiPowerUpText();
         }
 
-        private void resetUIPowerUpText()
+        private void resetUiPowerUpText()
         {
             this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
         }
 
-        public void CreateClonePlayer()
+        public void createClonePlayer()
         {
             if (this.players.Count < MaxPlayerClones)
             {

@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Galaga.Model;
 
 namespace Galaga.View
 {
@@ -12,7 +13,7 @@ namespace Galaga.View
 
         private void StartGame_Click(object sender, RoutedEventArgs e)
         {
-            var isHolidayMode = this.HolidayModeCheckBox.IsChecked ?? false;
+            var isHolidayMode = this.holidayModeCheckBox.IsChecked ?? false;
             (Window.Current.Content as Frame)?.Navigate(typeof(GameCanvas), isHolidayMode);
         }
 

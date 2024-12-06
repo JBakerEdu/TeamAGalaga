@@ -1,10 +1,13 @@
 ﻿using Windows.Foundation;
 using Windows.UI.ViewManagement;
 
-public static class WindowResizer
+namespace Galaga.Model
 {
-    public static void ResizeCurrentView(double width, double height)
+    public static class WindowResizer
     {
-        ApplicationView.GetForCurrentView().TryResizeView(new Size(width, height));
+        public static void ResizeCurrentView(double width, double height)
+        {
+            ApplicationView.GetForCurrentView().TryResizeView(new Size(width, height));
+        }
     }
 }

@@ -13,7 +13,7 @@
 
         <Button Content="Back to Start" Command="{Binding NavigateBackCommand}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
 
-        <ComboBox x:Name="SortSelector"
+        <ComboBox x:Name="sortSelector"
                   Grid.Row="1"
                   SelectedValue="{Binding SortOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectedValuePath="Content"
@@ -24,7 +24,7 @@
         </ComboBox>
 
 
-        <ListView x:Name="ScoreListView" Grid.Row="2" ItemsSource="{Binding HighScores}" Margin="10">
+        <ListView Grid.Row="2" ItemsSource="{Binding HighScores}" Margin="10">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

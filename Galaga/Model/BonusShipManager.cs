@@ -52,13 +52,16 @@ namespace Galaga.Model
             this.random = new Random();
             this.bonusShipActive = false;
             this.lastSpawnTime = DateTime.MinValue;
-            this.StartBonusShipTimer();
+            this.startBonusShipTimer();
             this.BonusShipSpawn = true;
         }
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Attempts to spawn a bonus ship in the game.
+        /// </summary>
         public void TrySpawnBonusShip()
         {
             if (this.bonusShipActive ||
@@ -72,47 +75,47 @@ namespace Galaga.Model
             this.canvas.Children.Add(this.bonusShip.Sprite);
             this.bonusShip.X = this.canvas.Width;
             this.bonusShip.Y = TopOffset;
-            this.UpdateBonusShipPosition();
+            this.updateBonusShipPosition();
             this.bonusShipActive = true;
             this.lastSpawnTime = DateTime.Now;
-            this.MoveBonusShip();
-            this.StartBonusShipActivityLoop();
+            this.moveBonusShip();
+            this.startBonusShipActivityLoop();
         }
 
-        private async void MoveBonusShip()
+        private async void moveBonusShip()
         {
             while (this.bonusShipActive && this.bonusShip.X + this.bonusShip.Width > 0)
             {
                 await Task.Delay(30);
                 this.bonusShip.X -= BonusShipSpeed;
-                this.UpdateBonusShipPosition();
-                if (this.CheckCollision())
+                this.updateBonusShipPosition();
+                if (this.checkCollision())
                 {
-                    this.HandleBonusShipHit();
+                    this.handleBonusShipHit();
                     return;
                 }
 
                 if (this.canFire && this.random.Next(0, 100) < BonusFireChance)
                 {
-                    this.FireBullet(this.gameManager.playerManager.players[0]);
-                    this.StartFireCooldown();
+                    this.fireBullet(this.gameManager.playerManager.players[0]);
+                    this.startFireCooldown();
                 }
             }
 
             if (this.bonusShipActive && this.bonusShip.X + this.bonusShip.Width <= 0)
             {
-                this.RemoveBonusShip();
+                this.removeBonusShip();
             }
         }
 
-        private async void StartFireCooldown()
+        private async void startFireCooldown()
         {
             this.canFire = false;
             await Task.Delay(FireCooldownMilliseconds);
             this.canFire = true;
         }
 
-        private void FireBullet(Player player)
+        private void fireBullet(Player player)
         {
             if (this.bonusShip == null || !this.BonusShipSpawn)
             {
@@ -126,9 +129,9 @@ namespace Galaga.Model
         }
 
 
-        private async void StartBonusShipTimer()
+        private async void startBonusShipTimer()
         {
-            for (int i = 0; i < MaxIterations; i++) // Replace MaxIterations with the desired number
+            for (var i = 0; i < MaxIterations; i++) // Replace MaxIterations with the desired number
             {
                 await Task.Delay(TimerIntervalMilliseconds);
 
@@ -139,7 +142,7 @@ namespace Galaga.Model
             }
         }
 
-        private async void StartBonusShipActivityLoop()
+        private async void startBonusShipActivityLoop()
         {
             while (this.bonusShipActive)
             {
@@ -148,7 +151,7 @@ namespace Galaga.Model
             }
         }
 
-        private void RemoveBonusShip()
+        private void removeBonusShip()
         {
             if (this.bonusShip != null)
             {
@@ -158,7 +161,7 @@ namespace Galaga.Model
             }
         }
 
-        private void UpdateBonusShipPosition()
+        private void updateBonusShipPosition()
         {
             Canvas.SetLeft(this.bonusShip.Sprite, this.bonusShip.X);
             Canvas.SetTop(this.bonusShip.Sprite, this.bonusShip.Y);
@@ -167,7 +170,7 @@ namespace Galaga.Model
         /// <summary>
         /// Checks if the bonus ship has collided with any player bullet.
         /// </summary>
-        private bool CheckCollision()
+        private bool checkCollision()
         {
             if (this.bonusShip == null)
             {
@@ -180,9 +183,9 @@ namespace Galaga.Model
         /// <summary>
         /// Handles the case when the bonus ship is hit by a bullet.
         /// </summary>
-        private void HandleBonusShipHit()
+        private void handleBonusShipHit()
         {
-            this.RemoveBonusShip();
+            this.removeBonusShip();
             AudioManager.PlayEnemyBlowUp(this.gameManager.gameType);
             if (this.gameManager.CurrentGameLevel() > 1)
             {
@@ -193,7 +196,7 @@ namespace Galaga.Model
                 this.gameManager.AddLifeToPlayer();
             }
             var randomPowerUp = (PowerUps)this.random.Next(Enum.GetValues(typeof(PowerUps)).Length);
-            this.gameManager.playerPowerUp(randomPowerUp);
+            this.gameManager.PlayerPowerUp(randomPowerUp);
         }
 
         #endregion

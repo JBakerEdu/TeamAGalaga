@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.Media.Core;
 using Windows.Media.Playback;
-using Galaga.View.Sprites;
+using Galaga.Model;
 
 namespace Galaga.View
 {
@@ -55,7 +55,7 @@ namespace Galaga.View
         /// </summary>
         public static void PlayActivePowerUp(GameType gameType)
         {
-            playSound("playerPowerUp.wav", gameType);
+            playSound("PlayerPowerUp.wav", gameType);
         }
 
         /// <summary>

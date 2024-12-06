@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-namespace Galaga.View.Sprites
+namespace Galaga.View.Sprites.HolidayGame
 {
     /// <summary>
     /// Defines HolidayShipExplosionFrame2 from which all sprites inherit.

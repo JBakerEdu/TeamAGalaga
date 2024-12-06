@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
+using Galaga.Model;
+using Galaga.View.Sprites.HolidayGame;
+using Galaga.View.Sprites.OriginalGame;
 
-namespace Galaga.View.Sprites
+namespace Galaga.View
 {
     internal class ExplosionAnimationManager
     {

@@ -1,4 +1,5 @@
 ﻿using System;
+using Galaga.View;
 
 namespace Galaga.Model
 {

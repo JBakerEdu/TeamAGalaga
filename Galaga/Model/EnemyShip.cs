@@ -1,5 +1,7 @@
 ﻿using System;
 using Galaga.View.Sprites;
+using Galaga.View.Sprites.HolidayGame;
+using Galaga.View.Sprites.OriginalGame;
 
 namespace Galaga.Model
 {
@@ -97,7 +99,7 @@ namespace Galaga.Model
             // Render the secondary sprite only if it exists
             if (this.HasSecondSprite && this.Sprite2 != null)
             {
-                this.RenderSecondSprite(x, y);
+                this.renderSecondSprite(x, y);
             }
         }
 
@@ -106,7 +108,7 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="x">The x-coordinate on the canvas.</param>
         /// <param name="y">The y-coordinate on the canvas.</param>
-        private void RenderSecondSprite(double x, double y)
+        private void renderSecondSprite(double x, double y)
         {
             // Adjust position or appearance for the second sprite as needed
             this.Sprite2.RenderAt(x, y);

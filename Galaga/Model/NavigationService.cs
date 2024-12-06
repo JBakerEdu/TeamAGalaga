@@ -1,30 +1,33 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 
-public interface INavigationService
+namespace Galaga.Model
 {
-    void Navigate(Type pageType, object parameter = null);
-    Type GetPreviousPageType();
-    int BackStackDepth { get; }
-}
-
-public class NavigationService : INavigationService
-{
-    private Frame Frame => (Frame)Windows.UI.Xaml.Window.Current.Content;
-
-    public void Navigate(Type pageType, object parameter = null)
+    public interface INavigationService
     {
-        this.Frame.Navigate(pageType, parameter);
+        void Navigate(Type pageType, object parameter = null);
+        Type GetPreviousPageType();
+        int BackStackDepth { get; }
     }
 
-    public Type GetPreviousPageType()
+    public class NavigationService : INavigationService
     {
-        if (this.Frame.BackStackDepth > 0)
+        private Frame Frame => (Frame)Windows.UI.Xaml.Window.Current.Content;
+
+        public void Navigate(Type pageType, object parameter = null)
         {
-            return this.Frame.BackStack[this.Frame.BackStack.Count - 1].SourcePageType;
+            this.Frame.Navigate(pageType, parameter);
         }
-        return null;
-    }
 
-    public int BackStackDepth => this.Frame.BackStackDepth;
+        public Type GetPreviousPageType()
+        {
+            if (this.Frame.BackStackDepth > 0)
+            {
+                return this.Frame.BackStack[this.Frame.BackStack.Count - 1].SourcePageType;
+            }
+            return null;
+        }
+
+        public int BackStackDepth => this.Frame.BackStackDepth;
+    }
 }

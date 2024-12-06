@@ -12,7 +12,7 @@
             <Button Content="Reset High Scores" Click="ResetHighScores_Click" Width="200" Height="50" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" Width="161">
                 <TextBlock Text="Play Holiday Mode: " VerticalAlignment="Center" />
-                <CheckBox x:Name="HolidayModeCheckBox" VerticalAlignment="Center" Width="45" />
+                <CheckBox x:Name="holidayModeCheckBox" VerticalAlignment="Center" Width="45" />
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -12,17 +12,18 @@ namespace Galaga.Model
     public class BulletManager
     {
         #region Data members
-
-        public int maxBulletsAllowed { get; set; }
         private readonly Canvas canvas;
         private readonly double canvasHeight;
-        public int PlayersFiring { get; set; }
         private readonly IList<Bullet> activePlayerBullets;
         private readonly IList<Bullet> activeEnemyBullets;
         private DispatcherTimer bulletMovementTimer;
         private GameManager gameManager;
         private double velocityX = 0;
-        private double velocityY = 5;
+        private double enemyVelocityY = 5;
+        private double playerVelocityY = -5;
+
+        public int maxBulletsAllowed { get; set; }
+        public int PlayersFiring { get; set; }
 
         #endregion
 
@@ -112,7 +113,7 @@ namespace Galaga.Model
         {
             if (this.activePlayerBullets.Count < this.maxBulletsAllowed * this.PlayersFiring)
             {
-                var bullet = BulletFactory.CreateBullet(0, -5, this.gameManager.gameType);
+                var bullet = BulletFactory.CreateBullet(this.velocityX, this.playerVelocityY, this.gameManager.gameType);
                 renderX = renderX - bullet.Sprite.Width / 2;
                 renderY = renderY - bullet.Sprite.Height;
                 bullet.RenderAt(renderX, renderY);
@@ -127,10 +128,13 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="renderX">where to render the x of the sprite</param>
         /// <param name="renderY">where to render the y of the sprite</param>
+        /// <param name="playerX"></param>
+        /// <param name="playerY"></param>
+        /// <param name="aimedAtPlayer"></param>
         public void FireEnemyBullet(double renderX, double renderY, double playerX = 0, double playerY = 0, bool aimedAtPlayer = false)
         {
-            double velocityX = 0;
-            double velocityY = 5;
+            double bulletVelocityX = this.velocityX;
+            double bulletVelocityY = this.enemyVelocityY;
 
             if (aimedAtPlayer)
             {
@@ -138,11 +142,11 @@ namespace Galaga.Model
                 var deltaY = playerY - renderY;
 
                 var magnitude = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-                velocityX = deltaX / magnitude * 5;
-                velocityY = deltaY / magnitude * 5;
+                bulletVelocityX = deltaX / magnitude * 5;
+                bulletVelocityY = deltaY / magnitude * 5;
             }
 
-            var bullet = BulletFactory.CreateBullet(velocityX, velocityY, this.gameManager.gameType);
+            var bullet = BulletFactory.CreateBullet(bulletVelocityX, bulletVelocityY, this.gameManager.gameType);
             renderX = renderX - bullet.Width / 2;
             bullet.RenderAt(renderX, renderY);
             this.canvas.Children.Add(bullet.Sprite);
@@ -150,14 +154,19 @@ namespace Galaga.Model
             this.activeEnemyBullets.Add(bullet);
         }
 
-
+        /// <summary>
+        /// Checks it the ships passed in collide with active  bullets
+        /// </summary>
+        /// <param name="ship">the ship to check if colliding</param>
+        /// <param name="isPlayer">lets the method know if the ship is a plyer to ensure not checking against its own bullets</param>
+        /// <returns>a bool of it the sprites collide or not</returns>
         public bool CheckSpriteCollision(GameObject ship, bool isPlayer)
         {
             var bullets = isPlayer ? this.activeEnemyBullets : this.activePlayerBullets;
             for (var i = bullets.Count - 1; i >= 0; i--)
             {
                 var bullet = bullets[i];
-                if (this.IsCollision(bullet, ship))
+                if (this.isCollision(bullet, ship))
                 {
                     this.canvas.Children.Remove(bullet.Sprite);
                     bullets.RemoveAt(i);
@@ -167,7 +176,7 @@ namespace Galaga.Model
             return false;
         }
 
-        private bool IsCollision(Bullet bullet, GameObject ship)
+        private bool isCollision(Bullet bullet, GameObject ship)
         {
             var bulletLeft = bullet.X;
             var bulletRight = bullet.X + bullet.Width;

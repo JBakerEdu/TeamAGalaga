@@ -1,24 +1,27 @@
 ﻿using System;
 using System.Windows.Input;
 
-public class RelayCommand : ICommand
+namespace Galaga.Model.ViewModel
 {
-    private readonly Action _execute;
-    private readonly Func<bool> _canExecute;
-    public event EventHandler CanExecuteChanged;
-
-    public RelayCommand(Action execute, Func<bool> canExecute = null)
+    public class RelayCommand : ICommand
     {
-        this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
-        this._canExecute = canExecute;
-    }
+        private readonly Action execute;
+        private readonly Func<bool> canExecute;
+        public event EventHandler CanExecuteChanged;
 
-    public bool CanExecute(object parameter) => this._canExecute?.Invoke() ?? true;
+        public RelayCommand(Action execute, Func<bool> canExecute = null)
+        {
+            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.canExecute = canExecute;
+        }
 
-    public void Execute(object parameter) => this._execute();
+        public bool CanExecute(object parameter) => this.canExecute?.Invoke() ?? true;
 
-    public void RaiseCanExecuteChanged()
-    {
-        this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        public void Execute(object parameter) => this.execute();
+
+        public void RaiseCanExecuteChanged()
+        {
+            this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

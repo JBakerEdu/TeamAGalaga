@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-namespace Galaga.View.Sprites
+namespace Galaga.View.Sprites.OriginalGame
 {
     /// <summary>
     /// Defines EnemyShipLevel3Sprite from which all sprites inherit.

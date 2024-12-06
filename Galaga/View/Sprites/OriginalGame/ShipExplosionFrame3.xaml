@@ -1,10 +1,10 @@
-﻿<local:ShipExplosionFrame2
-    x:Class="Galaga.View.Sprites.ShipExplosionFrame3"
+﻿<originalGame:ShipExplosionFrame2
+    x:Class="Galaga.View.Sprites.OriginalGame.ShipExplosionFrame3"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Galaga.View.Sprites"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:originalGame="using:Galaga.View.Sprites.OriginalGame"
     mc:Ignorable="d"
     d:DesignHeight="60"
     d:DesignWidth="50"
@@ -19,7 +19,7 @@
     </UserControl.Resources>
 
     <Canvas>
-        <local:ShipExplosionFrame2></local:ShipExplosionFrame2>
+        <originalGame:ShipExplosionFrame2></originalGame:ShipExplosionFrame2>
         <Ellipse Fill="{StaticResource FadingDarkGray}" Width="40" Height="40" Opacity="0.5" />
         <Ellipse Fill="{StaticResource FadingGray}" Width="30" Height="30" Canvas.Left="18" Canvas.Top="3" Opacity="0.4" />
         <Ellipse Fill="{StaticResource FadingBlack}" Width="20" Height="20" Canvas.Left="10" Canvas.Top="25" Opacity="0.3" />
@@ -29,4 +29,4 @@
         <Ellipse Fill="{StaticResource FadingBlack}" Width="20" Height="20" Canvas.Top="40" Opacity="0.3" />
         <Ellipse Fill="{StaticResource FadingGray}" Width="30" Height="30" Canvas.Left="10" Canvas.Top="30" Opacity="0.4" />
     </Canvas>
-</local:ShipExplosionFrame2>
+</originalGame:ShipExplosionFrame2>
