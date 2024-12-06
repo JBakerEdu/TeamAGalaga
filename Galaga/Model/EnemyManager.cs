@@ -3,6 +3,8 @@ using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Windows.UI.Notifications;
 using Galaga.View;
 
 namespace Galaga.Model
@@ -16,6 +18,8 @@ namespace Galaga.Model
 
         private const double MovementSpeed = 0.2;
         private const double MaxMoveDistance = 10;
+        private const double Offset = 250;
+        private readonly double maxYShootingValue;
         private readonly Canvas canvas;
         private readonly double canvasWidth;
         private int tickCounter;
@@ -59,6 +63,7 @@ namespace Galaga.Model
         {
             this.canvas = canvas;
             this.canvasWidth = canvas.Width;
+            this.maxYShootingValue = canvas.Height - Offset; 
             this.uiTextManager = uiTextManager;
             this.bulletManager = bulletManager;
             this.playerManager = playerManager;
@@ -127,11 +132,11 @@ namespace Galaga.Model
             {
                 return;
             }
-            var attackTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
+            var attackTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(this.random.Next(12, 20)) };
             var targetX = playerShip.X;
             var targetY = playerShip.Y;
-            var speedX = (targetX - attackingShip.X) / 500.0 * this.attackSpeed;
-            var speedY = (targetY - attackingShip.Y) / 500.0 * this.attackSpeed;
+            var speedX = (targetX - attackingShip.X) / this.canvas.Height * this.attackSpeed;
+            var speedY = (targetY - attackingShip.Y) / this.canvas.Height * this.attackSpeed;
 
             attackTimer.Tick += (s, e) =>
             {
@@ -141,7 +146,7 @@ namespace Galaga.Model
                 Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
                 Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
 
-                if (this.random.Next(0, 1000) < 3 && this.ships.Contains(attackingShip))
+                if (this.random.Next(0, 600) < 2 && this.ships.Contains(attackingShip) && attackingShip.Y <= this.maxYShootingValue)
                 {
                     this.bulletManager.FireEnemyBullet(attackingShip.X + attackingShip.Width / 2, attackingShip.Y + attackingShip.Height, playerShip.X, playerShip.Y, true);
                 }
@@ -153,8 +158,13 @@ namespace Galaga.Model
                     this.resetEnemyPosition(attackingShip);
                 }
 
+                if (attackingShip.Y > this.canvas.Height + Offset)
+                {
+                    attackTimer.Stop();
+                    this.attackingShips.Remove(attackingShip);
+                    this.resetEnemyPosition(attackingShip);
+                }
             };
-
             attackTimer.Start();
         }
 
@@ -170,16 +180,16 @@ namespace Galaga.Model
             {
                 attackingShip.X = this.originalShipPositions[originalIndex];
                 attackingShip.Y = this.rowHeights[attackingShip.Level - 1];
-
-                Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
-                Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
             }
             else
             {
                 attackingShip.X = 0;
                 attackingShip.Y = this.rowHeights[0];
             }
+            Canvas.SetLeft(attackingShip.Sprite, attackingShip.X);
+            Canvas.SetTop(attackingShip.Sprite, attackingShip.Y);
         }
+
 
 
 
