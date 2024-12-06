@@ -1,8 +1,7 @@
 ﻿<Page
     x:Class="Galaga.View.StartScreenPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Galaga.View">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
@@ -13,7 +12,7 @@
             <Button Content="Reset High Scores" Click="ResetHighScores_Click" Width="200" Height="50" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" Width="161">
                 <TextBlock Text="Play Holiday Mode: " VerticalAlignment="Center" />
-                <CheckBox x:Name="HolidayModeCheckBox" VerticalAlignment="Center" Width="45" />
+                <CheckBox x:Name="holidayModeCheckBox" VerticalAlignment="Center" Width="45" />
             </StackPanel>
         </StackPanel>
     </Grid>

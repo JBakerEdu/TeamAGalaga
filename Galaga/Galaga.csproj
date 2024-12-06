@@ -151,7 +151,6 @@
     <Compile Include="Model\PowerUps.cs" />
     <Compile Include="Model\ShipFactory.cs" />
     <Compile Include="Model\ViewModel\RelayCommand.cs" />
-    <Compile Include="Model\WindowResizer.cs" />
     <Compile Include="View\AudioManager.cs" />
     <Compile Include="View\ExplosionAnimationManager.cs" />
     <Compile Include="View\GameCanvas.xaml.cs">

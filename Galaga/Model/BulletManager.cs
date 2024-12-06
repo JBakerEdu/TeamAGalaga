@@ -3,7 +3,6 @@ using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Galaga.View;
-using Galaga.View.Sprites;
 
 namespace Galaga.Model
 {
@@ -13,17 +12,23 @@ namespace Galaga.Model
     public class BulletManager
     {
         #region Data members
-
-        public int maxBulletsAllowed { get; set; }
         private readonly Canvas canvas;
         private readonly double canvasHeight;
-        public int PlayersFiring { get; set; }
         private readonly IList<Bullet> activePlayerBullets;
         private readonly IList<Bullet> activeEnemyBullets;
         private DispatcherTimer bulletMovementTimer;
         private GameManager gameManager;
         private double velocityX = 0;
-        private double velocityY = 5;
+        private double enemyVelocityY = 5;
+        private double playerVelocityY = -5;
+        /// <summary>
+        /// this is the max bullets allowed for a single player
+        /// </summary>
+        public int MaxBulletsAllowed { get; set; }
+        /// <summary>
+        /// the number of Players on the team firing at a time
+        /// </summary>
+        public int PlayersFiring { get; set; }
 
         #endregion
 
@@ -33,12 +38,13 @@ namespace Galaga.Model
         /// Creates the game manager class and init the game
         /// </summary>
         /// <param name="canvas">the canvas passes in</param>
+        /// <param name="gameManager">the game manger to report back to</param>
         /// <exception cref="ArgumentNullException"></exception>
         public BulletManager(Canvas canvas, GameManager gameManager)
         {
             this.canvas = canvas;
             this.gameManager = gameManager;
-            this.maxBulletsAllowed = 3;
+            this.MaxBulletsAllowed = 3;
             this.canvasHeight = canvas.Height;
             this.activePlayerBullets = new List<Bullet>();
             this.activeEnemyBullets = new List<Bullet>();
@@ -111,14 +117,14 @@ namespace Galaga.Model
         /// </summary>
         public void PlayerFiresBullet(double renderX, double renderY)
         {
-            if (this.activePlayerBullets.Count < this.maxBulletsAllowed * this.PlayersFiring)
+            if (this.activePlayerBullets.Count < this.MaxBulletsAllowed * this.PlayersFiring)
             {
-                var bullet = BulletFactory.CreateBullet(0, -5, this.gameManager.gameType);
+                var bullet = BulletFactory.CreateBullet(this.velocityX, this.playerVelocityY, this.gameManager.GameType);
                 renderX = renderX - bullet.Sprite.Width / 2;
                 renderY = renderY - bullet.Sprite.Height;
                 bullet.RenderAt(renderX, renderY);
                 this.canvas.Children.Add(bullet.Sprite);
-                AudioManager.PlayPlayerShoot(this.gameManager.gameType);
+                AudioManager.PlayPlayerShoot(this.gameManager.GameType);
                 this.activePlayerBullets.Add(bullet);
             }
         }
@@ -128,37 +134,45 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="renderX">where to render the x of the sprite</param>
         /// <param name="renderY">where to render the y of the sprite</param>
+        /// <param name="playerX"></param>
+        /// <param name="playerY"></param>
+        /// <param name="aimedAtPlayer"></param>
         public void FireEnemyBullet(double renderX, double renderY, double playerX = 0, double playerY = 0, bool aimedAtPlayer = false)
         {
-            double velocityX = 0;
-            double velocityY = 5;
+            var bulletVelocityX = this.velocityX;
+            var bulletVelocityY = this.enemyVelocityY;
 
             if (aimedAtPlayer)
             {
-                double deltaX = playerX - renderX;
-                double deltaY = playerY - renderY;
+                var deltaX = playerX - renderX;
+                var deltaY = playerY - renderY;
 
-                double magnitude = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-                velocityX = (deltaX / magnitude) * 5;
-                velocityY = (deltaY / magnitude) * 5;
+                var magnitude = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+                bulletVelocityX = deltaX / magnitude * 5;
+                bulletVelocityY = deltaY / magnitude * 5;
             }
 
-            var bullet = BulletFactory.CreateBullet(velocityX, velocityY, this.gameManager.gameType);
+            var bullet = BulletFactory.CreateBullet(bulletVelocityX, bulletVelocityY, this.gameManager.GameType);
             renderX = renderX - bullet.Width / 2;
             bullet.RenderAt(renderX, renderY);
             this.canvas.Children.Add(bullet.Sprite);
-            AudioManager.PlayEnemyShoot(this.gameManager.gameType);
+            AudioManager.PlayEnemyShoot(this.gameManager.GameType);
             this.activeEnemyBullets.Add(bullet);
         }
 
-
+        /// <summary>
+        /// Checks it the ships passed in collide with active  bullets
+        /// </summary>
+        /// <param name="ship">the ship to check if colliding</param>
+        /// <param name="isPlayer">lets the method know if the ship is a plyer to ensure not checking against its own bullets</param>
+        /// <returns>a bool of it the sprites collide or not</returns>
         public bool CheckSpriteCollision(GameObject ship, bool isPlayer)
         {
             var bullets = isPlayer ? this.activeEnemyBullets : this.activePlayerBullets;
-            for (int i = bullets.Count - 1; i >= 0; i--)
+            for (var i = bullets.Count - 1; i >= 0; i--)
             {
                 var bullet = bullets[i];
-                if (IsCollision(bullet, ship))
+                if (this.isCollision(bullet, ship))
                 {
                     this.canvas.Children.Remove(bullet.Sprite);
                     bullets.RemoveAt(i);
@@ -168,7 +182,7 @@ namespace Galaga.Model
             return false;
         }
 
-        private bool IsCollision(Bullet bullet, GameObject ship)
+        private bool isCollision(Bullet bullet, GameObject ship)
         {
             var bulletLeft = bullet.X;
             var bulletRight = bullet.X + bullet.Width;

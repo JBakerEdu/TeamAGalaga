@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-namespace Galaga.View.Sprites
+namespace Galaga.View.Sprites.HolidayGame
 {
     /// <summary>
     /// Defines HolidayShipExplosionFrame3 from which all sprites inherit.
@@ -26,13 +26,5 @@ namespace Galaga.View.Sprites
             Canvas.SetLeft(this, x);
             Canvas.SetTop(this, y);
         }
-
-        private void HolidayShipExplosionFrame2_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-
-        }
     }
-
-
-    
 }

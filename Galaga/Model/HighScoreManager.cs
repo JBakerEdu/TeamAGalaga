@@ -1,78 +1,103 @@
-﻿using Galaga.Model;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using Windows.Storage;
 
-public class HighScoreManager
+namespace Galaga.Model
 {
-    private const string FileName = "HighScores.xml";
-    private readonly StorageFolder _storageFolder = ApplicationData.Current.LocalFolder;
-
-    public ObservableCollection<HighScoreEntry> HighScores { get; set; }
-
-    public HighScoreManager()
+    /// <summary>
+    /// manages the high scores of the game
+    /// </summary>
+    public class HighScoreManager
     {
-        HighScores = LoadHighScores();
-    }
+        private const string FileName = "HighScores.xml";
+        private readonly StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
 
-    private ObservableCollection<HighScoreEntry> LoadHighScores()
-    {
-        try
+        /// <summary>
+        /// the collection of high scores
+        /// </summary>
+        public ObservableCollection<HighScoreEntry> HighScores { get; set; }
+
+        /// <summary>
+        /// sets the high scores from the loaded scores
+        /// </summary>
+        public HighScoreManager()
         {
-            string filePath = Path.Combine(_storageFolder.Path, FileName);
-            Debug.Write(filePath);
-            if (File.Exists(filePath))
+            this.HighScores = this.loadHighScores();
+        }
+
+        private ObservableCollection<HighScoreEntry> loadHighScores()
+        {
+            try
             {
-                using (var stream = File.OpenRead(filePath))
+                var filePath = Path.Combine(this.storageFolder.Path, FileName);
+                Debug.Write(filePath);
+                if (File.Exists(filePath))
                 {
-                    var serializer = new XmlSerializer(typeof(ObservableCollection<HighScoreEntry>));
-                    return (ObservableCollection<HighScoreEntry>)serializer.Deserialize(stream);
+                    using (var stream = File.OpenRead(filePath))
+                    {
+                        var serializer = new XmlSerializer(typeof(ObservableCollection<HighScoreEntry>));
+                        return (ObservableCollection<HighScoreEntry>)serializer.Deserialize(stream);
+                    }
                 }
             }
-        }
-        catch
-        {
-            throw new System.Exception("Failed to load high scores");
-        }
-        return new ObservableCollection<HighScoreEntry>();
-    }
-
-    public void SaveHighScores()
-    {
-        try
-        {
-            string filePath = Path.Combine(_storageFolder.Path, FileName);
-            Debug.Write(filePath);
-            using (var stream = File.Create(filePath))
+            catch
             {
-                var serializer = new XmlSerializer(typeof(ObservableCollection<HighScoreEntry>));
-                serializer.Serialize(stream, HighScores);
+                throw new System.Exception("Failed to load high scores");
+            }
+            return new ObservableCollection<HighScoreEntry>();
+        }
+
+        /// <summary>
+        /// saves the high scores to a file
+        /// </summary>
+        /// <exception cref="System.Exception">if it fails to save high scores</exception>
+        public void SaveHighScores()
+        {
+            try
+            {
+                var filePath = Path.Combine(this.storageFolder.Path, FileName);
+                Debug.Write(filePath);
+                using (var stream = File.Create(filePath))
+                {
+                    var serializer = new XmlSerializer(typeof(ObservableCollection<HighScoreEntry>));
+                    serializer.Serialize(stream, this.HighScores);
+                }
+            }
+            catch
+            {
+                throw new System.Exception("Failed to save high scores");
             }
         }
-        catch
+
+        /// <summary>
+        /// Adds a new score entry to the high scores list, sorts the list by score (descending), 
+        /// player name (ascending), and level (descending), and ensures the list contains only the top 10 entries. 
+        /// The updated high scores are then saved persistently.
+        /// </summary>
+        /// <param name="playerName">The name of the player to associate with the score.</param>
+        /// <param name="score">The score to add to the high scores list.</param>
+        public void AddScore(string playerName, int score)
         {
-            throw new System.Exception("Failed to save high scores");
+            this.HighScores.Add(new HighScoreEntry { PlayerName = playerName, Score = score });
+            this.HighScores = new ObservableCollection<HighScoreEntry>(this.HighScores
+                .OrderByDescending(h => h.Score)
+                .ThenBy(h => h.PlayerName)
+                .ThenByDescending(h => h.Level)
+                .Take(10));
+            this.SaveHighScores();
         }
-    }
 
-    public void AddScore(string playerName, int score)
-    {
-        HighScores.Add(new HighScoreEntry { PlayerName = playerName, Score = score });
-        HighScores = new ObservableCollection<HighScoreEntry>(HighScores
-            .OrderByDescending(h => h.Score)
-            .ThenBy(h => h.PlayerName)
-            .ThenByDescending(h => h.Level)
-            .Take(10));
-        SaveHighScores();
-    }
+        /// <summary>
+        /// clears the file and reset the high scores
+        /// </summary>
+        public void ResetHighScores()
+        {
+            this.HighScores.Clear();
+            this.SaveHighScores();
+        }
 
-    public void ResetHighScores()
-    {
-        HighScores.Clear();
-        SaveHighScores();
     }
-
 }

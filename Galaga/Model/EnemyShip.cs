@@ -1,5 +1,7 @@
 ﻿using System;
 using Galaga.View.Sprites;
+using Galaga.View.Sprites.HolidayGame;
+using Galaga.View.Sprites.OriginalGame;
 
 namespace Galaga.Model
 {
@@ -9,9 +11,10 @@ namespace Galaga.Model
     public class EnemyShip : GameObject
     {
         private const int PointMultiplier = 100;
-        private readonly Random random = new Random();
+        /// <summary>
+        /// the second sprite of the ships
+        /// </summary>
         public BaseSprite Sprite2 { get; protected set; }
-
         /// <summary>
         ///This is the level of the enemy ship
         /// </summary>
@@ -38,6 +41,7 @@ namespace Galaga.Model
         /// <param name="ySpeed">The speed of the enemy ship on y axis.</param>
         /// <param name="level">The level of the ship.</param>
         /// <param name="isShooter">The value used to see if enemy can shoot or not.</param>
+        /// <param name="gameType">the game type in use </param>
         public EnemyShip(BaseSprite sprite, int xSpeed, int ySpeed, int level, bool isShooter, GameType gameType)
         {
             Sprite = sprite;
@@ -97,7 +101,7 @@ namespace Galaga.Model
             // Render the secondary sprite only if it exists
             if (this.HasSecondSprite && this.Sprite2 != null)
             {
-                this.RenderSecondSprite(x, y);
+                this.renderSecondSprite(x, y);
             }
         }
 
@@ -106,7 +110,7 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="x">The x-coordinate on the canvas.</param>
         /// <param name="y">The y-coordinate on the canvas.</param>
-        private void RenderSecondSprite(double x, double y)
+        private void renderSecondSprite(double x, double y)
         {
             // Adjust position or appearance for the second sprite as needed
             this.Sprite2.RenderAt(x, y);

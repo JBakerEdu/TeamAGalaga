@@ -1,5 +1,5 @@
 ﻿<local:BaseSprite
-    x:Class="Galaga.View.Sprites.PlayerSprite"
+    x:Class="Galaga.View.Sprites.OriginalGame.PlayerSprite"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Galaga.View.Sprites"

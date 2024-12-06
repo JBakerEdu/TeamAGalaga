@@ -1,10 +1,10 @@
-﻿<local:HolidayEnemyShipLevel3Sprite
-    x:Class="Galaga.View.Sprites.HolidayEnemyShipLevel3SecondSprite"
+﻿<holidayGame:HolidayEnemyShipLevel3Sprite
+    x:Class="Galaga.View.Sprites.HolidayGame.HolidayEnemyShipLevel3SecondSprite"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Galaga.View.Sprites"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:holidayGame="using:Galaga.View.Sprites.HolidayGame"
     mc:Ignorable="d"
     d:DesignHeight="70"
     d:DesignWidth="55"
@@ -12,7 +12,7 @@
     Width="55">
 
     <Canvas>
-        <local:HolidayEnemyShipLevel3Sprite></local:HolidayEnemyShipLevel3Sprite>
+        <holidayGame:HolidayEnemyShipLevel3Sprite></holidayGame:HolidayEnemyShipLevel3Sprite>
         <Rectangle Canvas.Top="36.241" Canvas.Left="16.573" Width="8" Height="2" Fill="{StaticResource Hair}" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
             <Rectangle.RenderTransform>
                 <CompositeTransform Rotation="4.399"/>
@@ -25,4 +25,4 @@
         </Rectangle>
 
     </Canvas>
-</local:HolidayEnemyShipLevel3Sprite>
+</holidayGame:HolidayEnemyShipLevel3Sprite>

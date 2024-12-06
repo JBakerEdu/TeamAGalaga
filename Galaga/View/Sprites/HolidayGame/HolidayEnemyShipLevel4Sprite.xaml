@@ -1,5 +1,5 @@
 ﻿<local:BaseSprite
-    x:Class="Galaga.View.Sprites.HolidayEnemyShipLevel4Sprite"
+    x:Class="Galaga.View.Sprites.HolidayGame.HolidayEnemyShipLevel4Sprite"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Galaga.View.Sprites"

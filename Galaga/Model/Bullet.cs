@@ -8,7 +8,6 @@ namespace Galaga.Model
     /// </summary>
     public class Bullet : GameObject
     {
-        // Speed components for the bullet
         private double xSpeed;
         private double ySpeed;
 
@@ -21,18 +20,18 @@ namespace Galaga.Model
         public Bullet(BaseSprite bulletSprite, double xSpeed, double ySpeed)
         {
             Sprite = bulletSprite;
-            SetSpeed(xSpeed, ySpeed);
+            this.SetSpeed(xSpeed, ySpeed);
         }
 
         /// <summary>
         /// Sets the speed of the bullet.
         /// </summary>
-        /// <param name="xSpeed">Speed along the x-axis.</param>
-        /// <param name="ySpeed">Speed along the y-axis.</param>
-        public void SetSpeed(double xSpeed, double ySpeed)
+        /// <param name="xSpeedValue">Speed along the x-axis.</param>
+        /// <param name="ySpeedValue">Speed along the y-axis.</param>
+        public void SetSpeed(double xSpeedValue, double ySpeedValue)
         {
-            this.xSpeed = xSpeed;
-            this.ySpeed = ySpeed;
+            this.xSpeed = xSpeedValue;
+            this.ySpeed = ySpeedValue;
         }
 
         /// <summary>
@@ -40,8 +39,8 @@ namespace Galaga.Model
         /// </summary>
         public void Move()
         {
-            X += xSpeed;
-            Y += ySpeed;
+            X += this.xSpeed;
+            Y += this.ySpeed;
 
             Canvas.SetLeft(Sprite, X);
             Canvas.SetTop(Sprite, Y);

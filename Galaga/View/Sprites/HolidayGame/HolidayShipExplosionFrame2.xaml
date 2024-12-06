@@ -1,10 +1,10 @@
-﻿<local:HolidayShipExplosionFrame1
-    x:Class="Galaga.View.Sprites.HolidayShipExplosionFrame2"
+﻿<holidayGame:HolidayShipExplosionFrame1
+    x:Class="Galaga.View.Sprites.HolidayGame.HolidayShipExplosionFrame2"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Galaga.View.Sprites"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:holidayGame="using:Galaga.View.Sprites.HolidayGame"
     mc:Ignorable="d"
     d:DesignHeight="60"
     d:DesignWidth="50"
@@ -19,7 +19,7 @@
     </UserControl.Resources>
 
     <Canvas>
-        <local:HolidayShipExplosionFrame1></local:HolidayShipExplosionFrame1>
+        <holidayGame:HolidayShipExplosionFrame1></holidayGame:HolidayShipExplosionFrame1>
 
         <Rectangle Fill="{StaticResource RedGift}" Width="10" Height="10" Canvas.Left="31" Canvas.Top="37" />
         <Line X1="5" Y1="55" X2="15" Y2="55" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="26" VerticalAlignment="Top" Canvas.Top="-14" />
@@ -34,4 +34,4 @@
         <Line X1="20" Y1="56" X2="32" Y2="56" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="7" VerticalAlignment="Top" Canvas.Top="-1" />
         <Line X1="26" Y1="50" X2="26" Y2="62" Stroke="{StaticResource YellowRibbon}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="4" VerticalAlignment="Top" Canvas.Top="-3" />
     </Canvas>
-</local:HolidayShipExplosionFrame1>
+</holidayGame:HolidayShipExplosionFrame1>

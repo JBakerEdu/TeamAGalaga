@@ -1,10 +1,10 @@
-﻿<local:EnemyShipLevel4Sprite
-    x:Class="Galaga.View.Sprites.EnemyShipLevel4SecondSprite"
+﻿<originalGame:EnemyShipLevel4Sprite
+    x:Class="Galaga.View.Sprites.OriginalGame.EnemyShipLevel4SecondSprite"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Galaga.View.Sprites"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:originalGame="using:Galaga.View.Sprites.OriginalGame"
     mc:Ignorable="d"
     d:DesignHeight="70"
     d:DesignWidth="55"
@@ -16,10 +16,10 @@
     </UserControl.Resources>
 
     <Canvas>
-        <local:EnemyShipLevel4Sprite></local:EnemyShipLevel4Sprite>
+        <originalGame:EnemyShipLevel4Sprite></originalGame:EnemyShipLevel4Sprite>
         <Line X1="5" Y1="45" X2="5" Y2="50" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
         <Line X1="50" Y1="45" X2="50" Y2="50" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Center" Canvas.Top="-3" VerticalAlignment="Top"/>
         <Line X1="50" Y1="55" X2="50" Y2="60" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Left" Canvas.Left="-15" VerticalAlignment="Top" Canvas.Top="-3"/>
         <Line X1="50" Y1="55" X2="50" Y2="60" Stroke="{StaticResource EngineGunColor}" StrokeThickness="6" HorizontalAlignment="Left" Canvas.Left="-30" VerticalAlignment="Top" Canvas.Top="-3"/>
     </Canvas>
-</local:EnemyShipLevel4Sprite>
+</originalGame:EnemyShipLevel4Sprite>

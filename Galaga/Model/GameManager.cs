@@ -1,6 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
-using Galaga.View.Sprites;
+using Galaga.View;
 
 namespace Galaga.Model
 {
@@ -10,11 +10,17 @@ namespace Galaga.Model
     public class GameManager
     {
         #region Data members
-        public readonly PlayerManager playerManager;
         private readonly BonusShipManager bonusShipManager;
         private readonly LevelManager levelManager;
         private readonly int playerLives = 3;
-        public GameType gameType { get; private set; }
+        /// <summary>
+        /// the player manager being used
+        /// </summary>
+        public readonly PlayerManager PlayerManager;
+        /// <summary>
+        /// the game type set to be played
+        /// </summary>
+        public GameType GameType { get; private set; }
         #endregion
 
         #region Constructors
@@ -23,15 +29,16 @@ namespace Galaga.Model
         /// Creates the game manager class and init the game
         /// </summary>
         /// <param name="canvas">the canvas passes in</param>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <param name="isHolidayMode">this lets the game know if the user wants to play the holiday game type</param>
+        /// <exception cref="ArgumentNullException"> if the canvas is not passed in correctly</exception>
         public GameManager(Canvas canvas, bool isHolidayMode)
         {
             canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
-            this.gameType = isHolidayMode ? GameType.HolidayGame : GameType.OriginalGame;
-            BulletManager bulletManager = new BulletManager(canvas, this);
-            UiTextManager uiTextManager = new UiTextManager(canvas, this.playerLives, this);
-            this.playerManager = new PlayerManager(this.playerLives, canvas, bulletManager, this, uiTextManager);
-            EnemyManager enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, this.playerManager, this);
+            this.GameType = isHolidayMode ? GameType.HolidayGame : GameType.OriginalGame;
+            var bulletManager = new BulletManager(canvas, this);
+            var uiTextManager = new UiTextManager(canvas, this.playerLives, this);
+            this.PlayerManager = new PlayerManager(this.playerLives, canvas, bulletManager, this, uiTextManager);
+            var enemyManager = new EnemyManager(canvas, bulletManager, uiTextManager, this.PlayerManager, this);
             this.bonusShipManager = new BonusShipManager(canvas, bulletManager, this);
             this.levelManager = new LevelManager(enemyManager, uiTextManager);
             this.levelManager.StartGame();
@@ -40,25 +47,25 @@ namespace Galaga.Model
 
         #region Methods
         /// <summary>
-        /// calls players moveLeft
+        /// calls Players moveLeft
         /// </summary>
-        public void MovePlayerLeft() => this.playerManager.MoveLeft();
+        public void MovePlayerLeft() => this.PlayerManager.MoveLeft();
         /// <summary>
-        /// calls players moveRight
+        /// calls Players moveRight
         /// </summary>
-        public void MovePlayerRight() => this.playerManager.MoveRight();
+        public void MovePlayerRight() => this.PlayerManager.MoveRight();
         /// <summary>
-        /// calls players fire
+        /// calls Players fire
         /// </summary>
-        public void FireBullet() => this.playerManager.FireBullet();
+        public void FireBullet() => this.PlayerManager.FireBullet();
         /// <summary>
         /// calls player to add a life
         /// </summary>
-        public void AddLifeToPlayer() => this.playerManager.addLife();
+        public void AddLifeToPlayer() => this.PlayerManager.AddLife();
         /// <summary>
-        /// calls to clone the players ship
+        /// calls to clone the Players ship
         /// </summary>
-        public void ClonePlayerShip() => this.playerManager.CreateClonePlayer();
+        public void ClonePlayerShip() => this.PlayerManager.CreateClonePlayer();
         /// <summary>
         /// calls the Bonus ship spawn to ensure that the bonus ship does not spawn at the wrong time
         /// </summary>
@@ -71,18 +78,21 @@ namespace Galaga.Model
         /// Gives a power up to the player to handle using the power up
         /// </summary>
         /// <param name="powerUp"> the type of power up to give the player</param>
-        public void playerPowerUp(PowerUps powerUp)
+        public void PlayerPowerUp(PowerUps powerUp)
         {
-            this.playerManager.ApplyPowerUp(powerUp);
+            this.PlayerManager.ApplyPowerUp(powerUp);
         }
         /// <summary>
         /// calls to move on to next level
         /// </summary>
         public void NextLevel() => this.levelManager.NextLevel();
-
+        /// <summary>
+        /// the current game level the game is on
+        /// </summary>
+        /// <returns> an int value of the level number </returns>
         public int CurrentGameLevel()
         {
-            return this.levelManager.currentLevel;
+            return this.levelManager.CurrentLevel;
         }
 
         #endregion

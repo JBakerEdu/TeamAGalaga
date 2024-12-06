@@ -4,14 +4,16 @@ using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using System.Collections.Generic;
 using System;
 using Windows.UI.Xaml.Navigation;
 
 namespace Galaga.View
 {
-    public sealed partial class GameCanvas : Page
+    /// <summary>
+    /// this is the game canvas the will be played on
+    /// </summary>
+    public sealed partial class GameCanvas
     {
         private GameManager gameManager;
         private readonly HashSet<VirtualKey> pressedKeys = new HashSet<VirtualKey>();
@@ -24,7 +26,7 @@ namespace Galaga.View
         public GameCanvas()
         {
             this.InitializeComponent();
-            this.Loaded += OnPageLoaded;
+            Loaded += this.OnPageLoaded;
 
             Width = this.canvas.Width;
             Height = this.canvas.Height;
@@ -41,17 +43,25 @@ namespace Galaga.View
             this.movementTimer.Start();
         }
 
+        /// <summary>
+        /// Called when the page is navigated to. Initializes the game manager based on the provided parameter.
+        /// </summary>
+        /// <param name="e">The event data that contains the navigation parameter and other related information.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.isHolidayMode = (bool)e.Parameter;
+            if (e.Parameter != null)
+            {
+                this.isHolidayMode = (bool)e.Parameter;
+            }
+
             this.gameManager = new GameManager(this.canvas, this.isHolidayMode);
         }
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
-            var containerWidth = this.ActualWidth;
-            var containerHeight = this.ActualHeight;
+            var containerWidth = ActualWidth;
+            var containerHeight = ActualHeight;
 
             ApplicationView.GetForCurrentView()
                 .TryResizeView(new Size(containerWidth, containerHeight));
@@ -86,7 +96,7 @@ namespace Galaga.View
             }
         }
 
-        private void ShowHighScoreBoard()
+        private void showHighScoreBoard()
         {
             Frame.Navigate(typeof(HighScorePage)); // Ensure HighScorePage.xaml is set up with the ViewModel binding
         }

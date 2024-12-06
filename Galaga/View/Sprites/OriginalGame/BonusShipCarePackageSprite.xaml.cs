@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-namespace Galaga.View.Sprites
+namespace Galaga.View.Sprites.OriginalGame
 {
     /// <summary>
     /// Defines BonusShipCarePackageSprite from which all sprites inherit.

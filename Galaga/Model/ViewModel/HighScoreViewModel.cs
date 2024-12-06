@@ -1,183 +1,179 @@
-﻿using Galaga.Model;
-using Galaga.View;
+﻿using Galaga.View;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
-public class HighScoreViewModel : INotifyPropertyChanged
+namespace Galaga.Model.ViewModel
 {
-    private readonly HighScoreManager manager;
-
-    private readonly INavigationService _navigationService;
-
-    private bool _canNavigateBack;
-    public bool CanNavigateBack
+    /// <summary>
+    /// The view model for the high scores
+    /// </summary>
+    public class HighScoreViewModel : INotifyPropertyChanged
     {
-        get => _canNavigateBack;
-        set
+        private readonly HighScoreManager manager;
+
+        private readonly INavigationService navigationService;
+
+        private bool canNavigateBack;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether navigation back is allowed.
+        /// </summary>
+        public bool CanNavigateBack
         {
-            _canNavigateBack = true;
-            NavigateBackCommand.RaiseCanExecuteChanged();
-        }
-    }
-
-    public RelayCommand NavigateBackCommand { get; }
-
-    public ObservableCollection<HighScoreEntry> highScores;
-
-    public ObservableCollection<HighScoreEntry> HighScores
-    {
-        get => highScores;
-        set
-        {
-            highScores = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private string _sortOrder = "Score";
-    public string SortOrder
-    {
-        get => _sortOrder;
-        set
-        {
-            _sortOrder = value;
-            SortHighScores();
-            OnPropertyChanged();
-        }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    public HighScoreViewModel(NavigationService service)
-    {
-        this.NavigateBackCommand = new RelayCommand(
-            execute: () => NavigateBack(),
-            canExecute: () => this.CanNavigateBack);
-
-        this.CanNavigateBack = true;
-
-        this._navigationService = service;
-
-        this.manager = new HighScoreManager();
-        this.HighScores = new ObservableCollection<HighScoreEntry>(this.manager.HighScores);
-    }
-
-    public void Initialize(object parameter)
-    {
-        var previousPage = _navigationService.GetPreviousPageType();
-
-        if (previousPage == typeof(StartScreenPage))
-        {
-            HandleNavigationFromStartScreen();
-        }
-        else if (previousPage == typeof(GameCanvas))
-        {
-            HandleNavigationFromGameCanvas(parameter);
-        }
-        else if (_navigationService.BackStackDepth == 0)
-        {
-            HandleFirstNavigation();
-        }
-        else
-        {
-            HandleUnknownNavigationSource();
-        }
-    }
-
-    private void HandleNavigationFromStartScreen()
-    {
-        LoadDefaultHighScores();
-    }
-
-    private void HandleNavigationFromGameCanvas(object parameter)
-    {
-        if (parameter is int score && score >= 0)
-        {
-            if (CheckIfTop10(score))
+            get => this.canNavigateBack;
+            set
             {
-                PromptForNameAndAddScore(score);
+                this.canNavigateBack = value;
+                this.canNavigateBack = true;
+                this.NavigateBackCommand.RaiseCanExecuteChanged();
             }
         }
-        else
+
+        /// <summary>
+        /// Gets the command used to navigate back in the navigation stack.
+        /// </summary>
+        public RelayCommand NavigateBackCommand { get; }
+
+        /// <summary>
+        /// Stores the collection of high scores.
+        /// </summary>
+        private ObservableCollection<HighScoreEntry> highScores;
+
+        /// <summary>
+        /// Gets or sets the collection of high scores displayed in the application.
+        /// </summary>
+        public ObservableCollection<HighScoreEntry> HighScores
         {
-            Debug.WriteLine("Invalid parameter from GameCanvas. Defaulting to default scores.");
-            LoadDefaultHighScores();
-        }
-    }
-
-    private void HandleUnknownNavigationSource()
-    {
-        Debug.WriteLine("Unknown navigation source");
-        LoadDefaultHighScores();
-    }
-
-    private void HandleFirstNavigation()
-    {
-        Debug.WriteLine("First navigation: Loading default scores.");
-        LoadDefaultHighScores();
-    }
-
-    private void LoadDefaultHighScores()
-    {
-        // Logic to initialize the high scores list
-    }
-
-    private void NavigateBack()
-    {
-        var frame = Window.Current.Content as Frame;
-        frame?.Navigate(typeof(StartScreenPage));
-    }
-
-    private void SortHighScores()
-    {
-        var sortedScores = SortOrder switch
-        {
-            "Name" => HighScores.OrderBy(h => h.PlayerName).ThenByDescending(h => h.Score).ThenByDescending(h => h.Level),
-            "Level" => HighScores.OrderByDescending(h => h.Level).ThenByDescending(h => h.Score).ThenBy(h => h.PlayerName),
-            _ => HighScores.OrderByDescending(h => h.Score).ThenBy(h => h.PlayerName).ThenByDescending(h => h.Level),
-        };
-
-        this.HighScores = new ObservableCollection<HighScoreEntry>(sortedScores);
-    }
-
-    private bool CheckIfTop10(int score)
-    {
-        return this.manager.HighScores.Count < 10 ||
-               this.manager.HighScores.Any(entry => score > entry.Score);
-    }
-
-    private async void PromptForNameAndAddScore(int score)
-    {
-        var nameInputDialog = new ContentDialog
-        {
-            Title = "New High Score!",
-            Content = new TextBox
+            get => this.highScores;
+            set
             {
-                PlaceholderText = "Enter your name"
-            },
-            PrimaryButtonText = "Submit",
-            CloseButtonText = "Cancel"
-        };
+                this.highScores = value;
+                this.OnPropertyChanged();
+            }
+        }
 
-        if (await nameInputDialog.ShowAsync() == ContentDialogResult.Primary)
+        private string sortOrder = "Score";
+
+        /// <summary>
+        /// Gets or sets the sort order for the high scores.
+        /// </summary>
+        public string SortOrder
         {
-            string playerName = ((TextBox)nameInputDialog.Content).Text;
-            manager.AddScore(playerName, score);
+            get => this.sortOrder;
+            set
+            {
+                this.sortOrder = value;
+                this.sortHighScores();
+                this.OnPropertyChanged();
+            }
+        }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event for the specified property.
+        /// </summary>
+        /// <param name="propertyName"> The name of the property that changed </param>
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HighScoreViewModel"/> class.
+        /// </summary>
+        /// <param name="service">The navigation service used for handling page navigation.</param>
+        public HighScoreViewModel(NavigationService service)
+        {
+            this.NavigateBackCommand = new RelayCommand(
+                execute: () => this.navigateBack(),
+                canExecute: () => this.CanNavigateBack);
+
+            this.CanNavigateBack = true;
+
+            this.navigationService = service;
+
+            this.manager = new HighScoreManager();
             this.HighScores = new ObservableCollection<HighScoreEntry>(this.manager.HighScores);
         }
+
+        /// <summary>
+        /// Performs initialization for the view model based on the provided parameter.
+        /// </summary>
+        /// <param name="parameter">The parameter passed during navigation, used to initialize the view model.</param>
+        public void Initialize(object parameter)
+        {
+            var previousPage = this.navigationService.GetPreviousPageType();
+            if (previousPage == typeof(GameCanvas))
+            {
+                this.handleNavigationFromGameCanvas(parameter);
+            }
+        }
+
+        private void handleNavigationFromGameCanvas(object parameter)
+        {
+            if (parameter is int score && score >= 0)
+            {
+                if (this.checkIfTop10(score))
+                {
+                    this.promptForNameAndAddScore(score);
+                }
+            }
+        }
+
+        private void navigateBack()
+        {
+            var frame = Window.Current.Content as Frame;
+            frame?.Navigate(typeof(StartScreenPage));
+        }
+
+        private void sortHighScores()
+        {
+            var sortedScores = this.SortOrder switch
+            {
+                "Name" => this.HighScores.OrderBy(h => h.PlayerName).ThenByDescending(h => h.Score).ThenByDescending(h => h.Level),
+                "Level" => this.HighScores.OrderByDescending(h => h.Level).ThenByDescending(h => h.Score).ThenBy(h => h.PlayerName),
+                _ => this.HighScores.OrderByDescending(h => h.Score).ThenBy(h => h.PlayerName).ThenByDescending(h => h.Level)
+            };
+
+            this.HighScores = new ObservableCollection<HighScoreEntry>(sortedScores);
+        }
+
+        private bool checkIfTop10(int score)
+        {
+            return this.manager.HighScores.Count < 10 ||
+                   this.manager.HighScores.Any(entry => score > entry.Score);
+        }
+
+        private async void promptForNameAndAddScore(int score)
+        {
+            var nameInputDialog = new ContentDialog
+            {
+                Title = "New High Score!",
+                Content = new TextBox
+                {
+                    PlaceholderText = "Enter your name"
+                },
+                PrimaryButtonText = "Submit",
+                CloseButtonText = "Cancel"
+            };
+
+            if (await nameInputDialog.ShowAsync() == ContentDialogResult.Primary)
+            {
+                var playerName = ((TextBox)nameInputDialog.Content).Text;
+                this.manager.AddScore(playerName, score);
+
+                this.HighScores = new ObservableCollection<HighScoreEntry>(this.manager.HighScores);
+            }
+        }
     }
+
 }

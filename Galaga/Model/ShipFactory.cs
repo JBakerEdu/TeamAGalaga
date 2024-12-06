@@ -1,5 +1,7 @@
 ﻿using Galaga.View.Sprites;
 using System;
+using Galaga.View.Sprites.HolidayGame;
+using Galaga.View.Sprites.OriginalGame;
 
 namespace Galaga.Model
 {
@@ -102,7 +104,7 @@ namespace Galaga.Model
         {
             var shipSprite = gameType switch
             {
-                GameType.HolidayGame => new Player(new PlayerSprite()),
+                GameType.HolidayGame => new Player(new HolidayPlayerSprite()),
                 GameType.OriginalGame => new Player(new PlayerSprite()),
                 _ => throw new ArgumentException("Unsupported game type")
             };
