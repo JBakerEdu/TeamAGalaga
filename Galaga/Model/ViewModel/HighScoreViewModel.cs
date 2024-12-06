@@ -2,7 +2,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Windows.UI.Xaml;
@@ -10,7 +9,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace Galaga.Model.ViewModel
 {
-
+    /// <summary>
+    /// The view model for the high scores
+    /// </summary>
     public class HighScoreViewModel : INotifyPropertyChanged
     {
         private readonly HighScoreManager manager;
@@ -18,6 +19,10 @@ namespace Galaga.Model.ViewModel
         private readonly INavigationService navigationService;
 
         private bool canNavigateBack;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether navigation back is allowed.
+        /// </summary>
         public bool CanNavigateBack
         {
             get => this.canNavigateBack;
@@ -29,10 +34,19 @@ namespace Galaga.Model.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets the command used to navigate back in the navigation stack.
+        /// </summary>
         public RelayCommand NavigateBackCommand { get; }
 
-        public ObservableCollection<HighScoreEntry> highScores;
+        /// <summary>
+        /// Stores the collection of high scores.
+        /// </summary>
+        private ObservableCollection<HighScoreEntry> highScores;
 
+        /// <summary>
+        /// Gets or sets the collection of high scores displayed in the application.
+        /// </summary>
         public ObservableCollection<HighScoreEntry> HighScores
         {
             get => this.highScores;
@@ -44,6 +58,10 @@ namespace Galaga.Model.ViewModel
         }
 
         private string sortOrder = "Score";
+
+        /// <summary>
+        /// Gets or sets the sort order for the high scores.
+        /// </summary>
         public string SortOrder
         {
             get => this.sortOrder;
@@ -55,13 +73,24 @@ namespace Galaga.Model.ViewModel
             }
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event for the specified property.
+        /// </summary>
+        /// <param name="propertyName"> The name of the property that changed </param>
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HighScoreViewModel"/> class.
+        /// </summary>
+        /// <param name="service">The navigation service used for handling page navigation.</param>
         public HighScoreViewModel(NavigationService service)
         {
             this.NavigateBackCommand = new RelayCommand(
@@ -76,31 +105,17 @@ namespace Galaga.Model.ViewModel
             this.HighScores = new ObservableCollection<HighScoreEntry>(this.manager.HighScores);
         }
 
+        /// <summary>
+        /// Performs initialization for the view model based on the provided parameter.
+        /// </summary>
+        /// <param name="parameter">The parameter passed during navigation, used to initialize the view model.</param>
         public void Initialize(object parameter)
         {
             var previousPage = this.navigationService.GetPreviousPageType();
-
-            if (previousPage == typeof(StartScreenPage))
-            {
-                this.handleNavigationFromStartScreen();
-            }
-            else if (previousPage == typeof(GameCanvas))
+            if (previousPage == typeof(GameCanvas))
             {
                 this.handleNavigationFromGameCanvas(parameter);
             }
-            else if (this.navigationService.BackStackDepth == 0)
-            {
-                this.handleFirstNavigation();
-            }
-            else
-            {
-                this.handleUnknownNavigationSource();
-            }
-        }
-
-        private void handleNavigationFromStartScreen()
-        {
-            this.LoadDefaultHighScores();
         }
 
         private void handleNavigationFromGameCanvas(object parameter)
@@ -112,28 +127,6 @@ namespace Galaga.Model.ViewModel
                     this.promptForNameAndAddScore(score);
                 }
             }
-            else
-            {
-                Debug.WriteLine("Invalid parameter from GameCanvas. Defaulting to default scores.");
-                this.LoadDefaultHighScores();
-            }
-        }
-
-        private void handleUnknownNavigationSource()
-        {
-            Debug.WriteLine("Unknown navigation source");
-            this.LoadDefaultHighScores();
-        }
-
-        private void handleFirstNavigation()
-        {
-            Debug.WriteLine("First navigation: Loading default scores.");
-            this.LoadDefaultHighScores();
-        }
-
-        private void LoadDefaultHighScores()
-        {
-            // Logic to initialize the high scores list
         }
 
         private void navigateBack()

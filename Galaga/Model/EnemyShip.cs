@@ -11,9 +11,10 @@ namespace Galaga.Model
     public class EnemyShip : GameObject
     {
         private const int PointMultiplier = 100;
-        private readonly Random random = new Random();
+        /// <summary>
+        /// the second sprite of the ships
+        /// </summary>
         public BaseSprite Sprite2 { get; protected set; }
-
         /// <summary>
         ///This is the level of the enemy ship
         /// </summary>
@@ -40,6 +41,7 @@ namespace Galaga.Model
         /// <param name="ySpeed">The speed of the enemy ship on y axis.</param>
         /// <param name="level">The level of the ship.</param>
         /// <param name="isShooter">The value used to see if enemy can shoot or not.</param>
+        /// <param name="gameType">the game type in use </param>
         public EnemyShip(BaseSprite sprite, int xSpeed, int ySpeed, int level, bool isShooter, GameType gameType)
         {
             Sprite = sprite;

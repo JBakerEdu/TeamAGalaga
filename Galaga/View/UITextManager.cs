@@ -6,6 +6,9 @@ using Galaga.Model;
 
 namespace Galaga.View
 {
+    /// <summary>
+    /// this is the Ui manager that manages the text that appear on screen
+    /// </summary>
     public class UiTextManager
     {
         private readonly Canvas canvas;
@@ -129,7 +132,6 @@ namespace Galaga.View
         /// Updates the level on screen by showing it in large text in the center, then small text at the bottom.
         /// </summary>
         /// <param name="level">The current level to display.</param>
-        /// <param name="waitTime">The time to wait before switching to the smaller display.</param>
         public async void UpdateLevel(int level)
         {
             this.levelTextBlock.FontSize = LargeFontSize;
@@ -166,7 +168,7 @@ namespace Galaga.View
 
 
         /// <summary>
-        /// this updates the players lives left removing lives as the player gets hit
+        /// this updates the Players lives left removing lives as the player gets hit
         /// </summary>
         /// <param name="playerLives">the number of lives left</param>
 
@@ -200,7 +202,7 @@ namespace Galaga.View
                 var textSize = this.gameOverTextBlock.DesiredSize;
                 Canvas.SetLeft(this.gameOverTextBlock, (this.canvas.Width - textSize.Width) / 2);
                 Canvas.SetTop(this.gameOverTextBlock, (this.canvas.Height - textSize.Height) / 2);
-                AudioManager.PlayGameOver(this.gameManager.gameType);
+                AudioManager.PlayGameOver(this.gameManager.GameType);
                 await Task.Delay(WaitTime);
                 (Window.Current.Content as Frame)?.Navigate(typeof(HighScorePage), this.score);
             }

@@ -19,7 +19,6 @@ namespace Galaga.Model
         private readonly Canvas canvas;
         private readonly double canvasHeight;
         private readonly double canvasWidth;
-        public List<Player> players { get; private set; }
         private readonly UiTextManager uiTextManager;
         private readonly GameManager gameManager;
         private readonly BulletManager bulletManager;
@@ -34,20 +33,24 @@ namespace Galaga.Model
         private const int SpeedBoostMultiplier = 2;
         private const int BulletCountMultiplier = 3;
         private DispatcherTimer powerUpTimer;
+        /// <summary>
+        /// the list of Players 
+        /// </summary>
+        public List<Player> Players { get; private set; }
 
         /// <summary>
         /// Calls objects moveLeft for each player, ensuring they don't move closer to each other
         /// </summary>
         public void MoveLeft()
         {
-            for (var i = 0; i < this.players.Count; i++)
+            for (var i = 0; i < this.Players.Count; i++)
             {
-                if (this.players[i].X > 0)
+                if (this.Players[i].X > 0)
                 {
-                    var targetX = this.players[i].X - this.players[i].SpeedX;
-                    if (this.canMoveToPosition(i, targetX, this.players[i].Width))
+                    var targetX = this.Players[i].X - this.Players[i].SpeedX;
+                    if (this.canMoveToPosition(i, targetX, this.Players[i].Width))
                     {
-                        this.players[i].MoveLeft();
+                        this.Players[i].MoveLeft();
                     }
                 }
             }
@@ -58,14 +61,14 @@ namespace Galaga.Model
         /// </summary>
         public void MoveRight()
         {
-            for (var i = 0; i < this.players.Count; i++)
+            for (var i = 0; i < this.Players.Count; i++)
             {
-                if (this.players[i].X + this.players[i].Width < this.canvasWidth)
+                if (this.Players[i].X + this.Players[i].Width < this.canvasWidth)
                 {
-                    var targetX = this.players[i].X + this.players[i].SpeedX;
-                    if (this.canMoveToPosition(i, targetX, this.players[i].Width))
+                    var targetX = this.Players[i].X + this.Players[i].SpeedX;
+                    if (this.canMoveToPosition(i, targetX, this.Players[i].Width))
                     {
-                        this.players[i].MoveRight(this.canvasWidth);
+                        this.Players[i].MoveRight(this.canvasWidth);
                     }
                 }
             }
@@ -73,12 +76,12 @@ namespace Galaga.Model
 
         private bool canMoveToPosition(int currentPlayerIndex, double targetX, double targetWidth)
         {
-            for (var i = 0; i < this.players.Count; i++)
+            for (var i = 0; i < this.Players.Count; i++)
             {
                 if (i != currentPlayerIndex)
                 {
-                    var otherPlayerX = this.players[i].X;
-                    var otherPlayerWidth = this.players[i].Width;
+                    var otherPlayerX = this.Players[i].X;
+                    var otherPlayerWidth = this.Players[i].Width;
                     if (Math.Abs(targetX - (otherPlayerX + otherPlayerWidth)) < ClonesOffset ||
                         Math.Abs(targetX + targetWidth - otherPlayerX) < ClonesOffset)
                     {
@@ -99,9 +102,10 @@ namespace Galaga.Model
         /// Constructs the player manager with all needed information 
         /// </summary>
         /// <param name="lives"> the lives each player has</param>
-        /// <param name="canvas"> the canvas that the players will be added onto</param>
-        /// <param name="bulletManager"></param>
-        /// <param name="uiTextManager"></param>
+        /// <param name="canvas"> the canvas that the Players will be added onto</param>
+        /// <param name="bulletManager">the bullets manager that is used</param>
+        /// <param name="gameManager">the game manger to report back to</param>
+        /// <param name="uiTextManager">the Ui text manager that will control the Ui</param>
         public PlayerManager(int lives, Canvas canvas, BulletManager bulletManager, GameManager gameManager, UiTextManager uiTextManager)
         {
             this.canvas = canvas;
@@ -113,7 +117,7 @@ namespace Galaga.Model
             this.bulletManager = bulletManager;
             this.lastFireTime = DateTime.Now - this.fireCooldown;
             this.playerLives = lives;
-            this.players = new List<Player>();
+            this.Players = new List<Player>();
             this.createAndPlacePlayer();
             this.initializeCollisionCheckTimer();
             this.initializePowerUpTimer();
@@ -125,8 +129,8 @@ namespace Galaga.Model
 
         private void createAndPlacePlayer()
         {
-            var newPlayer = ShipFactory.CreatePlayerShip(this.gameManager.gameType);
-            this.players.Add(newPlayer);
+            var newPlayer = ShipFactory.CreatePlayerShip(this.gameManager.GameType);
+            this.Players.Add(newPlayer);
             this.canvas.Children.Add(newPlayer.Sprite);
             this.placePlayerNearBottom(newPlayer);
         }
@@ -149,29 +153,29 @@ namespace Galaga.Model
             this.playerLives--;
             this.uiTextManager.UpdatePlayerLives(this.playerLives);
 
-            if (this.players.Count > 1)
+            if (this.Players.Count > 1)
             {
-                var mostRecentPlayer = this.players[this.players.Count - 1];
+                var mostRecentPlayer = this.Players[this.Players.Count - 1];
                 var explosionX = mostRecentPlayer.X;
                 var explosionY = mostRecentPlayer.Y;
                 this.canvas.Children.Remove(mostRecentPlayer.Sprite);
-                this.players.Remove(mostRecentPlayer);
-                AudioManager.PlayPlayerBlowUp(this.gameManager.gameType);
-                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.gameType);
+                this.Players.Remove(mostRecentPlayer);
+                AudioManager.PlayPlayerBlowUp(this.gameManager.GameType);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.GameType);
             }
 
             if (this.playerLives >= 0)
             {
-                AudioManager.PlayPlayerBlowUp(this.gameManager.gameType);
+                AudioManager.PlayPlayerBlowUp(this.gameManager.GameType);
             }
 
             if (this.playerLives == 0)
             {
-                var explosionX = this.players[playerIndex].X;
-                var explosionY = this.players[playerIndex].Y;
-                this.canvas.Children.Remove(this.players[playerIndex].Sprite);
+                var explosionX = this.Players[playerIndex].X;
+                var explosionY = this.Players[playerIndex].Y;
+                this.canvas.Children.Remove(this.Players[playerIndex].Sprite);
                 this.uiTextManager.EndGame(false);
-                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.gameType);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.GameType);
             }
         }
 
@@ -187,18 +191,21 @@ namespace Galaga.Model
 
         private void checkCollision()
         {
-            for (var i = 0; i < this.players.Count; i++)
+            for (var i = 0; i < this.Players.Count; i++)
             {
-                if (!this.shieldActive && this.bulletManager.CheckSpriteCollision(this.players[i], true))
+                if (!this.shieldActive && this.bulletManager.CheckSpriteCollision(this.Players[i], true))
                 {
                     this.handlePlayerHit(i);
                 }
             }
         }
 
-        public void addLife()
+        /// <summary>
+        /// add a life to the player
+        /// </summary>
+        public void AddLife()
         {
-            for (var i = 0; i < this.players.Count; i++)
+            for (var i = 0; i < this.Players.Count; i++)
             {
                 this.playerLives++;
                 this.uiTextManager.UpdatePlayerLives(this.playerLives);
@@ -215,8 +222,8 @@ namespace Galaga.Model
                 var currentTime = DateTime.Now;
                 if (currentTime - this.lastFireTime >= this.fireCooldown)
                 {
-                    this.bulletManager.PlayersFiring = this.players.Count;
-                    foreach (var player in this.players)
+                    this.bulletManager.PlayersFiring = this.Players.Count;
+                    foreach (var player in this.Players)
                     {
                         var renderX = player.X + player.Width / 2;
                         var renderY = this.canvasHeight - PlayerOffsetFromBottom;
@@ -231,14 +238,18 @@ namespace Galaga.Model
 
         #region BonusPowerUps
 
+        /// <summary>
+        /// applies a power up the Players team
+        /// </summary>
+        /// <param name="powerUp"> the type of power up to add</param>
         public void ApplyPowerUp(PowerUps powerUp)
         {
-            AudioManager.PlayActivePowerUp(this.gameManager.gameType);
+            AudioManager.PlayActivePowerUp(this.gameManager.GameType);
             this.uiTextManager.SetPowerUpText(powerUp.ToString());
             switch (powerUp)
             {
                 case PowerUps.ExtraLife:
-                    this.addLife();
+                    this.AddLife();
                     break;
                 case PowerUps.SpeedBoost:
                     this.applySpeedBoost();
@@ -254,7 +265,7 @@ namespace Galaga.Model
 
         private void applySpeedBoost()
         {
-            foreach (var player in this.players)
+            foreach (var player in this.Players)
             {
                 player.SpeedX *= SpeedBoostMultiplier;
             }
@@ -269,7 +280,7 @@ namespace Galaga.Model
 
         private void enableTripleBullet()
         {
-            this.bulletManager.maxBulletsAllowed *= BulletCountMultiplier;
+            this.bulletManager.MaxBulletsAllowed *= BulletCountMultiplier;
             this.setPowerUpEndTime(() => this.resetTripleBullet());
         }
 
@@ -302,7 +313,7 @@ namespace Galaga.Model
 
         private void resetSpeedBoost()
         {
-            foreach (var player in this.players)
+            foreach (var player in this.Players)
             {
                 player.SpeedX /= SpeedBoostMultiplier;
             }
@@ -317,7 +328,7 @@ namespace Galaga.Model
 
         private void resetTripleBullet()
         {
-            this.bulletManager.maxBulletsAllowed /= BulletCountMultiplier;
+            this.bulletManager.MaxBulletsAllowed /= BulletCountMultiplier;
             this.resetUiPowerUpText();
         }
 
@@ -326,14 +337,17 @@ namespace Galaga.Model
             this.uiTextManager.SetPowerUpText(NoCurrentPowerUp);
         }
 
-        public void createClonePlayer()
+        /// <summary>
+        /// creates another player when called
+        /// </summary>
+        public void CreateClonePlayer()
         {
-            if (this.players.Count < MaxPlayerClones)
+            if (this.Players.Count < MaxPlayerClones)
             {
-                var clonePlayer = ShipFactory.CreatePlayerShip(this.gameManager.gameType);
-                clonePlayer.X = this.players[this.players.Count - 1].X + clonePlayer.Width + ClonesOffset;
+                var clonePlayer = ShipFactory.CreatePlayerShip(this.gameManager.GameType);
+                clonePlayer.X = this.Players[this.Players.Count - 1].X + clonePlayer.Width + ClonesOffset;
                 clonePlayer.Y = this.canvasHeight - clonePlayer.Height - PlayerOffsetFromBottom;
-                this.players.Add(clonePlayer);
+                this.Players.Add(clonePlayer);
                 this.canvas.Children.Add(clonePlayer.Sprite);
                 this.updatePlayerPosition(clonePlayer);
             }

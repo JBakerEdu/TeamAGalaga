@@ -10,6 +10,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Galaga.View
 {
+    /// <summary>
+    /// this is the game canvas the will be played on
+    /// </summary>
     public sealed partial class GameCanvas
     {
         private GameManager gameManager;
@@ -40,6 +43,10 @@ namespace Galaga.View
             this.movementTimer.Start();
         }
 
+        /// <summary>
+        /// Called when the page is navigated to. Initializes the game manager based on the provided parameter.
+        /// </summary>
+        /// <param name="e">The event data that contains the navigation parameter and other related information.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);

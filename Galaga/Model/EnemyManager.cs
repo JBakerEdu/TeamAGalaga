@@ -28,7 +28,6 @@ namespace Galaga.Model
         private IList<double> originalShipPositions;
         private bool movingRight = true;
         private DispatcherTimer attackTimer;
-        private readonly Random randomAttack = new Random();
         private readonly double attackSpeed = 2.5;
         private const int MinAttackInterval = 5000;
         private const int MaxAttackInterval = 15000;
@@ -38,6 +37,9 @@ namespace Galaga.Model
         private readonly UiTextManager uiTextManager;
         private readonly PlayerManager playerManager;
         private readonly GameManager gameManager;
+        /// <summary>
+        /// ends the game and shows the ending screens / text
+        /// </summary>
         public static Action<bool> OnGameEnd;
 
 
@@ -51,6 +53,8 @@ namespace Galaga.Model
         /// <param name="canvas">the canvas to work on</param>
         /// <param name="bulletManager">the bullet manager so it can talk about if a bullet hits an enemy </param>
         /// <param name="uiTextManager"> the UiTextManger so it can call when games ends and to add a score of the enemies when hit</param>
+        /// <param name="playerManager">the player manager the team is up against</param>
+        /// <param name="gameManager">the game manger to report back to</param>
         public EnemyManager(Canvas canvas, BulletManager bulletManager, UiTextManager uiTextManager, PlayerManager playerManager, GameManager gameManager)
         {
             this.canvas = canvas;
@@ -106,7 +110,7 @@ namespace Galaga.Model
             {
                 var attackingShip = level4Ships[this.random.Next(level4Ships.Count)];
                 this.attackingShips.Add(attackingShip);
-                this.startAttackPattern(attackingShip, this.playerManager.players[0]);
+                this.startAttackPattern(attackingShip, this.playerManager.Players[0]);
             }
 
             this.attackTimer.Interval = TimeSpan.FromMilliseconds(this.random.Next(MinAttackInterval, MaxAttackInterval));
@@ -198,7 +202,7 @@ namespace Galaga.Model
                 {
                     var randomIndex = this.random.Next(this.ships.Count);
                     var enemy = this.ships[randomIndex];
-                    this.fireEnemyBullet(enemy, this.playerManager.players[0]);
+                    this.fireEnemyBullet(enemy, this.playerManager.Players[0]);
                 }
             }
         }
@@ -250,19 +254,19 @@ namespace Galaga.Model
             switch (enemyLevel)
             {
                 case 1:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel1(this.gameManager.gameType);
+                    enemyShip = ShipFactory.CreateEnemyShipLevel1(this.gameManager.GameType);
                     break;
                 case 2:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel2(this.gameManager.gameType);
+                    enemyShip = ShipFactory.CreateEnemyShipLevel2(this.gameManager.GameType);
                     break;
                 case 3:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel3(this.gameManager.gameType);
+                    enemyShip = ShipFactory.CreateEnemyShipLevel3(this.gameManager.GameType);
                     break;
                 case 4:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel4(this.gameManager.gameType);
+                    enemyShip = ShipFactory.CreateEnemyShipLevel4(this.gameManager.GameType);
                     break;
                 default:
-                    enemyShip = ShipFactory.CreateEnemyShipLevel1(this.gameManager.gameType);
+                    enemyShip = ShipFactory.CreateEnemyShipLevel1(this.gameManager.GameType);
                     break;
             }
             return enemyShip;
@@ -340,6 +344,7 @@ namespace Galaga.Model
         /// This is how the enemy fires their fireball.
         /// </summary>
         /// <param name="enemy">The enemy firing the bullet.</param>
+        /// <param name="player">the player ship firing</param>
         private void fireEnemyBullet(EnemyShip enemy, Player player)
         {
             if (enemy != null && enemy.IsShooter && !this.uiTextManager.GameOver)
@@ -360,7 +365,7 @@ namespace Galaga.Model
                 var explosionX = enemy.X;
                 var explosionY = enemy.Y;
                 this.canvas.Children.Remove(enemy.Sprite);
-                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.gameType);
+                _ = ExplosionAnimationManager.Play(this.canvas, explosionX, explosionY, this.gameManager.GameType);
                 if (enemy.HasSecondSprite)
                 {
                     this.canvas.Children.Remove(enemy.Sprite2);
@@ -382,7 +387,7 @@ namespace Galaga.Model
                 if (enemy != null && this.bulletManager.CheckSpriteCollision(enemy, false))
                 {
                     this.destroyEnemy(enemy);
-                    AudioManager.PlayEnemyBlowUp(this.gameManager.gameType);
+                    AudioManager.PlayEnemyBlowUp(this.gameManager.GameType);
                     this.uiTextManager.UpdateScore(enemy);
                 }
             }

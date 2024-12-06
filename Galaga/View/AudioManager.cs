@@ -70,7 +70,8 @@ namespace Galaga.View
         /// General method to play a sound file.
         /// </summary>
         /// <param name="fileName">The name of the .wav file to play.</param>
-        private static async void playSound(string fileName, GameType gameType)
+        /// <param name="gameType">the game type to help decided on what folder to look through for sound effects</param>
+        private static void playSound(string fileName, GameType gameType)
         {
             try
             {

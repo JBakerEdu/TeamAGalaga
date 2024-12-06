@@ -7,13 +7,22 @@ using Windows.Storage;
 
 namespace Galaga.Model
 {
+    /// <summary>
+    /// manages the high scores of the game
+    /// </summary>
     public class HighScoreManager
     {
         private const string FileName = "HighScores.xml";
         private readonly StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
 
+        /// <summary>
+        /// the collection of high scores
+        /// </summary>
         public ObservableCollection<HighScoreEntry> HighScores { get; set; }
 
+        /// <summary>
+        /// sets the high scores from the loaded scores
+        /// </summary>
         public HighScoreManager()
         {
             this.HighScores = this.loadHighScores();
@@ -41,6 +50,10 @@ namespace Galaga.Model
             return new ObservableCollection<HighScoreEntry>();
         }
 
+        /// <summary>
+        /// saves the high scores to a file
+        /// </summary>
+        /// <exception cref="System.Exception">if it fails to save high scores</exception>
         public void SaveHighScores()
         {
             try
@@ -59,6 +72,13 @@ namespace Galaga.Model
             }
         }
 
+        /// <summary>
+        /// Adds a new score entry to the high scores list, sorts the list by score (descending), 
+        /// player name (ascending), and level (descending), and ensures the list contains only the top 10 entries. 
+        /// The updated high scores are then saved persistently.
+        /// </summary>
+        /// <param name="playerName">The name of the player to associate with the score.</param>
+        /// <param name="score">The score to add to the high scores list.</param>
         public void AddScore(string playerName, int score)
         {
             this.HighScores.Add(new HighScoreEntry { PlayerName = playerName, Score = score });
@@ -70,6 +90,9 @@ namespace Galaga.Model
             this.SaveHighScores();
         }
 
+        /// <summary>
+        /// clears the file and reset the high scores
+        /// </summary>
         public void ResetHighScores()
         {
             this.HighScores.Clear();

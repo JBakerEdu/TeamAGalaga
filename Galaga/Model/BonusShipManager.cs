@@ -71,7 +71,7 @@ namespace Galaga.Model
                 return;
             }
 
-            this.bonusShip = ShipFactory.CreateBonusShip(this.gameManager.gameType);
+            this.bonusShip = ShipFactory.CreateBonusShip(this.gameManager.GameType);
             this.canvas.Children.Add(this.bonusShip.Sprite);
             this.bonusShip.X = this.canvas.Width;
             this.bonusShip.Y = TopOffset;
@@ -97,7 +97,7 @@ namespace Galaga.Model
 
                 if (this.canFire && this.random.Next(0, 100) < BonusFireChance)
                 {
-                    this.fireBullet(this.gameManager.playerManager.players[0]);
+                    this.fireBullet(this.gameManager.PlayerManager.Players[0]);
                     this.startFireCooldown();
                 }
             }
@@ -146,7 +146,7 @@ namespace Galaga.Model
         {
             while (this.bonusShipActive)
             {
-                AudioManager.PlayActiveBonusShip(this.gameManager.gameType);
+                AudioManager.PlayActiveBonusShip(this.gameManager.GameType);
                 await Task.Delay(SoundEffectMilliseconds);
             }
         }
@@ -186,7 +186,7 @@ namespace Galaga.Model
         private void handleBonusShipHit()
         {
             this.removeBonusShip();
-            AudioManager.PlayEnemyBlowUp(this.gameManager.gameType);
+            AudioManager.PlayEnemyBlowUp(this.gameManager.GameType);
             if (this.gameManager.CurrentGameLevel() > 1)
             {
                 this.gameManager.ClonePlayerShip();

@@ -4,8 +4,14 @@ using Galaga.Model;
 
 namespace Galaga.View
 {
+    /// <summary>
+    /// Represents the start screen page of the application.
+    /// </summary>
     public sealed partial class StartScreenPage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StartScreenPage"/> class.
+        /// </summary>
         public StartScreenPage()
         {
             this.InitializeComponent();

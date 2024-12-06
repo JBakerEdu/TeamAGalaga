@@ -21,8 +21,13 @@ namespace Galaga.Model
         private double velocityX = 0;
         private double enemyVelocityY = 5;
         private double playerVelocityY = -5;
-
-        public int maxBulletsAllowed { get; set; }
+        /// <summary>
+        /// this is the max bullets allowed for a single player
+        /// </summary>
+        public int MaxBulletsAllowed { get; set; }
+        /// <summary>
+        /// the number of Players on the team firing at a time
+        /// </summary>
         public int PlayersFiring { get; set; }
 
         #endregion
@@ -33,12 +38,13 @@ namespace Galaga.Model
         /// Creates the game manager class and init the game
         /// </summary>
         /// <param name="canvas">the canvas passes in</param>
+        /// <param name="gameManager">the game manger to report back to</param>
         /// <exception cref="ArgumentNullException"></exception>
         public BulletManager(Canvas canvas, GameManager gameManager)
         {
             this.canvas = canvas;
             this.gameManager = gameManager;
-            this.maxBulletsAllowed = 3;
+            this.MaxBulletsAllowed = 3;
             this.canvasHeight = canvas.Height;
             this.activePlayerBullets = new List<Bullet>();
             this.activeEnemyBullets = new List<Bullet>();
@@ -111,14 +117,14 @@ namespace Galaga.Model
         /// </summary>
         public void PlayerFiresBullet(double renderX, double renderY)
         {
-            if (this.activePlayerBullets.Count < this.maxBulletsAllowed * this.PlayersFiring)
+            if (this.activePlayerBullets.Count < this.MaxBulletsAllowed * this.PlayersFiring)
             {
-                var bullet = BulletFactory.CreateBullet(this.velocityX, this.playerVelocityY, this.gameManager.gameType);
+                var bullet = BulletFactory.CreateBullet(this.velocityX, this.playerVelocityY, this.gameManager.GameType);
                 renderX = renderX - bullet.Sprite.Width / 2;
                 renderY = renderY - bullet.Sprite.Height;
                 bullet.RenderAt(renderX, renderY);
                 this.canvas.Children.Add(bullet.Sprite);
-                AudioManager.PlayPlayerShoot(this.gameManager.gameType);
+                AudioManager.PlayPlayerShoot(this.gameManager.GameType);
                 this.activePlayerBullets.Add(bullet);
             }
         }
@@ -133,8 +139,8 @@ namespace Galaga.Model
         /// <param name="aimedAtPlayer"></param>
         public void FireEnemyBullet(double renderX, double renderY, double playerX = 0, double playerY = 0, bool aimedAtPlayer = false)
         {
-            double bulletVelocityX = this.velocityX;
-            double bulletVelocityY = this.enemyVelocityY;
+            var bulletVelocityX = this.velocityX;
+            var bulletVelocityY = this.enemyVelocityY;
 
             if (aimedAtPlayer)
             {
@@ -146,11 +152,11 @@ namespace Galaga.Model
                 bulletVelocityY = deltaY / magnitude * 5;
             }
 
-            var bullet = BulletFactory.CreateBullet(bulletVelocityX, bulletVelocityY, this.gameManager.gameType);
+            var bullet = BulletFactory.CreateBullet(bulletVelocityX, bulletVelocityY, this.gameManager.GameType);
             renderX = renderX - bullet.Width / 2;
             bullet.RenderAt(renderX, renderY);
             this.canvas.Children.Add(bullet.Sprite);
-            AudioManager.PlayEnemyShoot(this.gameManager.gameType);
+            AudioManager.PlayEnemyShoot(this.gameManager.GameType);
             this.activeEnemyBullets.Add(bullet);
         }
 

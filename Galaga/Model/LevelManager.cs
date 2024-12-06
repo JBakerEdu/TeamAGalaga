@@ -10,18 +10,19 @@ namespace Galaga.Model
     {
         private readonly EnemyManager enemyManager;
         private readonly UiTextManager uiTextManager;
-
-        public int currentLevel { get; private set; }
         private const int MaxLevel = 3;
         private const int MinPossibleFireRateMin = 4;
         private const int MinPossibleFireRateMax = 10;
         private const int FireRateMin = 12;
         private const int FireRateMax = 35;
-
         private const int FirstRowShips = 1;
         private const int SecondRowShips = 2;
         private const int ThirdRowShips = 2;
         private const int FourthRowShips = 3;
+        /// <summary>
+        /// the level the game is currently on
+        /// </summary>
+        public int CurrentLevel { get; private set; }
 
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Galaga.Model
         {
             this.enemyManager = enemyManager ?? throw new ArgumentNullException(nameof(enemyManager));
             this.uiTextManager = uiTextManager ?? throw new ArgumentNullException(nameof(uiTextManager));
-            this.currentLevel = 1;
+            this.CurrentLevel = 1;
         }
 
         /// <summary>
@@ -42,18 +43,18 @@ namespace Galaga.Model
         /// </summary>
         public void SetLevelParameters()
         {
-            if (this.currentLevel > MaxLevel)
+            if (this.CurrentLevel > MaxLevel)
             {
                 this.uiTextManager.EndGame(true);
                 return;
             }
 
-            int[] shipsPerRow = { FirstRowShips + this.currentLevel, SecondRowShips + this.currentLevel, ThirdRowShips + this.currentLevel, FourthRowShips + this.currentLevel };
-            var fireIntervalMin = Math.Max(FireRateMin - this.currentLevel, MinPossibleFireRateMin);
-            var fireIntervalMax = Math.Max(FireRateMax - this.currentLevel * 2, MinPossibleFireRateMax);
+            int[] shipsPerRow = { FirstRowShips + this.CurrentLevel, SecondRowShips + this.CurrentLevel, ThirdRowShips + this.CurrentLevel, FourthRowShips + this.CurrentLevel };
+            var fireIntervalMin = Math.Max(FireRateMin - this.CurrentLevel, MinPossibleFireRateMin);
+            var fireIntervalMax = Math.Max(FireRateMax - this.CurrentLevel * 2, MinPossibleFireRateMax);
 
             this.enemyManager.UpdateLevelSettings(shipsPerRow, fireIntervalMin, fireIntervalMax);
-            this.uiTextManager.UpdateLevel(this.currentLevel);
+            this.uiTextManager.UpdateLevel(this.CurrentLevel);
         }
 
         /// <summary>
@@ -61,9 +62,9 @@ namespace Galaga.Model
         /// </summary>
         public void NextLevel()
         {
-            if (this.currentLevel < MaxLevel)
+            if (this.CurrentLevel < MaxLevel)
             {
-                this.currentLevel++;
+                this.CurrentLevel++;
                 this.SetLevelParameters();
                 this.enemyManager.InitializeEnemies();
             }
@@ -78,7 +79,7 @@ namespace Galaga.Model
         /// </summary>
         public void StartGame()
         {
-            this.currentLevel = 1;
+            this.CurrentLevel = 1;
             this.SetLevelParameters();
             this.enemyManager.InitializeEnemies();
         }
