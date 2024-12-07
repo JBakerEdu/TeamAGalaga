@@ -28,6 +28,7 @@ namespace Galaga.Model.MovementPattern
             Action<EnemyShip> updatePosition,
             Action<EnemyShip> handleSecondSprite)
         {
+
             for (var i = 0; i < ships.Count; i++)
             {
                 var ship = ships[i];
