@@ -14,7 +14,7 @@ namespace Galaga.Model
 
         private const int TopOffset = 40;
         private const int RandomMaxValue = 100;
-        private const int MaxIterations = 20;
+        private const int MaxIterations = 500;
         private readonly Canvas canvas;
         private readonly BulletManager bulletManager;
         private readonly GameManager gameManager;
