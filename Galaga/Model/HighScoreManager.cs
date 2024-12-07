@@ -79,9 +79,10 @@ namespace Galaga.Model
         /// </summary>
         /// <param name="playerName">The name of the player to associate with the score.</param>
         /// <param name="score">The score to add to the high scores list.</param>
-        public void AddScore(string playerName, int score)
+        /// <param name="level">The level the player ended the game on</param>
+        public void AddScore(string playerName, int score, int level)
         {
-            this.HighScores.Add(new HighScoreEntry { PlayerName = playerName, Score = score });
+            this.HighScores.Add(new HighScoreEntry { PlayerName = playerName, Score = score, Level = level });
             this.HighScores = new ObservableCollection<HighScoreEntry>(this.HighScores
                 .OrderByDescending(h => h.Score)
                 .ThenBy(h => h.PlayerName)

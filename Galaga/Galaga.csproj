@@ -140,6 +140,7 @@
     <Compile Include="Model\EnemyShip.cs" />
     <Compile Include="Model\GameManager.cs" />
     <Compile Include="Model\GameObject.cs" />
+    <Compile Include="Model\GameResult.cs" />
     <Compile Include="Model\GameType.cs" />
     <Compile Include="Model\HighScoreEntry.cs" />
     <Compile Include="Model\HighScoreManager.cs" />

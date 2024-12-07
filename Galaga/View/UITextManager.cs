@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Galaga.Model;
+using System.Text.RegularExpressions;
 
 namespace Galaga.View
 {
@@ -204,7 +205,12 @@ namespace Galaga.View
                 Canvas.SetTop(this.gameOverTextBlock, (this.canvas.Height - textSize.Height) / 2);
                 AudioManager.PlayGameOver(this.gameManager.GameType);
                 await Task.Delay(WaitTime);
-                (Window.Current.Content as Frame)?.Navigate(typeof(HighScorePage), this.score);
+                string text = this.levelTextBlock.Text;
+                string numberPart = Regex.Match(text, @"\d+").Value;
+                if (int.TryParse(numberPart, out int level))
+                {
+                    (Window.Current.Content as Frame)?.Navigate(typeof(HighScorePage), new GameResult { Score = this.score, Level = level });
+                }
             }
         }
     }

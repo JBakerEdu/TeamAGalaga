@@ -120,11 +120,17 @@ namespace Galaga.Model.ViewModel
 
         private void handleNavigationFromGameCanvas(object parameter)
         {
-            if (parameter is int score && score >= 0)
+            if (parameter is GameResult result)
             {
-                if (this.checkIfTop10(score))
+                var score = result.Score;
+                var level = result.Level;
+
+                if (score >= 0)
                 {
-                    this.promptForNameAndAddScore(score);
+                    if (this.checkIfTop10(score))
+                    {
+                        this.promptForNameAndAddScore(score, level);
+                    }
                 }
             }
         }
@@ -153,7 +159,7 @@ namespace Galaga.Model.ViewModel
                    this.manager.HighScores.Any(entry => score > entry.Score);
         }
 
-        private async void promptForNameAndAddScore(int score)
+        private async void promptForNameAndAddScore(int score, int level)
         {
             var nameInputDialog = new ContentDialog
             {
@@ -169,7 +175,7 @@ namespace Galaga.Model.ViewModel
             if (await nameInputDialog.ShowAsync() == ContentDialogResult.Primary)
             {
                 var playerName = ((TextBox)nameInputDialog.Content).Text;
-                this.manager.AddScore(playerName, score);
+                this.manager.AddScore(playerName, score, level);
 
                 this.HighScores = new ObservableCollection<HighScoreEntry>(this.manager.HighScores);
             }
