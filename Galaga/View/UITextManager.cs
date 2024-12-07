@@ -205,9 +205,9 @@ namespace Galaga.View
                 Canvas.SetTop(this.gameOverTextBlock, (this.canvas.Height - textSize.Height) / 2);
                 AudioManager.PlayGameOver(this.gameManager.GameType);
                 await Task.Delay(WaitTime);
-                string text = this.levelTextBlock.Text;
-                string numberPart = Regex.Match(text, @"\d+").Value;
-                if (int.TryParse(numberPart, out int level))
+                var text = this.levelTextBlock.Text;
+                var numberPart = Regex.Match(text, @"\d+").Value;
+                if (int.TryParse(numberPart, out var level))
                 {
                     (Window.Current.Content as Frame)?.Navigate(typeof(HighScorePage), new GameResult { Score = this.score, Level = level });
                 }

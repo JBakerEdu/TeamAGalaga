@@ -29,21 +29,14 @@ namespace Galaga.Model.MovementPattern
             Action<EnemyShip> handleSecondSprite)
         {
             double amplitude = 20;
+            var frequency = 0.05;
 
-            double frequency = 0.05;
-
-            for (int i = 0; i < ships.Count; i++)
+            foreach (var ship in ships)
             {
-                var ship = ships[i];
-                double originalX = originalPositions[i];
-                double baseY = ship.BaseYPosition;
-
+                var baseY = ship.BaseYPosition;
                 ship.X += movingRight ? movementSpeed : -movementSpeed;
-
                 ship.Y = baseY + amplitude * Math.Sin(frequency * ship.X);
-
                 updatePosition(ship);
-
                 handleSecondSprite(ship);
             }
         }

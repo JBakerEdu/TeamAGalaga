@@ -30,11 +30,9 @@ namespace Galaga.Model.MovementPattern
         {
             foreach (var ship in ships)
             {
-                // Apply horizontal movement based on direction
                 ship.X += movingRight ? movementSpeed : -movementSpeed;
-
-                // Update the ship's position
                 updatePosition(ship);
+                handleSecondSprite(ship);
             }
         }
     }

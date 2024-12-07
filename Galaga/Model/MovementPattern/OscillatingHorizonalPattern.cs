@@ -12,7 +12,7 @@ namespace Galaga.Model.MovementPattern
         /// <summary>
         /// Controls the oscillation phase for the movement pattern.
         /// </summary>
-        private double phase = 0;
+        private double phase;
 
         /// <summary>
         /// Applies the oscillating horizontal movement pattern to a list of enemy ships.
@@ -37,22 +37,16 @@ namespace Galaga.Model.MovementPattern
 
             foreach (var ship in ships)
             {
-                // Apply horizontal movement based on direction and speed
                 ship.X += horizontalDirection * movementSpeed;
-
-                // Apply sinusoidal oscillation
-                ship.X += Math.Sin(phase) * 5;
-
-                // Update the ship's position
+                ship.X += Math.Sin(this.phase) * 5;
                 updatePosition(ship);
+                handleSecondSprite(ship);
             }
-
-            // Increment the phase for oscillation
-            phase += 0.1;
-
-            // Reset phase if it exceeds one full cycle (2 * PI)
-            if (phase > 2 * Math.PI)
-                phase -= 2 * Math.PI;
+            this.phase += 0.1;
+            if (this.phase > 2 * Math.PI)
+            {
+                this.phase -= 2 * Math.PI;
+            }
         }
     }
 }
