@@ -27,28 +27,22 @@
     </UserControl.Resources>
 
     <Canvas>
-        <!-- Face -->
         <Ellipse Width="26" Height="32" Fill="{StaticResource FaceColor}" 
                  Stroke="{StaticResource StrokeColor}" StrokeThickness="1"
                  Canvas.Left="3" Canvas.Top="7" />
 
-        <!-- Eyes -->
         <Ellipse Width="6" Height="5" Fill="{StaticResource EyeColor}" 
                  Canvas.Left="9" Canvas.Top="16" />
 
-        <!-- Pupils -->
         <Ellipse Width="2" Height="2" Fill="{StaticResource PupilColor}" 
                  Canvas.Left="12" Canvas.Top="18" />
 
-        <!-- Smile -->
         <Path Fill="{StaticResource MouthColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.7"
               Data="M18,35 Q25,45 32,35 Q25,42 18,35" Canvas.Top="27.13" HorizontalAlignment="Left" UseLayoutRounding="False" VerticalAlignment="Top" Canvas.Left="5.345" Height="5" Stretch="Fill" Width="21" />
 
-        <!-- Hair Tufts -->
         <Path Fill="{StaticResource HairColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="0.5"
               Data="M25,5 C15,0 5,10 8,20 L10,15 L12,25 L15,18 L20,25 L25,10 L30,25 L35,18 L38,25 L40,15 L42,20 C45,10 35,0 25,5" Canvas.Top="23.796" HorizontalAlignment="Left" UseLayoutRounding="False" VerticalAlignment="Top" Canvas.Left="6.494" Height="4" Stretch="Fill" Width="19" />
 
-        <!-- Optional Santa Hat -->
         <Path Fill="{StaticResource HatColor}" Stroke="{StaticResource StrokeColor}" StrokeThickness="1"
               Data="M20,5 C10,0 5,10 8,25 L42,25 C45,10 40,0 30,5 Z" Canvas.Top="5.393" UseLayoutRounding="False" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="2.019" Height="9" Stretch="Fill" Width="28" />
         <Ellipse Width="4" Height="4" Fill="{StaticResource HatTrimColor}" 
@@ -120,8 +114,6 @@
                 <CompositeTransform Rotation="71.608"/>
             </Path.RenderTransform>
         </Path>
-
-
 
     </Canvas>
 </local:BaseSprite>

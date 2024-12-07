@@ -13,16 +13,11 @@
 
     <UserControl.Resources>
         <SolidColorBrush x:Key="LightBlueBrush" Color="#ADD8E6" />
-        <!-- Light blue -->
         <SolidColorBrush x:Key="WhiteBrush" Color="#FFFFFF" />
-        <!-- White -->
     </UserControl.Resources>
 
     <Canvas>
-        <!-- First Row: Light Blue Snowflake -->
-        <!-- Central Circle -->
         <Ellipse Width="5" Height="5" Fill="{StaticResource LightBlueBrush}" Canvas.Top="15" Canvas.Left="15" />
-        <!-- Arms -->
         <Line X1="17.5" Y1="0" X2="17.5" Y2="10" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" />
         <Line X1="17.5" Y1="5" X2="12.5" Y2="7.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="-12" Canvas.Top="14" />
         <Line X1="17.5" Y1="5" X2="22.5" Y2="7.5" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1" Canvas.Left="12" Canvas.Top="14" />
@@ -40,10 +35,7 @@
         <Line X1="30" Y1="5" X2="25" Y2="10" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" Canvas.Left="-4" Canvas.Top="4" />
         <Line X1="10" Y1="25" X2="5" Y2="30" Stroke="{StaticResource LightBlueBrush}" StrokeThickness="1.5" Canvas.Left="4" Canvas.Top="-4" />
 
-        <!-- Second Row: White Snowflake -->
-        <!-- Central Circle -->
         <Ellipse Width="2.5" Height="2.5" Fill="{StaticResource WhiteBrush}" Canvas.Top="16" Canvas.Left="16" RenderTransformOrigin="-0.263,0.003" />
-        <!-- Arms -->
         <Line X1="17.5" Y1="5" X2="17.5" Y2="12" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
         <Line X1="12.5" Y1="12.5" X2="15" Y2="15" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
         <Line X1="22.5" Y1="12.5" X2="20" Y2="15" Stroke="{StaticResource WhiteBrush}" StrokeThickness="1" />
