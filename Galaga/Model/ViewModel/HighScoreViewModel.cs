@@ -16,6 +16,8 @@ namespace Galaga.Model.ViewModel
     {
         private readonly HighScoreManager manager;
 
+        private const int TopIndexCap = 10;
+
         private readonly INavigationService navigationService;
 
         private bool canNavigateBack;
@@ -127,7 +129,7 @@ namespace Galaga.Model.ViewModel
 
                 if (score >= 0)
                 {
-                    if (this.checkIfTop10(score))
+                    if (this.checkIfTop(score))
                     {
                         this.promptForNameAndAddScore(score, level);
                     }
@@ -153,9 +155,9 @@ namespace Galaga.Model.ViewModel
             this.HighScores = new ObservableCollection<HighScoreEntry>(sortedScores);
         }
 
-        private bool checkIfTop10(int score)
+        private bool checkIfTop(int score)
         {
-            return this.manager.HighScores.Count < 10 ||
+            return this.manager.HighScores.Count < TopIndexCap ||
                    this.manager.HighScores.Any(entry => score > entry.Score);
         }
 

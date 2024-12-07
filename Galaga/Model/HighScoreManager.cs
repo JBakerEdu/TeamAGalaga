@@ -13,6 +13,7 @@ namespace Galaga.Model
     public class HighScoreManager
     {
         private const string FileName = "HighScores.xml";
+        private const int TopValuesAllowed = 10;
         private readonly StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace Galaga.Model
                 .OrderByDescending(h => h.Score)
                 .ThenBy(h => h.PlayerName)
                 .ThenByDescending(h => h.Level)
-                .Take(10));
+                .Take(TopValuesAllowed));
             this.SaveHighScores();
         }
 

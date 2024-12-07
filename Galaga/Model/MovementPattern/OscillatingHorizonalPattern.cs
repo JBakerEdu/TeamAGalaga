@@ -34,11 +34,12 @@ namespace Galaga.Model.MovementPattern
             Action<EnemyShip> handleSecondSprite)
         {
             double horizontalDirection = movingRight ? 1 : -1;
+            double shipSpeed = 5;
 
             foreach (var ship in ships)
             {
                 ship.X += horizontalDirection * movementSpeed;
-                ship.X += Math.Sin(this.phase) * 5;
+                ship.X += Math.Sin(this.phase) * shipSpeed;
                 updatePosition(ship);
                 handleSecondSprite(ship);
             }

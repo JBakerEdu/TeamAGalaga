@@ -405,12 +405,7 @@ namespace Galaga.Model
         {
             if (enemy != null && enemy.IsShooter && !this.uiTextManager.GameOver)
             {
-                this.bulletManager.FireEnemyBullet(
-                    enemy.X + enemy.Width / 2,
-                    enemy.Y + enemy.Height,
-                    player.X + player.Width / 2,
-                    player.Y + player.Height / 2,
-                    enemy.Level == 4);
+                this.bulletManager.FireEnemyBullet(enemy.X + enemy.Width / 2, enemy.Y + enemy.Height, player.X + player.Width / 2, player.Y + player.Height / 2, enemy.Level == 4);
             }
         }
 
