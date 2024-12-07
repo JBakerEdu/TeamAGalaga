@@ -143,6 +143,11 @@
     <Compile Include="Model\GameType.cs" />
     <Compile Include="Model\HighScoreEntry.cs" />
     <Compile Include="Model\HighScoreManager.cs" />
+    <Compile Include="Model\MovementPattern\DiagonalPattern.cs" />
+    <Compile Include="Model\MovementPattern\IMovementPattern.cs" />
+    <Compile Include="Model\MovementPattern\OscillatingHorizonalPattern.cs" />
+    <Compile Include="Model\MovementPattern\StraightPattern.cs" />
+    <Compile Include="Model\MovementPattern\ZigZagPattern.cs" />
     <Compile Include="Model\NavigationService.cs" />
     <Compile Include="Model\ViewModel\HighScoreViewModel.cs" />
     <Compile Include="Model\LevelManager.cs" />

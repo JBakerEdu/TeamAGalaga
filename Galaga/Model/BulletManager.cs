@@ -119,7 +119,7 @@ namespace Galaga.Model
         {
             if (this.activePlayerBullets.Count < this.MaxBulletsAllowed * this.PlayersFiring)
             {
-                var bullet = BulletFactory.CreateBullet(this.velocityX, this.playerVelocityY, this.gameManager.GameType);
+                var bullet = BulletFactory.CreateBullet(this.velocityX, this.playerVelocityY*4, this.gameManager.GameType);
                 renderX = renderX - bullet.Sprite.Width / 2;
                 renderY = renderY - bullet.Sprite.Height;
                 bullet.RenderAt(renderX, renderY);

@@ -32,6 +32,7 @@ namespace Galaga.Model
         /// </summary>
         public bool IsShooter { get; private set; }
 
+        public double BaseYPosition { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EnemyShip"/> class.
