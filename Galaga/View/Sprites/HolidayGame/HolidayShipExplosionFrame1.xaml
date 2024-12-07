@@ -12,40 +12,31 @@
     Width="50">
 
     <UserControl.Resources>
-        <!-- Colors for snowman -->
         <SolidColorBrush x:Key="BrightSnow" Color="White"/>
         <SolidColorBrush x:Key="ShadowSnow" Color="#FFA0D8FF"/>
-        <!-- Slightly darker blue -->
         <SolidColorBrush x:Key="Black" Color="Black"/>
         <SolidColorBrush x:Key="Orange" Color="Orange"/>
     </UserControl.Resources>
 
     <Canvas>
-        <!-- Bottom snowball -->
         <Ellipse Fill="{StaticResource BrightSnow}" Width="20" Height="20" Canvas.Left="15" Canvas.Top="30" />
         <Ellipse Fill="{StaticResource ShadowSnow}" Width="43" Height="30" Canvas.Top="30" Opacity="0.3" Canvas.Left="4" />
 
-        <!-- Middle snowball -->
         <Ellipse Fill="{StaticResource BrightSnow}" Width="15" Height="15" Canvas.Left="17.5" Canvas.Top="15" />
         <Ellipse Fill="{StaticResource ShadowSnow}" Width="33" Height="20" Canvas.Left="9" Canvas.Top="17" Opacity="0.3" />
 
-        <!-- Head snowball -->
         <Ellipse Fill="{StaticResource BrightSnow}" Width="10" Height="10" Canvas.Left="20" Canvas.Top="5" />
         <Ellipse Fill="{StaticResource ShadowSnow}" Width="25" Height="19" Canvas.Left="13" Opacity="0.3" />
 
-        <!-- Eyes -->
         <Ellipse Fill="{StaticResource Black}" Width="1.5" Height="1.5" Canvas.Left="24" Canvas.Top="6" />
         <Ellipse Fill="{StaticResource Black}" Width="1.5" Height="1.5" Canvas.Left="31" Canvas.Top="6" />
 
-        <!-- Nose -->
         <Polygon Points="25,10 25,12 30,11" Fill="{StaticResource Orange}" Canvas.Left="3" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-        <!-- Buttons -->
         <Ellipse Fill="{StaticResource Black}" Width="2" Height="2" Canvas.Left="24" Canvas.Top="19" />
         <Ellipse Fill="{StaticResource Black}" Width="2" Height="2" Canvas.Left="24" Canvas.Top="22" />
         <Ellipse Fill="{StaticResource Black}" Width="2" Height="2" Canvas.Left="24" Canvas.Top="26" />
 
-        <!-- Arms -->
         <Line X1="15" Y1="20" X2="5" Y2="10" Stroke="{StaticResource Black}" StrokeThickness="1" Canvas.Left="-2" Canvas.Top="2" />
         <Line X1="35" Y1="20" X2="45" Y2="10" Stroke="{StaticResource Black}" StrokeThickness="1" HorizontalAlignment="Left" Canvas.Left="1" VerticalAlignment="Center" />
         <Ellipse Fill="{StaticResource ShadowSnow}" Width="7" Height="5" Canvas.Top="55" Opacity="0.3" />

@@ -12,6 +12,7 @@ namespace Galaga.Model
     public class BulletManager
     {
         #region Data members
+        private const double EnemyBulletSpeed = 5;
         private readonly Canvas canvas;
         private readonly double canvasHeight;
         private readonly IList<Bullet> activePlayerBullets;
@@ -148,8 +149,8 @@ namespace Galaga.Model
                 var deltaY = playerY - renderY;
 
                 var magnitude = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-                bulletVelocityX = deltaX / magnitude * 5;
-                bulletVelocityY = deltaY / magnitude * 5;
+                bulletVelocityX = deltaX / magnitude * EnemyBulletSpeed;
+                bulletVelocityY = deltaY / magnitude * EnemyBulletSpeed;
             }
 
             var bullet = BulletFactory.CreateBullet(bulletVelocityX, bulletVelocityY, this.gameManager.GameType);
@@ -194,10 +195,7 @@ namespace Galaga.Model
             var shipTop = ship.Y;
             var shipBottom = ship.Y + ship.Height;
 
-            return bulletBottom >= shipTop &&
-                   bulletTop <= shipBottom &&
-                   bulletRight >= shipLeft &&
-                   bulletLeft <= shipRight;
+            return bulletBottom >= shipTop && bulletTop <= shipBottom && bulletRight >= shipLeft && bulletLeft <= shipRight;
         }
     }
 }

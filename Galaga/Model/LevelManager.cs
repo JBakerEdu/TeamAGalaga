@@ -19,6 +19,7 @@ namespace Galaga.Model
         private const int SecondRowShips = 2;
         private const int ThirdRowShips = 2;
         private const int FourthRowShips = 3;
+        private const int StartLevel = 1;
         /// <summary>
         /// the level the game is currently on
         /// </summary>
@@ -35,7 +36,7 @@ namespace Galaga.Model
         {
             this.enemyManager = enemyManager ?? throw new ArgumentNullException(nameof(enemyManager));
             this.uiTextManager = uiTextManager ?? throw new ArgumentNullException(nameof(uiTextManager));
-            this.CurrentLevel = 1;
+            this.CurrentLevel = StartLevel;
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace Galaga.Model
         /// </summary>
         public void StartGame()
         {
-            this.CurrentLevel = 1;
+            this.CurrentLevel = StartLevel;
             this.SetLevelParameters();
             this.enemyManager.InitializeEnemies();
         }

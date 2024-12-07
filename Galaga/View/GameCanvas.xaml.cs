@@ -98,7 +98,7 @@ namespace Galaga.View
 
         private void showHighScoreBoard()
         {
-            Frame.Navigate(typeof(HighScorePage)); // Ensure HighScorePage.xaml is set up with the ViewModel binding
+            Frame.Navigate(typeof(HighScorePage));
         }
     }
 }

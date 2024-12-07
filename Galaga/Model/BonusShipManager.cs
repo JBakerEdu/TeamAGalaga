@@ -13,7 +13,8 @@ namespace Galaga.Model
         #region Data Members
 
         private const int TopOffset = 40;
-        private const int MaxIterations = 20;
+        private const int RandomMaxValue = 100;
+        private const int MaxIterations = 500;
         private readonly Canvas canvas;
         private readonly BulletManager bulletManager;
         private readonly GameManager gameManager;
@@ -64,9 +65,7 @@ namespace Galaga.Model
         /// </summary>
         public void TrySpawnBonusShip()
         {
-            if (this.bonusShipActive ||
-                this.random.Next(0, 100) >= BonusSpawnChance ||
-                (DateTime.Now - this.lastSpawnTime).TotalMilliseconds < MinimumSpawnDelayMilliseconds)
+            if (this.bonusShipActive || this.random.Next(0, RandomMaxValue) >= BonusSpawnChance || (DateTime.Now - this.lastSpawnTime).TotalMilliseconds < MinimumSpawnDelayMilliseconds)
             {
                 return;
             }
@@ -95,7 +94,7 @@ namespace Galaga.Model
                     return;
                 }
 
-                if (this.canFire && this.random.Next(0, 100) < BonusFireChance)
+                if (this.canFire && this.random.Next(0, RandomMaxValue) < BonusFireChance)
                 {
                     this.fireBullet(this.gameManager.PlayerManager.Players[0]);
                     this.startFireCooldown();

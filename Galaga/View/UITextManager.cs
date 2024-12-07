@@ -20,6 +20,7 @@ namespace Galaga.View
         private const int SmallFontSize = 15;
         private const int LargeFontSize = 25;
         private const int WaitTime = 3000;
+        private const int Offset = 10;
 
         /// <summary>
         /// Marks when game is over
@@ -79,7 +80,7 @@ namespace Galaga.View
                 var textSize = this.powerUpTextBlock.DesiredSize;
 
                 Canvas.SetLeft(this.powerUpTextBlock, (this.canvas.Width - textSize.Width) / 2);
-                Canvas.SetTop(this.powerUpTextBlock, 10);
+                Canvas.SetTop(this.powerUpTextBlock, Offset);
             }
         }
 
@@ -97,7 +98,7 @@ namespace Galaga.View
             var textSize = this.levelTextBlock.DesiredSize;
 
             Canvas.SetLeft(this.levelTextBlock, (this.canvas.Width - textSize.Width) / 2);
-            Canvas.SetTop(this.levelTextBlock, this.canvas.Height - textSize.Height - 10);
+            Canvas.SetTop(this.levelTextBlock, this.canvas.Height - textSize.Height - Offset);
         }
 
         private void initializeScoreGame()
@@ -113,8 +114,8 @@ namespace Galaga.View
             this.scoreTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
             var textSize = this.scoreTextBlock.DesiredSize;
 
-            Canvas.SetLeft(this.scoreTextBlock, this.canvas.Width - textSize.Width - 10);
-            Canvas.SetTop(this.scoreTextBlock, 10);
+            Canvas.SetLeft(this.scoreTextBlock, this.canvas.Width - textSize.Width - Offset);
+            Canvas.SetTop(this.scoreTextBlock, Offset);
         }
 
         private void initializePlayerLives(int playerLives)
@@ -124,7 +125,7 @@ namespace Galaga.View
                 Text = $"Lives: {playerLives}",
                 FontSize = SmallFontSize,
                 Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.White),
-                Margin = new Thickness(10, 10, 0, 0)
+                Margin = new Thickness(Offset, Offset, 0, 0)
             };
             this.canvas.Children.Add(this.playerLivesTextBlock);
         }
@@ -150,7 +151,7 @@ namespace Galaga.View
             this.levelTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
             var secondTextSize = this.levelTextBlock.DesiredSize;
             Canvas.SetLeft(this.levelTextBlock, (this.canvas.Width - secondTextSize.Width) / 2);
-            Canvas.SetTop(this.levelTextBlock, this.canvas.Height - secondTextSize.Height - 10);
+            Canvas.SetTop(this.levelTextBlock, this.canvas.Height - secondTextSize.Height - Offset);
         }
 
         /// <summary>
@@ -163,8 +164,8 @@ namespace Galaga.View
             this.scoreTextBlock.Text = $"Score: {this.score}";
             this.scoreTextBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
             var textSize = this.scoreTextBlock.DesiredSize;
-            Canvas.SetLeft(this.scoreTextBlock, this.canvas.Width - textSize.Width - 10);
-            Canvas.SetTop(this.scoreTextBlock, 10);
+            Canvas.SetLeft(this.scoreTextBlock, this.canvas.Width - textSize.Width - Offset);
+            Canvas.SetTop(this.scoreTextBlock, Offset);
         }
 
 
