@@ -15,17 +15,13 @@ namespace Galaga.Model.MovementPattern
             {
                 var ship = ships[i];
 
-                // Move X based on the direction
                 ship.X += movingRight ? speed : -speed;
 
-                // Calculate the original Y position for the ship
                 double originalY = ship.BaseYPosition;
 
-                // Keep the ship oscillating around the original row height
-                double maxVerticalDisplacement = maxDistance / 2; // Limit vertical movement
+                double maxVerticalDisplacement = maxDistance / 2;
                 ship.Y = originalY + Math.Sin((ship.X - originalPositions[i]) / maxDistance * Math.PI) * maxVerticalDisplacement;
 
-                // Update the ship's position and handle sprite behavior
                 updatePosition(ship);
                 handleSecondSprite(ship);
             }

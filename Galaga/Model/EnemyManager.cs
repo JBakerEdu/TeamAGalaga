@@ -206,7 +206,7 @@ namespace Galaga.Model
 
             for (int row = 0; row < shipsPerRow.Length; row++)
             {
-                var rowShips = ships.Where(ship => ship.Level == row + 1).ToList();
+                var rowShips = ships.Where(ship => ship.Level == row + 1 && !attackingShips.Contains(ship)).ToList();
                 if (!rowShips.Any()) continue;
 
                 UpdateRowDirection(row, rowShips);

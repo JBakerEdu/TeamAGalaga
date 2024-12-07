@@ -14,22 +14,19 @@ namespace Galaga.Model.MovementPattern
             Action<EnemyShip> updatePosition,
             Action<EnemyShip> handleSecondSprite)
         {
-            double amplitude = 20; // Adjust as needed for vertical movement range
-            double frequency = 0.05; // Adjust for the speed of vertical oscillation
+            double amplitude = 20;
+            double frequency = 0.05;
 
             for (int i = 0; i < ships.Count; i++)
             {
                 var ship = ships[i];
                 double originalX = originalPositions[i];
-                double baseY = ship.BaseYPosition; // The original Y position of the ship
+                double baseY = ship.BaseYPosition;
 
-                // Update horizontal position
                 ship.X += movingRight ? movementSpeed : -movementSpeed;
 
-                // Calculate vertical position using sine wave, centered around baseY
                 ship.Y = baseY + amplitude * Math.Sin(frequency * ship.X);
 
-                // Update the ship's position in the canvas
                 updatePosition(ship);
                 handleSecondSprite(ship);
             }

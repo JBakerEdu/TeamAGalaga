@@ -19,25 +19,19 @@ namespace Galaga.Model.MovementPattern
             Action<EnemyShip> updatePosition,
             Action<EnemyShip> handleSecondSprite)
         {
-            // Determine the direction of horizontal movement
             double horizontalDirection = movingRight ? 1 : -1;
 
-            // Update each ship's position
             foreach (var ship in ships)
             {
-                // Move horizontally across the screen
                 ship.X += horizontalDirection * movementSpeed;
 
-                // Add oscillating motion
-                ship.X += Math.Sin(phase) * 5; // Oscillates by ±5 units
+                ship.X += Math.Sin(phase) * 5;
 
-                // Update the ship's position on the canvas
                 updatePosition(ship);
             }
 
-            // Increment the phase for smooth oscillation
             phase += 0.1;
-            if (phase > 2 * Math.PI) phase -= 2 * Math.PI; // Reset phase to prevent overflow
+            if (phase > 2 * Math.PI) phase -= 2 * Math.PI;
         }
     }
 }
