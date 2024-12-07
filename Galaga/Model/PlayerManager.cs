@@ -260,6 +260,8 @@ namespace Galaga.Model
                 case PowerUps.TripleBulletCap:
                     this.enableTripleBullet();
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(powerUp), powerUp, null);
             }
         }
 

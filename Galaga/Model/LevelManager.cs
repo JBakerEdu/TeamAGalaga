@@ -79,7 +79,7 @@ namespace Galaga.Model
         /// </summary>
         public void StartGame()
         {
-            this.CurrentLevel = 3;
+            this.CurrentLevel = 1;
             this.SetLevelParameters();
             this.enemyManager.InitializeEnemies();
         }

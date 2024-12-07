@@ -31,7 +31,9 @@ namespace Galaga.Model
         /// this is a boolean if a sprite can shoot/fire
         /// </summary>
         public bool IsShooter { get; private set; }
-
+        /// <summary>
+        /// the starting Y position
+        /// </summary>
         public double BaseYPosition { get; set; }
 
         /// <summary>
@@ -95,11 +97,7 @@ namespace Galaga.Model
         {
             X = x;
             Y = y;
-
-            // Render the primary sprite
             Sprite.RenderAt(x, y);
-
-            // Render the secondary sprite only if it exists
             if (this.HasSecondSprite && this.Sprite2 != null)
             {
                 this.renderSecondSprite(x, y);
@@ -113,7 +111,6 @@ namespace Galaga.Model
         /// <param name="y">The y-coordinate on the canvas.</param>
         private void renderSecondSprite(double x, double y)
         {
-            // Adjust position or appearance for the second sprite as needed
             this.Sprite2.RenderAt(x, y);
         }
 
@@ -125,11 +122,7 @@ namespace Galaga.Model
         public void Move(double deltaX)
         {
             X += deltaX * SpeedX;
-
-            // Move the primary sprite
             Sprite.RenderAt(X, Y);
-
-            // Move the secondary sprite only if it exists
             if (this.HasSecondSprite && this.Sprite2 != null)
             {
                 this.Sprite2.RenderAt(X, Y);

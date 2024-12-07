@@ -28,19 +28,14 @@ namespace Galaga.Model.MovementPattern
             Action<EnemyShip> updatePosition,
             Action<EnemyShip> handleSecondSprite)
         {
-            for (int i = 0; i < ships.Count; i++)
+            for (var i = 0; i < ships.Count; i++)
             {
                 var ship = ships[i];
-
                 ship.X += movingRight ? speed : -speed;
-
-                double originalY = ship.BaseYPosition;
-                double maxVerticalDisplacement = maxDistance / 2;
-
+                var originalY = ship.BaseYPosition;
+                var maxVerticalDisplacement = maxDistance / 2;
                 ship.Y = originalY + Math.Sin((ship.X - originalPositions[i]) / maxDistance * Math.PI) * maxVerticalDisplacement;
-
                 updatePosition(ship);
-
                 handleSecondSprite(ship);
             }
         }

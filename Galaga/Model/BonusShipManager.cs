@@ -131,7 +131,7 @@ namespace Galaga.Model
 
         private async void startBonusShipTimer()
         {
-            for (var i = 0; i < MaxIterations; i++) // Replace MaxIterations with the desired number
+            for (var i = 0; i < MaxIterations; i++)
             {
                 await Task.Delay(TimerIntervalMilliseconds);
 

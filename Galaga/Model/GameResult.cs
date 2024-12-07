@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Galaga.Model
+﻿namespace Galaga.Model
 {
+    /// <summary>
+    /// the results from the game 
+    /// </summary>
     public class GameResult
     {
+        /// <summary>
+        /// the score from the game
+        /// </summary>
         public int Score { get; set; }
+        /// <summary>
+        /// the level achieved in the game
+        /// </summary>
         public int Level { get; set; }
     }
 }
